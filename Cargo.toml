@@ -1,0 +1,19 @@
+[package]
+name = "egglog_repro"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "bench"
+path = "src/main.rs"
+
+[features]
+old = ["dep:egglog_old"]
+new = ["dep:egglog_new"]
+
+[dependencies]
+egglog_old = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "0a8cc35a6c68d0460c20449d5fa19ca3caba2923", optional = true }
+egglog_new = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "2e5657bbb2c1a90fba31002da61381815f891b6f", optional = true }
+
+[profile.release]
+debug = 1
