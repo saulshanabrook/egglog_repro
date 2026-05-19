@@ -114,6 +114,7 @@ const spec = {
   width: 860,
   height: 430,
   data: { values: rows },
+  transform: [{ calculate: "(random() - 0.5) * 42", as: "jitter" }],
   mark: {
     type: "point",
     filled: true,
@@ -138,9 +139,8 @@ const spec = {
       },
     },
     xOffset: {
-      field: "run",
-      type: "ordinal",
-      sort: [1, 2, 3, 4, 5],
+      field: "jitter",
+      type: "quantitative",
     },
     y: {
       field: "time_ms",
@@ -205,7 +205,7 @@ const spec = {
 fs.writeFileSync(specPath, `${JSON.stringify(spec, null, 2)}\n`);
 NODE
 
-npx --yes --package vega-lite@5 --package canvas vl2png "$SPEC" "$PNG"
+npx --yes --package vega-lite@5 --package canvas vl2png --seed 1 "$SPEC" "$PNG"
 
 printf 'Wrote %s\n' "$CSV"
 printf 'Wrote %s\n' "$SPEC"

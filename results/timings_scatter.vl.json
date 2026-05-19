@@ -10,7 +10,7 @@
         "variant": "old",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 0.06,
+        "time_ms": 0.056,
         "tuples": 4751
       },
       {
@@ -18,7 +18,7 @@
         "variant": "old",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 0.056,
+        "time_ms": 0.062,
         "tuples": 4751
       },
       {
@@ -26,7 +26,7 @@
         "variant": "old",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.056,
+        "time_ms": 0.057,
         "tuples": 4751
       },
       {
@@ -34,7 +34,7 @@
         "variant": "old",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.057,
+        "time_ms": 0.056,
         "tuples": 4751
       },
       {
@@ -42,7 +42,7 @@
         "variant": "old",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.056,
+        "time_ms": 0.055,
         "tuples": 4751
       },
       {
@@ -58,7 +58,7 @@
         "variant": "old",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 0.158,
+        "time_ms": 0.077,
         "tuples": 7749
       },
       {
@@ -66,7 +66,7 @@
         "variant": "old",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.07,
+        "time_ms": 0.071,
         "tuples": 7749
       },
       {
@@ -74,7 +74,7 @@
         "variant": "old",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.079,
+        "time_ms": 0.074,
         "tuples": 7749
       },
       {
@@ -82,29 +82,13 @@
         "variant": "old",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.073,
+        "time_ms": 0.184,
         "tuples": 7749
       },
       {
         "experiment": "qwen_all total runtime",
         "variant": "old",
         "run": 1,
-        "metric": "total runtime ms",
-        "time_ms": 268,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 2,
-        "metric": "total runtime ms",
-        "time_ms": 263,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 3,
         "metric": "total runtime ms",
         "time_ms": 261,
         "tuples": 7805
@@ -112,9 +96,25 @@
       {
         "experiment": "qwen_all total runtime",
         "variant": "old",
+        "run": 2,
+        "metric": "total runtime ms",
+        "time_ms": 259,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 3,
+        "metric": "total runtime ms",
+        "time_ms": 260,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
         "run": 4,
         "metric": "total runtime ms",
-        "time_ms": 261,
+        "time_ms": 259,
         "tuples": 7805
       },
       {
@@ -122,7 +122,7 @@
         "variant": "old",
         "run": 5,
         "metric": "total runtime ms",
-        "time_ms": 261,
+        "time_ms": 256,
         "tuples": 7805
       },
       {
@@ -130,7 +130,7 @@
         "variant": "new",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 22.453,
+        "time_ms": 22.232,
         "tuples": 4751
       },
       {
@@ -138,7 +138,7 @@
         "variant": "new",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 21.734,
+        "time_ms": 21.407,
         "tuples": 4751
       },
       {
@@ -146,7 +146,7 @@
         "variant": "new",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 22.39,
+        "time_ms": 21.67,
         "tuples": 4751
       },
       {
@@ -154,7 +154,7 @@
         "variant": "new",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 21.968,
+        "time_ms": 21.757,
         "tuples": 4751
       },
       {
@@ -162,7 +162,7 @@
         "variant": "new",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 21.984,
+        "time_ms": 21.941,
         "tuples": 4751
       },
       {
@@ -170,7 +170,7 @@
         "variant": "new",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 105.064,
+        "time_ms": 103.761,
         "tuples": 7749
       },
       {
@@ -178,7 +178,7 @@
         "variant": "new",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 104.598,
+        "time_ms": 104.421,
         "tuples": 7749
       },
       {
@@ -186,7 +186,7 @@
         "variant": "new",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 106.291,
+        "time_ms": 105.326,
         "tuples": 7749
       },
       {
@@ -194,7 +194,7 @@
         "variant": "new",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 105.777,
+        "time_ms": 103.808,
         "tuples": 7749
       },
       {
@@ -202,7 +202,7 @@
         "variant": "new",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 104.903,
+        "time_ms": 103.652,
         "tuples": 7749
       },
       {
@@ -210,7 +210,7 @@
         "variant": "new",
         "run": 1,
         "metric": "total runtime ms",
-        "time_ms": 1830,
+        "time_ms": 1820,
         "tuples": 7805
       },
       {
@@ -218,7 +218,7 @@
         "variant": "new",
         "run": 2,
         "metric": "total runtime ms",
-        "time_ms": 1843,
+        "time_ms": 1859,
         "tuples": 7805
       },
       {
@@ -226,7 +226,7 @@
         "variant": "new",
         "run": 3,
         "metric": "total runtime ms",
-        "time_ms": 1916,
+        "time_ms": 1813,
         "tuples": 7805
       },
       {
@@ -234,7 +234,7 @@
         "variant": "new",
         "run": 4,
         "metric": "total runtime ms",
-        "time_ms": 2022,
+        "time_ms": 1996,
         "tuples": 7805
       },
       {
@@ -242,7 +242,7 @@
         "variant": "new",
         "run": 5,
         "metric": "total runtime ms",
-        "time_ms": 1856,
+        "time_ms": 1836,
         "tuples": 7805
       },
       {
@@ -250,7 +250,7 @@
         "variant": "PR #857",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 0.414,
+        "time_ms": 0.368,
         "tuples": 4751
       },
       {
@@ -258,7 +258,7 @@
         "variant": "PR #857",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 0.419,
+        "time_ms": 0.379,
         "tuples": 4751
       },
       {
@@ -266,7 +266,7 @@
         "variant": "PR #857",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.366,
+        "time_ms": 0.361,
         "tuples": 4751
       },
       {
@@ -274,7 +274,7 @@
         "variant": "PR #857",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.41,
+        "time_ms": 0.406,
         "tuples": 4751
       },
       {
@@ -282,7 +282,7 @@
         "variant": "PR #857",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.371,
+        "time_ms": 0.372,
         "tuples": 4751
       },
       {
@@ -290,7 +290,7 @@
         "variant": "PR #857",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 0.751,
+        "time_ms": 0.691,
         "tuples": 7749
       },
       {
@@ -298,7 +298,7 @@
         "variant": "PR #857",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 0.726,
+        "time_ms": 0.689,
         "tuples": 7749
       },
       {
@@ -306,7 +306,7 @@
         "variant": "PR #857",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.804,
+        "time_ms": 0.688,
         "tuples": 7749
       },
       {
@@ -314,7 +314,7 @@
         "variant": "PR #857",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.715,
+        "time_ms": 0.936,
         "tuples": 7749
       },
       {
@@ -322,13 +322,29 @@
         "variant": "PR #857",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.72,
+        "time_ms": 0.736,
         "tuples": 7749
       },
       {
         "experiment": "qwen_all total runtime",
         "variant": "PR #857",
         "run": 1,
+        "metric": "total runtime ms",
+        "time_ms": 185,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 2,
+        "metric": "total runtime ms",
+        "time_ms": 189,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 3,
         "metric": "total runtime ms",
         "time_ms": 184,
         "tuples": 7805
@@ -336,25 +352,9 @@
       {
         "experiment": "qwen_all total runtime",
         "variant": "PR #857",
-        "run": 2,
-        "metric": "total runtime ms",
-        "time_ms": 185,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
-        "run": 3,
-        "metric": "total runtime ms",
-        "time_ms": 186,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
         "run": 4,
         "metric": "total runtime ms",
-        "time_ms": 185,
+        "time_ms": 187,
         "tuples": 7805
       },
       {
@@ -367,6 +367,12 @@
       }
     ]
   },
+  "transform": [
+    {
+      "calculate": "(random() - 0.5) * 42",
+      "as": "jitter"
+    }
+  ],
   "mark": {
     "type": "point",
     "filled": true,
@@ -391,15 +397,8 @@
       }
     },
     "xOffset": {
-      "field": "run",
-      "type": "ordinal",
-      "sort": [
-        1,
-        2,
-        3,
-        4,
-        5
-      ]
+      "field": "jitter",
+      "type": "quantitative"
     },
     "y": {
       "field": "time_ms",
