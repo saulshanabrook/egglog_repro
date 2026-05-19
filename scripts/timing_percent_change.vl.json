@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "title": {
     "text": "egglog #872 percent change vs old serial baseline",
-    "subtitle": "Points are ratio-of-means percent change; bars are 95% CIs on a log-ratio scale"
+    "subtitle": "Vertical lines are 95% CIs; labels show ratio-of-means percent change"
   },
   "padding": {
     "left": 5,
@@ -31,27 +31,35 @@
       }
     }
   },
+  "transform": [
+    {
+      "calculate": "abs(datum.percent_change) >= 1000 ? format(datum.percent_change, '+.3s') + '%' : format(datum.percent_change, '+.0f') + '%'",
+      "as": "percent_label"
+    },
+    {
+      "calculate": "datum.experiment_order - 1",
+      "as": "experiment_offset"
+    }
+  ],
   "facet": {
-    "row": {
-      "field": "experiment",
+    "column": {
+      "field": "variant",
       "type": "nominal",
       "sort": {
-        "field": "experiment_order",
+        "field": "variant_order",
         "op": "min",
         "order": "ascending"
       },
-      "title": null,
+      "title": "Commit",
       "header": {
-        "labelOrient": "top",
         "labelFontSize": 13,
-        "labelFontWeight": "bold",
-        "labelPadding": 6
+        "labelFontWeight": "bold"
       }
     }
   },
   "spec": {
-    "width": 860,
-    "height": 230,
+    "width": 240,
+    "height": 520,
     "layer": [
       {
         "mark": {
@@ -62,41 +70,6 @@
         "encoding": {
           "y": {
             "datum": 1,
-            "type": "quantitative"
-          }
-        }
-      },
-      {
-        "mark": {
-          "type": "rule",
-          "strokeWidth": 2,
-          "opacity": 0.65
-        },
-        "encoding": {
-          "x": {
-            "field": "variant",
-            "type": "nominal",
-            "sort": {
-              "field": "variant_order",
-              "op": "min",
-              "order": "ascending"
-            },
-            "axis": {
-              "title": "Commit",
-              "labelAngle": 0
-            }
-          },
-          "xOffset": {
-            "field": "parallel",
-            "type": "nominal",
-            "sort": {
-              "field": "parallel_order",
-              "op": "min",
-              "order": "ascending"
-            }
-          },
-          "y": {
-            "field": "ci_lower_ratio",
             "type": "quantitative",
             "scale": {
               "type": "log",
@@ -104,15 +77,21 @@
               "nice": false
             },
             "axis": {
-              "title": null,
+              "title": "% change vs old serial baseline (log ratio scale)",
               "values": [0.7, 0.8, 1, 2, 10, 100, 1000, 3000],
               "labelExpr": "datum.value === 1 ? '0%' : datum.value < 1 ? format((datum.value - 1) * 100, '.0f') + '%' : '+' + format((datum.value - 1) * 100, '.2s') + '%'"
             }
-          },
-          "y2": {
-            "field": "ci_upper_ratio"
-          },
-          "color": {
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "rule",
+          "strokeWidth": 3,
+          "opacity": 0.72
+        },
+        "encoding": {
+          "x": {
             "field": "parallel",
             "type": "nominal",
             "sort": {
@@ -120,8 +99,36 @@
               "op": "min",
               "order": "ascending"
             },
+            "axis": {
+              "title": null,
+              "labelAngle": 0
+            }
+          },
+          "xOffset": {
+            "field": "experiment_offset",
+            "type": "quantitative",
+            "scale": {
+              "domain": [-1, 1],
+              "range": [-18, 18]
+            }
+          },
+          "y": {
+            "field": "ci_lower_ratio",
+            "type": "quantitative"
+          },
+          "y2": {
+            "field": "ci_upper_ratio"
+          },
+          "color": {
+            "field": "experiment",
+            "type": "nominal",
+            "sort": {
+              "field": "experiment_order",
+              "op": "min",
+              "order": "ascending"
+            },
             "legend": {
-              "title": "Mode",
+              "title": "Benchmark",
               "orient": "top"
             }
           }
@@ -129,45 +136,43 @@
       },
       {
         "mark": {
-          "type": "point",
-          "filled": true,
-          "size": 85,
-          "opacity": 0.75,
-          "stroke": "white",
-          "strokeWidth": 0.8
+          "type": "text",
+          "align": "left",
+          "baseline": "middle",
+          "dx": 7,
+          "fontSize": 11
         },
         "encoding": {
           "x": {
-            "field": "variant",
-            "type": "nominal",
-            "sort": {
-              "field": "variant_order",
-              "op": "min",
-              "order": "ascending"
-            },
-            "axis": {
-              "title": "Commit",
-              "labelAngle": 0
-            }
-          },
-          "xOffset": {
             "field": "parallel",
             "type": "nominal",
             "sort": {
               "field": "parallel_order",
               "op": "min",
               "order": "ascending"
+            }
+          },
+          "xOffset": {
+            "field": "experiment_offset",
+            "type": "quantitative",
+            "scale": {
+              "domain": [-1, 1],
+              "range": [-18, 18]
             }
           },
           "y": {
             "field": "ratio_mean",
             "type": "quantitative"
           },
+          "text": {
+            "field": "percent_label",
+            "type": "nominal"
+          },
           "color": {
-            "field": "parallel",
+            "field": "experiment",
             "type": "nominal",
             "sort": {
-              "field": "parallel_order",
+              "field": "experiment_order",
               "op": "min",
               "order": "ascending"
             }
@@ -178,7 +183,6 @@
   },
   "resolve": {
     "scale": {
-      "x": "shared",
       "y": "shared",
       "color": "shared"
     }
@@ -195,6 +199,7 @@
     },
     "title": {
       "fontSize": 16,
+      "subtitleFontSize": 12,
       "anchor": "start"
     },
     "view": {
