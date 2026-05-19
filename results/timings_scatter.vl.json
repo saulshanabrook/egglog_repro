@@ -4,373 +4,15 @@
   "width": 860,
   "height": 430,
   "data": {
-    "values": [
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "old",
-        "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.052,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "old",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.055,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "old",
-        "run": 3,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.055,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "old",
-        "run": 4,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.056,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "old",
-        "run": 5,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.063,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "old",
-        "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.075,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "old",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.071,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "old",
-        "run": 3,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.075,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "old",
-        "run": 4,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.086,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "old",
-        "run": 5,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.073,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 1,
-        "metric": "total runtime ms",
-        "time_ms": 268,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 2,
-        "metric": "total runtime ms",
-        "time_ms": 266,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 3,
-        "metric": "total runtime ms",
-        "time_ms": 259,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 4,
-        "metric": "total runtime ms",
-        "time_ms": 262,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 5,
-        "metric": "total runtime ms",
-        "time_ms": 258,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "new",
-        "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 22.484,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "new",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 21.736,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "new",
-        "run": 3,
-        "metric": "rule search+apply ms",
-        "time_ms": 22.233,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "new",
-        "run": 4,
-        "metric": "rule search+apply ms",
-        "time_ms": 21.939,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "new",
-        "run": 5,
-        "metric": "rule search+apply ms",
-        "time_ms": 22.03,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "new",
-        "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 105.275,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "new",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 104.295,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "new",
-        "run": 3,
-        "metric": "rule search+apply ms",
-        "time_ms": 104.57,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "new",
-        "run": 4,
-        "metric": "rule search+apply ms",
-        "time_ms": 105.594,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "new",
-        "run": 5,
-        "metric": "rule search+apply ms",
-        "time_ms": 104.046,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "new",
-        "run": 1,
-        "metric": "total runtime ms",
-        "time_ms": 1837,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "new",
-        "run": 2,
-        "metric": "total runtime ms",
-        "time_ms": 1956,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "new",
-        "run": 3,
-        "metric": "total runtime ms",
-        "time_ms": 1858,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "new",
-        "run": 4,
-        "metric": "total runtime ms",
-        "time_ms": 1826,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "new",
-        "run": 5,
-        "metric": "total runtime ms",
-        "time_ms": 1900,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "PR #857",
-        "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.408,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "PR #857",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.372,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "PR #857",
-        "run": 3,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.391,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "PR #857",
-        "run": 4,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.379,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "PR #857",
-        "run": 5,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.374,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "PR #857",
-        "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.74,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "PR #857",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.814,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "PR #857",
-        "run": 3,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.688,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "PR #857",
-        "run": 4,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.738,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_one target rule",
-        "variant": "PR #857",
-        "run": 5,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.731,
-        "tuples": 7749
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
-        "run": 1,
-        "metric": "total runtime ms",
-        "time_ms": 186,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
-        "run": 2,
-        "metric": "total runtime ms",
-        "time_ms": 184,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
-        "run": 3,
-        "metric": "total runtime ms",
-        "time_ms": 184,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
-        "run": 4,
-        "metric": "total runtime ms",
-        "time_ms": 183,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "PR #857",
-        "run": 5,
-        "metric": "total runtime ms",
-        "time_ms": 182,
-        "tuples": 7805
-      }
-    ]
+    "url": "timings_scatter.csv",
+    "format": {
+      "type": "csv"
+    }
   },
   "transform": [
     {
-      "calculate": "(random() - 0.5) * 2",
-      "as": "jitter"
+      "calculate": "(datum.experiment === 'qwen_minimal target rule' ? 0 : datum.experiment === 'qwen_one target rule' ? 1 : 2) + (random() - 0.5) * 0.025",
+      "as": "x_jittered"
     }
   ],
   "mark": {
@@ -383,31 +25,17 @@
   },
   "encoding": {
     "x": {
-      "field": "experiment",
-      "type": "nominal",
-      "sort": [
-        "qwen_minimal target rule",
-        "qwen_one target rule",
-        "qwen_all total runtime"
-      ],
-      "axis": {
-        "title": "Experiment",
-        "labelAngle": 0,
-        "labelLimit": 180
-      }
-    },
-    "xOffset": {
-      "field": "jitter",
+      "field": "x_jittered",
       "type": "quantitative",
       "scale": {
-        "domain": [
-          -1,
-          1
-        ],
-        "range": [
-          -3,
-          3
-        ]
+        "domain": [-0.5, 2.5],
+        "zero": false
+      },
+      "axis": {
+        "title": "Experiment",
+        "values": [0, 1, 2],
+        "labelExpr": "datum.value === 0 ? 'qwen_minimal target rule' : datum.value === 1 ? 'qwen_one target rule' : 'qwen_all total runtime'",
+        "labelLimit": 180
       }
     },
     "y": {
@@ -416,10 +44,7 @@
       "scale": {
         "type": "log",
         "base": 10,
-        "domain": [
-          0.04,
-          3000
-        ]
+        "domain": [0.04, 3000]
       },
       "axis": {
         "title": "Time (ms, log scale)",
@@ -429,22 +54,10 @@
     "color": {
       "field": "variant",
       "type": "nominal",
-      "sort": [
-        "old",
-        "new",
-        "PR #857"
-      ],
+      "sort": ["old", "new", "PR #857"],
       "scale": {
-        "domain": [
-          "old",
-          "new",
-          "PR #857"
-        ],
-        "range": [
-          "#4c78a8",
-          "#e45756",
-          "#54a24b"
-        ]
+        "domain": ["old", "new", "PR #857"],
+        "range": ["#4c78a8", "#e45756", "#54a24b"]
       },
       "legend": {
         "title": "Variant",

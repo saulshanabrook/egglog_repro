@@ -18,6 +18,11 @@ bins=("$BIN_DIR/bench_old" "$BIN_DIR/bench_new" "$BIN_DIR/bench_pr857")
 
 cd "$ROOT"
 
+if [[ ! -f "$SPEC" ]]; then
+  printf 'missing Vega-Lite spec: %s\n' "$SPEC" >&2
+  exit 1
+fi
+
 for i in "${!features[@]}"; do
   cargo build --release --features "${features[$i]}" --no-default-features
   cp target/release/bench "${bins[$i]}"
@@ -87,130 +92,7 @@ for i in "${!variants[@]}"; do
   done
 done
 
-node - "$CSV" "$SPEC" <<'NODE'
-const fs = require("fs");
-
-const [csvPath, specPath] = process.argv.slice(2);
-const rows = fs
-  .readFileSync(csvPath, "utf8")
-  .trim()
-  .split(/\r?\n/)
-  .slice(1)
-  .map((line) => {
-    const [experiment, variant, run, metric, time_ms, tuples] = line.split(",");
-    return {
-      experiment,
-      variant,
-      run: Number(run),
-      metric,
-      time_ms: Number(time_ms),
-      tuples: Number(tuples),
-    };
-  });
-
-const spec = {
-  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-  title: "egglog #872 repro timings, 5 runs per variant",
-  width: 860,
-  height: 430,
-  data: { values: rows },
-  transform: [{ calculate: "(random() - 0.5) * 2", as: "jitter" }],
-  mark: {
-    type: "point",
-    filled: true,
-    size: 70,
-    opacity: 0.55,
-    stroke: "white",
-    strokeWidth: 0.8,
-  },
-  encoding: {
-    x: {
-      field: "experiment",
-      type: "nominal",
-      sort: [
-        "qwen_minimal target rule",
-        "qwen_one target rule",
-        "qwen_all total runtime",
-      ],
-      axis: {
-        title: "Experiment",
-        labelAngle: 0,
-        labelLimit: 180,
-      },
-    },
-    xOffset: {
-      field: "jitter",
-      type: "quantitative",
-      scale: {
-        domain: [-1, 1],
-        range: [-3, 3],
-      },
-    },
-    y: {
-      field: "time_ms",
-      type: "quantitative",
-      scale: {
-        type: "log",
-        base: 10,
-        domain: [0.04, 3000],
-      },
-      axis: {
-        title: "Time (ms, log scale)",
-        format: "~g",
-      },
-    },
-    color: {
-      field: "variant",
-      type: "nominal",
-      sort: ["old", "new", "PR #857"],
-      scale: {
-        domain: ["old", "new", "PR #857"],
-        range: ["#4c78a8", "#e45756", "#54a24b"],
-      },
-      legend: {
-        title: "Variant",
-        orient: "top",
-      },
-    },
-    tooltip: [
-      { field: "experiment", type: "nominal", title: "Experiment" },
-      { field: "variant", type: "nominal", title: "Variant" },
-      { field: "run", type: "ordinal", title: "Run" },
-      { field: "metric", type: "nominal", title: "Metric" },
-      {
-        field: "time_ms",
-        type: "quantitative",
-        title: "Time (ms)",
-        format: ".3f",
-      },
-      { field: "tuples", type: "quantitative", title: "Tuples" },
-    ],
-  },
-  config: {
-    axis: {
-      grid: true,
-      titleFontSize: 13,
-      labelFontSize: 12,
-    },
-    legend: {
-      labelFontSize: 12,
-      titleFontSize: 12,
-    },
-    title: {
-      fontSize: 16,
-      anchor: "start",
-    },
-    view: {
-      stroke: null,
-    },
-  },
-};
-
-fs.writeFileSync(specPath, `${JSON.stringify(spec, null, 2)}\n`);
-NODE
-
 npx --yes --package vega-lite@5 --package canvas vl2png --seed 1 "$SPEC" "$PNG"
 
 printf 'Wrote %s\n' "$CSV"
-printf 'Wrote %s\n' "$SPEC"
-printf 'Wrote %s\n' "$PNG"
+printf 'Rendered %s from %s\n' "$PNG" "$SPEC"
