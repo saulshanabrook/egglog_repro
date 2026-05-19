@@ -1,5 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Plots the ratio-of-execution-time-means percent changes and one-level Fieller-style 95% CIs precomputed by scripts/compute_timing_percent_change.mjs, following Kalibera and Jones, Quantifying Performance Changes with Effect Size Confidence Intervals.",
   "title": {
     "text": "egglog #872 percent change vs old serial baseline",
     "subtitle": "Vertical lines are 95% CIs; labels show ratio-of-means percent change"

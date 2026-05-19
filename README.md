@@ -105,9 +105,27 @@ writes:
 
 The percent-change CSV uses the old serial (`parallel off`) mean for each
 benchmark as the baseline and reports ratio-of-means percent change with a
-one-level Fieller-style 95% confidence interval. In that summary chart,
-`serial` means `RAYON_NUM_THREADS=1`; `default Rayon` means no
-`RAYON_NUM_THREADS` override.
+one-level Fieller-style 95% confidence interval, following the
+ratio-of-execution-time-means effect-size framing from Kalibera and Jones'
+*Quantifying Performance Changes with Effect Size Confidence Intervals*.
+This script treats each process-level run in `results/timings_scatter.csv`
+as one sample; it does not attempt the full hierarchical experiment
+dimensioning from Kalibera and Jones' *Rigorous Benchmarking in Reasonable
+Time*. It also does not implement Chen et al.'s HPT method, which is better
+suited as a suite-level decision layer than as the per-benchmark diagnostic
+shown here. In that summary chart, `serial` means `RAYON_NUM_THREADS=1`;
+`default Rayon` means no `RAYON_NUM_THREADS` override.
+
+## Performance-change references
+
+- Tomas Kalibera and Richard Jones, [*Quantifying Performance Changes with
+  Effect Size Confidence Intervals*](https://arxiv.org/abs/2007.10899),
+  University of Kent Technical Report 4-12 / arXiv:2007.10899.
+- Tomas Kalibera and Richard E. Jones, [*Rigorous Benchmarking in Reasonable
+  Time*](https://doi.org/10.1145/2464157.2464160), ISMM 2013.
+- Tianshi Chen, Yunji Chen, Qi Guo, Olivier Temam, Yue Wu, and Weiwu Hu,
+  [*Statistical Performance Comparisons of
+  Computers*](https://doi.org/10.1109/HPCA.2012.6169043), HPCA 2012.
 
 ## The slow rule
 

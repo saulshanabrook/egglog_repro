@@ -1,6 +1,17 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from "node:fs";
 
+// Percent-change reporting follows the ratio-of-execution-time-means framing
+// from Kalibera and Jones, "Quantifying Performance Changes with Effect Size
+// Confidence Intervals" (University of Kent Technical Report 4-12,
+// arXiv:2007.10899). This script intentionally computes a one-level summary
+// over the five process-level runs in timings_scatter.csv; it does not attempt
+// the full hierarchical experiment design from Kalibera and Jones, "Rigorous
+// Benchmarking in Reasonable Time" (ISMM 2013, doi:10.1145/2464157.2464160),
+// and it does not implement the HPT suite-level method from Chen, Chen, Guo,
+// Temam, Wu, and Hu, "Statistical Performance Comparisons of Computers"
+// (HPCA 2012, doi:10.1109/HPCA.2012.6169043).
+
 const [, , inputPath = "results/timings_scatter.csv", outputPath = "results/timing_percent_change.csv"] =
   process.argv;
 
@@ -144,6 +155,9 @@ function ratioConfidenceInterval(oldValues, newValues) {
   const newFactor = newMean ** 2 - (t ** 2 * newVariance) / newN;
   const radicand = (oldMean * newMean) ** 2 - newFactor * oldFactor;
 
+  // Fieller-style confidence interval for the ratio of means, in the
+  // one-level shape used by the JupyterLab benchmark reporter. The raw output
+  // is a ratio; CSV percent columns are derived as (ratio - 1) * 100.
   if (oldFactor > 0 && radicand >= 0) {
     const center = (oldMean * newMean) / oldFactor;
     const halfWidth = Math.sqrt(radicand) / oldFactor;
