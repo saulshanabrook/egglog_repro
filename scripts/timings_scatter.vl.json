@@ -1,0 +1,116 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "egglog #872 repro timings, 5 runs per variant",
+  "width": 860,
+  "height": 430,
+  "padding": {
+    "left": 5,
+    "top": 5,
+    "right": 5,
+    "bottom": 35
+  },
+  "data": {
+    "url": "../results/timings_scatter.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "run": "number",
+        "time_ms": "number",
+        "tuples": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "source_row"
+        }
+      ]
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "min",
+          "field": "source_row",
+          "as": "experiment_first_row"
+        }
+      ],
+      "groupby": ["experiment"]
+    },
+    {
+      "calculate": "random() - 0.5",
+      "as": "jitter"
+    }
+  ],
+  "mark": {
+    "type": "point",
+    "filled": true,
+    "size": 70,
+    "opacity": 0.55,
+    "stroke": "white",
+    "strokeWidth": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "experiment",
+      "type": "nominal",
+      "sort": {
+        "field": "experiment_first_row",
+        "op": "min",
+        "order": "ascending"
+      },
+      "axis": {
+        "title": "Experiment",
+        "labelAngle": 0
+      }
+    },
+    "xOffset": {
+      "field": "jitter",
+      "type": "quantitative",
+      "scale": {
+        "domain": [-0.5, 0.5],
+        "range": [-2, 2]
+      }
+    },
+    "y": {
+      "field": "time_ms",
+      "type": "quantitative",
+      "scale": {
+        "type": "log",
+        "base": 10
+      },
+      "axis": {
+        "title": "Time (ms, log scale)",
+        "format": "~g"
+      }
+    },
+    "color": {
+      "field": "variant",
+      "type": "nominal",
+      "legend": {
+        "title": "Variant",
+        "orient": "top"
+      }
+    }
+  },
+  "config": {
+    "axis": {
+      "grid": true,
+      "titleFontSize": 13,
+      "labelFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12
+    },
+    "title": {
+      "fontSize": 16,
+      "anchor": "start"
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

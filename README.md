@@ -82,10 +82,9 @@ To regenerate the five-run timing scatter plot:
 scripts/render_timing_scatter.sh
 ```
 
-This writes:
+This reads `scripts/timings_scatter.vl.json` and writes:
 
 - `results/timings_scatter.csv`
-- `results/timings_scatter.vl.json`
 - `results/timings_scatter.png`
 
 ## The slow rule

@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="$ROOT/results"
 CSV="$OUT_DIR/timings_scatter.csv"
-SPEC="$OUT_DIR/timings_scatter.vl.json"
+SPEC="$ROOT/scripts/timings_scatter.vl.json"
 PNG="$OUT_DIR/timings_scatter.png"
 BIN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/egglog-repro-bins.XXXXXX")"
 
