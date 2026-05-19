@@ -13,7 +13,7 @@ const variantOrder = new Map([
 
 const parallelLabels = new Map([
   ["parallel off", { label: "serial", order: 0 }],
-  ["parallel on", { label: "parallel", order: 1 }],
+  ["parallel on", { label: "default Rayon", order: 1 }],
 ]);
 
 const tCritical95 = [
@@ -205,7 +205,8 @@ for (const [experiment, experimentOrder] of experiments) {
 
   for (const [key, values] of groups) {
     const [groupExperiment, variant, rawParallel] = key.split("\u0000");
-    if (groupExperiment !== experiment || variant === "old") continue;
+    if (groupExperiment !== experiment) continue;
+    if (variant === "old" && rawParallel === "parallel off") continue;
 
     const parallel = parallelLabels.get(rawParallel);
     if (!parallel) throw new Error(`unknown parallel mode: ${rawParallel}`);

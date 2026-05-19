@@ -105,7 +105,9 @@ writes:
 
 The percent-change CSV uses the old serial (`parallel off`) mean for each
 benchmark as the baseline and reports ratio-of-means percent change with a
-one-level Fieller-style 95% confidence interval.
+one-level Fieller-style 95% confidence interval. In that summary chart,
+`serial` means `RAYON_NUM_THREADS=1`; `default Rayon` means no
+`RAYON_NUM_THREADS` override.
 
 ## The slow rule
 
