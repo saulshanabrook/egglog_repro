@@ -1,5 +1,5 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "title": "egglog #872 repro timings, 5 runs per variant",
   "width": 860,
   "height": 430,
@@ -71,7 +71,14 @@
       "type": "quantitative",
       "scale": {
         "domain": [-0.5, 0.5],
-        "range": [-2, 2]
+        "range": [
+          {
+            "expr": "bandwidth('x') / 2 - 2"
+          },
+          {
+            "expr": "bandwidth('x') / 2 + 2"
+          }
+        ]
       }
     },
     "y": {

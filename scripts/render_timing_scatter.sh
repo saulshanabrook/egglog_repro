@@ -92,7 +92,7 @@ for i in "${!variants[@]}"; do
   done
 done
 
-npx --yes --package vega-lite@5 --package canvas vl2png --seed 1 "$SPEC" "$PNG"
+npx --yes --package vega-lite@6.4.3 --package canvas vl2png --seed 1 "$SPEC" "$PNG"
 
 printf 'Wrote %s\n' "$CSV"
 printf 'Rendered %s from %s\n' "$PNG" "$SPEC"
