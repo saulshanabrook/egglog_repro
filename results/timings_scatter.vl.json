@@ -1,0 +1,552 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "egglog #872 repro timings, 5 runs per variant",
+  "width": 860,
+  "height": 430,
+  "data": {
+    "values": [
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "old",
+        "run": 1,
+        "slot": "old 1",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.064,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "old",
+        "run": 2,
+        "slot": "old 2",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.064,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "old",
+        "run": 3,
+        "slot": "old 3",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.052,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "old",
+        "run": 4,
+        "slot": "old 4",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.055,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "old",
+        "run": 5,
+        "slot": "old 5",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.06,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "old",
+        "run": 1,
+        "slot": "old 1",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.07,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "old",
+        "run": 2,
+        "slot": "old 2",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.071,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "old",
+        "run": 3,
+        "slot": "old 3",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.072,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "old",
+        "run": 4,
+        "slot": "old 4",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.074,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "old",
+        "run": 5,
+        "slot": "old 5",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.078,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 1,
+        "slot": "old 1",
+        "metric": "total runtime ms",
+        "time_ms": 260,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 2,
+        "slot": "old 2",
+        "metric": "total runtime ms",
+        "time_ms": 363,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 3,
+        "slot": "old 3",
+        "metric": "total runtime ms",
+        "time_ms": 263,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 4,
+        "slot": "old 4",
+        "metric": "total runtime ms",
+        "time_ms": 259,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 5,
+        "slot": "old 5",
+        "metric": "total runtime ms",
+        "time_ms": 259,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "new",
+        "run": 1,
+        "slot": "new 1",
+        "metric": "rule search+apply ms",
+        "time_ms": 22.036,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "new",
+        "run": 2,
+        "slot": "new 2",
+        "metric": "rule search+apply ms",
+        "time_ms": 21.697,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "new",
+        "run": 3,
+        "slot": "new 3",
+        "metric": "rule search+apply ms",
+        "time_ms": 21.88,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "new",
+        "run": 4,
+        "slot": "new 4",
+        "metric": "rule search+apply ms",
+        "time_ms": 22.391,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "new",
+        "run": 5,
+        "slot": "new 5",
+        "metric": "rule search+apply ms",
+        "time_ms": 22.156,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "new",
+        "run": 1,
+        "slot": "new 1",
+        "metric": "rule search+apply ms",
+        "time_ms": 105.225,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "new",
+        "run": 2,
+        "slot": "new 2",
+        "metric": "rule search+apply ms",
+        "time_ms": 103.634,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "new",
+        "run": 3,
+        "slot": "new 3",
+        "metric": "rule search+apply ms",
+        "time_ms": 104.412,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "new",
+        "run": 4,
+        "slot": "new 4",
+        "metric": "rule search+apply ms",
+        "time_ms": 104.077,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "new",
+        "run": 5,
+        "slot": "new 5",
+        "metric": "rule search+apply ms",
+        "time_ms": 104.785,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "new",
+        "run": 1,
+        "slot": "new 1",
+        "metric": "total runtime ms",
+        "time_ms": 1861,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "new",
+        "run": 2,
+        "slot": "new 2",
+        "metric": "total runtime ms",
+        "time_ms": 1836,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "new",
+        "run": 3,
+        "slot": "new 3",
+        "metric": "total runtime ms",
+        "time_ms": 1831,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "new",
+        "run": 4,
+        "slot": "new 4",
+        "metric": "total runtime ms",
+        "time_ms": 1841,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "new",
+        "run": 5,
+        "slot": "new 5",
+        "metric": "total runtime ms",
+        "time_ms": 1855,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "PR #857",
+        "run": 1,
+        "slot": "PR #857 1",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.381,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "PR #857",
+        "run": 2,
+        "slot": "PR #857 2",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.383,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "PR #857",
+        "run": 3,
+        "slot": "PR #857 3",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.377,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "PR #857",
+        "run": 4,
+        "slot": "PR #857 4",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.504,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "PR #857",
+        "run": 5,
+        "slot": "PR #857 5",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.399,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "PR #857",
+        "run": 1,
+        "slot": "PR #857 1",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.717,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "PR #857",
+        "run": 2,
+        "slot": "PR #857 2",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.722,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "PR #857",
+        "run": 3,
+        "slot": "PR #857 3",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.745,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "PR #857",
+        "run": 4,
+        "slot": "PR #857 4",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.714,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_one target rule",
+        "variant": "PR #857",
+        "run": 5,
+        "slot": "PR #857 5",
+        "metric": "rule search+apply ms",
+        "time_ms": 0.76,
+        "tuples": 7749
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 1,
+        "slot": "PR #857 1",
+        "metric": "total runtime ms",
+        "time_ms": 185,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 2,
+        "slot": "PR #857 2",
+        "metric": "total runtime ms",
+        "time_ms": 185,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 3,
+        "slot": "PR #857 3",
+        "metric": "total runtime ms",
+        "time_ms": 185,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 4,
+        "slot": "PR #857 4",
+        "metric": "total runtime ms",
+        "time_ms": 186,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "PR #857",
+        "run": 5,
+        "slot": "PR #857 5",
+        "metric": "total runtime ms",
+        "time_ms": 186,
+        "tuples": 7805
+      }
+    ]
+  },
+  "mark": {
+    "type": "point",
+    "filled": true,
+    "size": 70,
+    "opacity": 0.85,
+    "stroke": "white",
+    "strokeWidth": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "experiment",
+      "type": "nominal",
+      "sort": [
+        "qwen_minimal target rule",
+        "qwen_one target rule",
+        "qwen_all total runtime"
+      ],
+      "axis": {
+        "title": "Experiment",
+        "labelAngle": 0,
+        "labelLimit": 180
+      }
+    },
+    "xOffset": {
+      "field": "slot",
+      "type": "ordinal",
+      "sort": [
+        "old 1",
+        "old 2",
+        "old 3",
+        "old 4",
+        "old 5",
+        "new 1",
+        "new 2",
+        "new 3",
+        "new 4",
+        "new 5",
+        "PR #857 1",
+        "PR #857 2",
+        "PR #857 3",
+        "PR #857 4",
+        "PR #857 5"
+      ]
+    },
+    "y": {
+      "field": "time_ms",
+      "type": "quantitative",
+      "scale": {
+        "type": "log",
+        "base": 10,
+        "domain": [
+          0.04,
+          3000
+        ]
+      },
+      "axis": {
+        "title": "Time (ms, log scale)",
+        "format": "~g"
+      }
+    },
+    "color": {
+      "field": "variant",
+      "type": "nominal",
+      "sort": [
+        "old",
+        "new",
+        "PR #857"
+      ],
+      "scale": {
+        "domain": [
+          "old",
+          "new",
+          "PR #857"
+        ],
+        "range": [
+          "#4c78a8",
+          "#e45756",
+          "#54a24b"
+        ]
+      },
+      "legend": {
+        "title": "Variant",
+        "orient": "top"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "experiment",
+        "type": "nominal",
+        "title": "Experiment"
+      },
+      {
+        "field": "variant",
+        "type": "nominal",
+        "title": "Variant"
+      },
+      {
+        "field": "run",
+        "type": "ordinal",
+        "title": "Run"
+      },
+      {
+        "field": "metric",
+        "type": "nominal",
+        "title": "Metric"
+      },
+      {
+        "field": "time_ms",
+        "type": "quantitative",
+        "title": "Time (ms)",
+        "format": ".3f"
+      },
+      {
+        "field": "tuples",
+        "type": "quantitative",
+        "title": "Tuples"
+      }
+    ]
+  },
+  "config": {
+    "axis": {
+      "grid": true,
+      "titleFontSize": 13,
+      "labelFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12
+    },
+    "title": {
+      "fontSize": 16,
+      "anchor": "start"
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

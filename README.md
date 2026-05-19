@@ -76,6 +76,18 @@ cp target/release/bench /tmp/bench_pr857
 /tmp/bench_pr857 qwen_all_cublaslt_rules.egg 10
 ```
 
+To regenerate the five-run timing scatter plot:
+
+```bash
+scripts/render_timing_scatter.sh
+```
+
+This writes:
+
+- `results/timings_scatter.csv`
+- `results/timings_scatter.vl.json`
+- `results/timings_scatter.png`
+
 ## The slow rule
 
 All slow rules are 25-30 atom joins with several `nth_from_end` lookups
