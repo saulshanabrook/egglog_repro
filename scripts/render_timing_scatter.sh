@@ -114,7 +114,7 @@ const spec = {
   width: 860,
   height: 430,
   data: { values: rows },
-  transform: [{ calculate: "(random() - 0.5) * 4", as: "jitter" }],
+  transform: [{ calculate: "(random() - 0.5) * 2", as: "jitter" }],
   mark: {
     type: "point",
     filled: true,
@@ -141,6 +141,10 @@ const spec = {
     xOffset: {
       field: "jitter",
       type: "quantitative",
+      scale: {
+        domain: [-1, 1],
+        range: [-3, 3],
+      },
     },
     y: {
       field: "time_ms",

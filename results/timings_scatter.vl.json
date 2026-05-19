@@ -10,23 +10,23 @@
         "variant": "old",
         "run": 1,
         "metric": "rule search+apply ms",
+        "time_ms": 0.052,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "old",
+        "run": 2,
+        "metric": "rule search+apply ms",
         "time_ms": 0.055,
         "tuples": 4751
       },
       {
         "experiment": "qwen_minimal target rule",
         "variant": "old",
-        "run": 2,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.059,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "old",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.053,
+        "time_ms": 0.055,
         "tuples": 4751
       },
       {
@@ -34,7 +34,7 @@
         "variant": "old",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.054,
+        "time_ms": 0.056,
         "tuples": 4751
       },
       {
@@ -42,7 +42,7 @@
         "variant": "old",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.057,
+        "time_ms": 0.063,
         "tuples": 4751
       },
       {
@@ -50,7 +50,7 @@
         "variant": "old",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 0.082,
+        "time_ms": 0.075,
         "tuples": 7749
       },
       {
@@ -58,7 +58,7 @@
         "variant": "old",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 0.069,
+        "time_ms": 0.071,
         "tuples": 7749
       },
       {
@@ -66,7 +66,7 @@
         "variant": "old",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.074,
+        "time_ms": 0.075,
         "tuples": 7749
       },
       {
@@ -74,7 +74,7 @@
         "variant": "old",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.072,
+        "time_ms": 0.086,
         "tuples": 7749
       },
       {
@@ -82,13 +82,37 @@
         "variant": "old",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.075,
+        "time_ms": 0.073,
         "tuples": 7749
       },
       {
         "experiment": "qwen_all total runtime",
         "variant": "old",
         "run": 1,
+        "metric": "total runtime ms",
+        "time_ms": 268,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 2,
+        "metric": "total runtime ms",
+        "time_ms": 266,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 3,
+        "metric": "total runtime ms",
+        "time_ms": 259,
+        "tuples": 7805
+      },
+      {
+        "experiment": "qwen_all total runtime",
+        "variant": "old",
+        "run": 4,
         "metric": "total runtime ms",
         "time_ms": 262,
         "tuples": 7805
@@ -96,33 +120,9 @@
       {
         "experiment": "qwen_all total runtime",
         "variant": "old",
-        "run": 2,
-        "metric": "total runtime ms",
-        "time_ms": 261,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 3,
-        "metric": "total runtime ms",
-        "time_ms": 261,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
-        "run": 4,
-        "metric": "total runtime ms",
-        "time_ms": 260,
-        "tuples": 7805
-      },
-      {
-        "experiment": "qwen_all total runtime",
-        "variant": "old",
         "run": 5,
         "metric": "total runtime ms",
-        "time_ms": 256,
+        "time_ms": 258,
         "tuples": 7805
       },
       {
@@ -130,7 +130,7 @@
         "variant": "new",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 21.737,
+        "time_ms": 22.484,
         "tuples": 4751
       },
       {
@@ -138,7 +138,7 @@
         "variant": "new",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 21.793,
+        "time_ms": 21.736,
         "tuples": 4751
       },
       {
@@ -146,7 +146,7 @@
         "variant": "new",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 21.601,
+        "time_ms": 22.233,
         "tuples": 4751
       },
       {
@@ -154,7 +154,7 @@
         "variant": "new",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 21.819,
+        "time_ms": 21.939,
         "tuples": 4751
       },
       {
@@ -162,7 +162,7 @@
         "variant": "new",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 21.742,
+        "time_ms": 22.03,
         "tuples": 4751
       },
       {
@@ -170,7 +170,7 @@
         "variant": "new",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 102.869,
+        "time_ms": 105.275,
         "tuples": 7749
       },
       {
@@ -178,7 +178,7 @@
         "variant": "new",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 103.544,
+        "time_ms": 104.295,
         "tuples": 7749
       },
       {
@@ -186,7 +186,7 @@
         "variant": "new",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 104.536,
+        "time_ms": 104.57,
         "tuples": 7749
       },
       {
@@ -194,7 +194,7 @@
         "variant": "new",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 103.034,
+        "time_ms": 105.594,
         "tuples": 7749
       },
       {
@@ -202,7 +202,7 @@
         "variant": "new",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 102.488,
+        "time_ms": 104.046,
         "tuples": 7749
       },
       {
@@ -210,7 +210,7 @@
         "variant": "new",
         "run": 1,
         "metric": "total runtime ms",
-        "time_ms": 1821,
+        "time_ms": 1837,
         "tuples": 7805
       },
       {
@@ -218,7 +218,7 @@
         "variant": "new",
         "run": 2,
         "metric": "total runtime ms",
-        "time_ms": 1820,
+        "time_ms": 1956,
         "tuples": 7805
       },
       {
@@ -226,7 +226,7 @@
         "variant": "new",
         "run": 3,
         "metric": "total runtime ms",
-        "time_ms": 1834,
+        "time_ms": 1858,
         "tuples": 7805
       },
       {
@@ -234,7 +234,7 @@
         "variant": "new",
         "run": 4,
         "metric": "total runtime ms",
-        "time_ms": 1907,
+        "time_ms": 1826,
         "tuples": 7805
       },
       {
@@ -242,21 +242,13 @@
         "variant": "new",
         "run": 5,
         "metric": "total runtime ms",
-        "time_ms": 1863,
+        "time_ms": 1900,
         "tuples": 7805
       },
       {
         "experiment": "qwen_minimal target rule",
         "variant": "PR #857",
         "run": 1,
-        "metric": "rule search+apply ms",
-        "time_ms": 0.4,
-        "tuples": 4751
-      },
-      {
-        "experiment": "qwen_minimal target rule",
-        "variant": "PR #857",
-        "run": 2,
         "metric": "rule search+apply ms",
         "time_ms": 0.408,
         "tuples": 4751
@@ -264,9 +256,17 @@
       {
         "experiment": "qwen_minimal target rule",
         "variant": "PR #857",
+        "run": 2,
+        "metric": "rule search+apply ms",
+        "time_ms": 0.372,
+        "tuples": 4751
+      },
+      {
+        "experiment": "qwen_minimal target rule",
+        "variant": "PR #857",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.377,
+        "time_ms": 0.391,
         "tuples": 4751
       },
       {
@@ -274,7 +274,7 @@
         "variant": "PR #857",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.405,
+        "time_ms": 0.379,
         "tuples": 4751
       },
       {
@@ -282,7 +282,7 @@
         "variant": "PR #857",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.847,
+        "time_ms": 0.374,
         "tuples": 4751
       },
       {
@@ -290,7 +290,7 @@
         "variant": "PR #857",
         "run": 1,
         "metric": "rule search+apply ms",
-        "time_ms": 0.755,
+        "time_ms": 0.74,
         "tuples": 7749
       },
       {
@@ -298,7 +298,7 @@
         "variant": "PR #857",
         "run": 2,
         "metric": "rule search+apply ms",
-        "time_ms": 0.765,
+        "time_ms": 0.814,
         "tuples": 7749
       },
       {
@@ -306,7 +306,7 @@
         "variant": "PR #857",
         "run": 3,
         "metric": "rule search+apply ms",
-        "time_ms": 0.741,
+        "time_ms": 0.688,
         "tuples": 7749
       },
       {
@@ -314,7 +314,7 @@
         "variant": "PR #857",
         "run": 4,
         "metric": "rule search+apply ms",
-        "time_ms": 0.711,
+        "time_ms": 0.738,
         "tuples": 7749
       },
       {
@@ -322,7 +322,7 @@
         "variant": "PR #857",
         "run": 5,
         "metric": "rule search+apply ms",
-        "time_ms": 0.767,
+        "time_ms": 0.731,
         "tuples": 7749
       },
       {
@@ -354,7 +354,7 @@
         "variant": "PR #857",
         "run": 4,
         "metric": "total runtime ms",
-        "time_ms": 196,
+        "time_ms": 183,
         "tuples": 7805
       },
       {
@@ -362,14 +362,14 @@
         "variant": "PR #857",
         "run": 5,
         "metric": "total runtime ms",
-        "time_ms": 186,
+        "time_ms": 182,
         "tuples": 7805
       }
     ]
   },
   "transform": [
     {
-      "calculate": "(random() - 0.5) * 4",
+      "calculate": "(random() - 0.5) * 2",
       "as": "jitter"
     }
   ],
@@ -398,7 +398,17 @@
     },
     "xOffset": {
       "field": "jitter",
-      "type": "quantitative"
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          -1,
+          1
+        ],
+        "range": [
+          -3,
+          3
+        ]
+      }
     },
     "y": {
       "field": "time_ms",
