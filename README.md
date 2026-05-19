@@ -93,7 +93,10 @@ To regenerate the five-run timing scatter plot:
 scripts/render_timing_scatter.sh
 ```
 
-This reads `scripts/timings_scatter.vl.json` and writes:
+This runs each benchmark both with Rayon parallelism disabled
+(`RAYON_NUM_THREADS=1`, labeled `parallel off`) and with the default Rayon
+thread pool (`parallel on`). It reads `scripts/timings_scatter.vl.json` and
+writes:
 
 - `results/timings_scatter.csv`
 - `results/timings_scatter.png`

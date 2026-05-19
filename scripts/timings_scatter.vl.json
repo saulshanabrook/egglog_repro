@@ -1,8 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "title": "egglog #872 repro timings, 5 runs per variant",
-  "width": 860,
-  "height": 430,
+  "title": "egglog #872 repro timings, 5 runs per variant and parallel mode",
   "padding": {
     "left": 5,
     "top": 5,
@@ -44,62 +42,86 @@
       "as": "jitter"
     }
   ],
-  "mark": {
-    "type": "point",
-    "filled": true,
-    "size": 70,
-    "opacity": 0.55,
-    "stroke": "white",
-    "strokeWidth": 0.8
+  "facet": {
+    "row": {
+      "field": "parallel",
+      "type": "nominal",
+      "sort": ["parallel off", "parallel on"],
+      "title": null,
+      "header": {
+        "labelFontSize": 13,
+        "labelFontWeight": "bold",
+        "labelPadding": 6
+      }
+    }
   },
-  "encoding": {
-    "x": {
-      "field": "experiment",
-      "type": "nominal",
-      "sort": {
-        "field": "experiment_first_row",
-        "op": "min",
-        "order": "ascending"
+  "spec": {
+    "width": 860,
+    "height": 260,
+    "mark": {
+      "type": "point",
+      "filled": true,
+      "size": 70,
+      "opacity": 0.4,
+      "stroke": "white",
+      "strokeWidth": 0.8
+    },
+    "encoding": {
+      "x": {
+        "field": "experiment",
+        "type": "nominal",
+        "sort": {
+          "field": "experiment_first_row",
+          "op": "min",
+          "order": "ascending"
+        },
+        "axis": {
+          "title": "Experiment",
+          "labelAngle": 0
+        }
       },
-      "axis": {
-        "title": "Experiment",
-        "labelAngle": 0
-      }
-    },
-    "xOffset": {
-      "field": "jitter",
-      "type": "quantitative",
-      "scale": {
-        "domain": [-0.5, 0.5],
-        "range": [
-          {
-            "expr": "bandwidth('x') / 2 - 4"
-          },
-          {
-            "expr": "bandwidth('x') / 2 + 4"
-          }
-        ]
-      }
-    },
-    "y": {
-      "field": "time_ms",
-      "type": "quantitative",
-      "scale": {
-        "type": "log",
-        "base": 10
+      "xOffset": {
+        "field": "jitter",
+        "type": "quantitative",
+        "scale": {
+          "domain": [-0.5, 0.5],
+          "range": [
+            {
+              "expr": "bandwidth('x') / 2 - 4"
+            },
+            {
+              "expr": "bandwidth('x') / 2 + 4"
+            }
+          ]
+        }
       },
-      "axis": {
-        "title": "Time (ms, log scale)",
-        "format": "~g"
+      "y": {
+        "field": "time_ms",
+        "type": "quantitative",
+        "scale": {
+          "type": "log",
+          "base": 10
+        },
+        "axis": {
+          "title": "Time (ms, log scale)",
+          "format": "~g"
+        }
+      },
+      "color": {
+        "field": "variant",
+        "type": "nominal",
+        "legend": {
+          "title": "Variant",
+          "orient": "top"
+        }
       }
-    },
-    "color": {
-      "field": "variant",
-      "type": "nominal",
-      "legend": {
-        "title": "Variant",
-        "orient": "top"
-      }
+    }
+  },
+  "resolve": {
+    "scale": {
+      "x": "shared",
+      "y": "shared",
+      "color": "shared"
     }
   },
   "config": {

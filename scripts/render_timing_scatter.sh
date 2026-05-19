@@ -15,6 +15,8 @@ mkdir -p "$OUT_DIR"
 features=("old" "new" "pr857" "latest_main")
 variants=("old" "new" "PR #857" "main 8c1c70b")
 bins=("$BIN_DIR/bench_old" "$BIN_DIR/bench_new" "$BIN_DIR/bench_pr857" "$BIN_DIR/bench_latest_main")
+parallel_labels=("parallel off" "parallel on")
+rayon_threads=("1" "")
 
 cd "$ROOT"
 
@@ -28,67 +30,89 @@ for i in "${!features[@]}"; do
   cp target/release/bench "${bins[$i]}"
 done
 
-printf 'experiment,variant,run,metric,time_ms,tuples\n' > "$CSV"
+printf 'parallel,experiment,variant,run,metric,time_ms,tuples\n' > "$CSV"
+
+run_bench() {
+  local bin="$1"
+  local file="$2"
+  local top_n="$3"
+  local rayon_thread_count="$4"
+
+  if [[ -n "$rayon_thread_count" ]]; then
+    RAYON_NUM_THREADS="$rayon_thread_count" "$bin" "$file" "$top_n" 2>&1
+  else
+    "$bin" "$file" "$top_n" 2>&1
+  fi
+}
 
 append_rule_timing() {
   local bin="$1"
   local variant="$2"
-  local run="$3"
-  local experiment="$4"
-  local file="$5"
+  local parallel="$3"
+  local run="$4"
+  local experiment="$5"
+  local file="$6"
+  local rayon_thread_count="$7"
   local out
   local time_ms
   local tuples
 
-  out="$("$bin" "$file" 200 2>&1)"
+  out="$(run_bench "$bin" "$file" 200 "$rayon_thread_count")"
   time_ms="$(printf '%s\n' "$out" | awk '/cublaslt batched column-major/ { print $1; exit }')"
   tuples="$(printf '%s\n' "$out" | awk '/tuples after:/ { print $3; exit }')"
 
   if [[ -z "$time_ms" || -z "$tuples" ]]; then
-    printf 'failed to parse rule timing for %s %s run %s\n' "$variant" "$experiment" "$run" >&2
+    printf 'failed to parse rule timing for %s %s %s run %s\n' "$parallel" "$variant" "$experiment" "$run" >&2
     printf '%s\n' "$out" >&2
     exit 1
   fi
 
-  printf '%s,%s,%s,rule search+apply ms,%s,%s\n' \
-    "$experiment" "$variant" "$run" "$time_ms" "$tuples" >> "$CSV"
+  printf '%s,%s,%s,%s,rule search+apply ms,%s,%s\n' \
+    "$parallel" "$experiment" "$variant" "$run" "$time_ms" "$tuples" >> "$CSV"
 }
 
 append_total_timing() {
   local bin="$1"
   local variant="$2"
-  local run="$3"
+  local parallel="$3"
+  local run="$4"
+  local rayon_thread_count="$5"
   local out
   local time_ms
   local tuples
 
-  out="$("$bin" qwen_all_cublaslt_rules.egg 0 2>&1)"
+  out="$(run_bench "$bin" qwen_all_cublaslt_rules.egg 0 "$rayon_thread_count")"
   time_ms="$(printf '%s\n' "$out" | awk '/egglog total:/ { gsub("s", "", $3); print $3 * 1000; exit }')"
   tuples="$(printf '%s\n' "$out" | awk '/tuples after:/ { print $3; exit }')"
 
   if [[ -z "$time_ms" || -z "$tuples" ]]; then
-    printf 'failed to parse total timing for %s run %s\n' "$variant" "$run" >&2
+    printf 'failed to parse total timing for %s %s run %s\n' "$parallel" "$variant" "$run" >&2
     printf '%s\n' "$out" >&2
     exit 1
   fi
 
-  printf 'qwen_all total runtime,%s,%s,total runtime ms,%s,%s\n' \
-    "$variant" "$run" "$time_ms" "$tuples" >> "$CSV"
+  printf '%s,qwen_all total runtime,%s,%s,total runtime ms,%s,%s\n' \
+    "$parallel" "$variant" "$run" "$time_ms" "$tuples" >> "$CSV"
 }
 
-for i in "${!variants[@]}"; do
-  for run in 1 2 3 4 5; do
-    append_rule_timing "${bins[$i]}" "${variants[$i]}" "$run" \
-      "qwen_minimal target rule" qwen_minimal.egg
-  done
+for mode_i in "${!parallel_labels[@]}"; do
+  parallel="${parallel_labels[$mode_i]}"
+  rayon_thread_count="${rayon_threads[$mode_i]}"
 
-  for run in 1 2 3 4 5; do
-    append_rule_timing "${bins[$i]}" "${variants[$i]}" "$run" \
-      "qwen_one target rule" qwen_one_cublaslt_rule.egg
-  done
+  for i in "${!variants[@]}"; do
+    for run in 1 2 3 4 5; do
+      append_rule_timing "${bins[$i]}" "${variants[$i]}" "$parallel" "$run" \
+        "qwen_minimal target rule" qwen_minimal.egg "$rayon_thread_count"
+    done
 
-  for run in 1 2 3 4 5; do
-    append_total_timing "${bins[$i]}" "${variants[$i]}" "$run"
+    for run in 1 2 3 4 5; do
+      append_rule_timing "${bins[$i]}" "${variants[$i]}" "$parallel" "$run" \
+        "qwen_one target rule" qwen_one_cublaslt_rule.egg "$rayon_thread_count"
+    done
+
+    for run in 1 2 3 4 5; do
+      append_total_timing "${bins[$i]}" "${variants[$i]}" "$parallel" "$run" "$rayon_thread_count"
+    done
   done
 done
 
