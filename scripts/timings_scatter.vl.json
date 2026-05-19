@@ -73,10 +73,10 @@
         "domain": [-0.5, 0.5],
         "range": [
           {
-            "expr": "bandwidth('x') / 2 - 2"
+            "expr": "bandwidth('x') / 2 - 4"
           },
           {
-            "expr": "bandwidth('x') / 2 + 2"
+            "expr": "bandwidth('x') / 2 + 4"
           }
         ]
       }

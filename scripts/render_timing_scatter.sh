@@ -12,9 +12,9 @@ trap 'rm -rf "$BIN_DIR"' EXIT
 
 mkdir -p "$OUT_DIR"
 
-features=("old" "new" "pr857")
-variants=("old" "new" "PR #857")
-bins=("$BIN_DIR/bench_old" "$BIN_DIR/bench_new" "$BIN_DIR/bench_pr857")
+features=("old" "new" "pr857" "latest_main")
+variants=("old" "new" "PR #857" "main 8c1c70b")
+bins=("$BIN_DIR/bench_old" "$BIN_DIR/bench_new" "$BIN_DIR/bench_pr857" "$BIN_DIR/bench_latest_main")
 
 cd "$ROOT"
 

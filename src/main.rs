@@ -6,15 +6,25 @@ use egglog_new as egglog;
 use egglog_old as egglog;
 #[cfg(feature = "pr857")]
 use egglog_pr857 as egglog;
+#[cfg(feature = "latest_main")]
+use egglog_latest_main as egglog;
 
-#[cfg(not(any(feature = "old", feature = "new", feature = "pr857")))]
-compile_error!("enable exactly one of the old, new, or pr857 features");
+#[cfg(not(any(
+    feature = "old",
+    feature = "new",
+    feature = "pr857",
+    feature = "latest_main"
+)))]
+compile_error!("enable exactly one of the old, new, pr857, or latest_main features");
 #[cfg(any(
     all(feature = "old", feature = "new"),
     all(feature = "old", feature = "pr857"),
+    all(feature = "old", feature = "latest_main"),
     all(feature = "new", feature = "pr857"),
+    all(feature = "new", feature = "latest_main"),
+    all(feature = "pr857", feature = "latest_main"),
 ))]
-compile_error!("enable exactly one of the old, new, or pr857 features");
+compile_error!("enable exactly one of the old, new, pr857, or latest_main features");
 
 fn main() {
     let path = std::env::args()

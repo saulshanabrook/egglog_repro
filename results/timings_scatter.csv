@@ -1,46 +1,61 @@
 experiment,variant,run,metric,time_ms,tuples
-qwen_minimal target rule,old,1,rule search+apply ms,0.057,4751
-qwen_minimal target rule,old,2,rule search+apply ms,0.061,4751
-qwen_minimal target rule,old,3,rule search+apply ms,0.061,4751
-qwen_minimal target rule,old,4,rule search+apply ms,0.060,4751
-qwen_minimal target rule,old,5,rule search+apply ms,0.064,4751
-qwen_one target rule,old,1,rule search+apply ms,0.078,7749
-qwen_one target rule,old,2,rule search+apply ms,0.067,7749
-qwen_one target rule,old,3,rule search+apply ms,0.079,7749
-qwen_one target rule,old,4,rule search+apply ms,0.071,7749
-qwen_one target rule,old,5,rule search+apply ms,0.081,7749
-qwen_all total runtime,old,1,total runtime ms,333,7805
-qwen_all total runtime,old,2,total runtime ms,288,7805
-qwen_all total runtime,old,3,total runtime ms,282,7805
-qwen_all total runtime,old,4,total runtime ms,354,7805
-qwen_all total runtime,old,5,total runtime ms,283,7805
-qwen_minimal target rule,new,1,rule search+apply ms,23.008,4751
-qwen_minimal target rule,new,2,rule search+apply ms,22.241,4751
-qwen_minimal target rule,new,3,rule search+apply ms,22.566,4751
-qwen_minimal target rule,new,4,rule search+apply ms,22.474,4751
-qwen_minimal target rule,new,5,rule search+apply ms,21.825,4751
-qwen_one target rule,new,1,rule search+apply ms,105.501,7749
-qwen_one target rule,new,2,rule search+apply ms,103.930,7749
-qwen_one target rule,new,3,rule search+apply ms,106.049,7749
-qwen_one target rule,new,4,rule search+apply ms,105.833,7749
-qwen_one target rule,new,5,rule search+apply ms,106.313,7749
-qwen_all total runtime,new,1,total runtime ms,1868,7805
-qwen_all total runtime,new,2,total runtime ms,1865,7805
-qwen_all total runtime,new,3,total runtime ms,2019,7805
-qwen_all total runtime,new,4,total runtime ms,1937,7805
-qwen_all total runtime,new,5,total runtime ms,1899,7805
-qwen_minimal target rule,PR #857,1,rule search+apply ms,0.422,4751
-qwen_minimal target rule,PR #857,2,rule search+apply ms,0.406,4751
-qwen_minimal target rule,PR #857,3,rule search+apply ms,0.368,4751
-qwen_minimal target rule,PR #857,4,rule search+apply ms,0.387,4751
-qwen_minimal target rule,PR #857,5,rule search+apply ms,0.438,4751
-qwen_one target rule,PR #857,1,rule search+apply ms,0.812,7749
-qwen_one target rule,PR #857,2,rule search+apply ms,0.685,7749
-qwen_one target rule,PR #857,3,rule search+apply ms,0.757,7749
-qwen_one target rule,PR #857,4,rule search+apply ms,0.748,7749
-qwen_one target rule,PR #857,5,rule search+apply ms,0.820,7749
-qwen_all total runtime,PR #857,1,total runtime ms,196,7805
-qwen_all total runtime,PR #857,2,total runtime ms,198,7805
-qwen_all total runtime,PR #857,3,total runtime ms,197,7805
-qwen_all total runtime,PR #857,4,total runtime ms,251,7805
-qwen_all total runtime,PR #857,5,total runtime ms,194,7805
+qwen_minimal target rule,old,1,rule search+apply ms,0.059,4751
+qwen_minimal target rule,old,2,rule search+apply ms,0.053,4751
+qwen_minimal target rule,old,3,rule search+apply ms,0.055,4751
+qwen_minimal target rule,old,4,rule search+apply ms,0.055,4751
+qwen_minimal target rule,old,5,rule search+apply ms,0.057,4751
+qwen_one target rule,old,1,rule search+apply ms,0.074,7749
+qwen_one target rule,old,2,rule search+apply ms,0.087,7749
+qwen_one target rule,old,3,rule search+apply ms,0.073,7749
+qwen_one target rule,old,4,rule search+apply ms,0.091,7749
+qwen_one target rule,old,5,rule search+apply ms,0.073,7749
+qwen_all total runtime,old,1,total runtime ms,311,7805
+qwen_all total runtime,old,2,total runtime ms,273,7805
+qwen_all total runtime,old,3,total runtime ms,285,7805
+qwen_all total runtime,old,4,total runtime ms,489,7805
+qwen_all total runtime,old,5,total runtime ms,277,7805
+qwen_minimal target rule,new,1,rule search+apply ms,23.260,4751
+qwen_minimal target rule,new,2,rule search+apply ms,23.051,4751
+qwen_minimal target rule,new,3,rule search+apply ms,22.970,4751
+qwen_minimal target rule,new,4,rule search+apply ms,23.780,4751
+qwen_minimal target rule,new,5,rule search+apply ms,23.381,4751
+qwen_one target rule,new,1,rule search+apply ms,106.579,7749
+qwen_one target rule,new,2,rule search+apply ms,116.153,7749
+qwen_one target rule,new,3,rule search+apply ms,196.164,7749
+qwen_one target rule,new,4,rule search+apply ms,111.385,7749
+qwen_one target rule,new,5,rule search+apply ms,110.457,7749
+qwen_all total runtime,new,1,total runtime ms,2183,7805
+qwen_all total runtime,new,2,total runtime ms,1973,7805
+qwen_all total runtime,new,3,total runtime ms,1921,7805
+qwen_all total runtime,new,4,total runtime ms,1930,7805
+qwen_all total runtime,new,5,total runtime ms,1983,7805
+qwen_minimal target rule,PR #857,1,rule search+apply ms,0.371,4751
+qwen_minimal target rule,PR #857,2,rule search+apply ms,0.400,4751
+qwen_minimal target rule,PR #857,3,rule search+apply ms,0.481,4751
+qwen_minimal target rule,PR #857,4,rule search+apply ms,0.412,4751
+qwen_minimal target rule,PR #857,5,rule search+apply ms,0.529,4751
+qwen_one target rule,PR #857,1,rule search+apply ms,0.714,7749
+qwen_one target rule,PR #857,2,rule search+apply ms,0.833,7749
+qwen_one target rule,PR #857,3,rule search+apply ms,0.781,7749
+qwen_one target rule,PR #857,4,rule search+apply ms,0.870,7749
+qwen_one target rule,PR #857,5,rule search+apply ms,0.724,7749
+qwen_all total runtime,PR #857,1,total runtime ms,214,7805
+qwen_all total runtime,PR #857,2,total runtime ms,196,7805
+qwen_all total runtime,PR #857,3,total runtime ms,203,7805
+qwen_all total runtime,PR #857,4,total runtime ms,197,7805
+qwen_all total runtime,PR #857,5,total runtime ms,191,7805
+qwen_minimal target rule,main 8c1c70b,1,rule search+apply ms,0.387,4751
+qwen_minimal target rule,main 8c1c70b,2,rule search+apply ms,0.393,4751
+qwen_minimal target rule,main 8c1c70b,3,rule search+apply ms,0.403,4751
+qwen_minimal target rule,main 8c1c70b,4,rule search+apply ms,0.414,4751
+qwen_minimal target rule,main 8c1c70b,5,rule search+apply ms,0.391,4751
+qwen_one target rule,main 8c1c70b,1,rule search+apply ms,0.830,7749
+qwen_one target rule,main 8c1c70b,2,rule search+apply ms,0.774,7749
+qwen_one target rule,main 8c1c70b,3,rule search+apply ms,0.766,7749
+qwen_one target rule,main 8c1c70b,4,rule search+apply ms,0.752,7749
+qwen_one target rule,main 8c1c70b,5,rule search+apply ms,0.745,7749
+qwen_all total runtime,main 8c1c70b,1,total runtime ms,187,7805
+qwen_all total runtime,main 8c1c70b,2,total runtime ms,190,7805
+qwen_all total runtime,main 8c1c70b,3,total runtime ms,192,7805
+qwen_all total runtime,main 8c1c70b,4,total runtime ms,190,7805
+qwen_all total runtime,main 8c1c70b,5,total runtime ms,189,7805

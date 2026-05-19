@@ -49,6 +49,12 @@ On a local run, that branch reduces the target zero-match cublaslt rule from
 `qwen_one_cublaslt_rule.egg`. The full cublaslt ruleset total drops from
 ~1.85 s on NEW to ~0.19 s on the PR branch, with identical final tuple counts.
 
+The harness also includes latest upstream `main`, pinned to commit
+`8c1c70b03b805b9a0062272ba64552cd5738454c` (`main 8c1c70b` in the plot).
+On the same five-run local timing sweep, latest `main` stays in the same
+range as PR #857: ~0.40 ms on `qwen_minimal.egg`, ~0.77 ms on
+`qwen_one_cublaslt_rule.egg`, and ~0.19 s on the full cublaslt ruleset.
+
 ## Reproduce
 
 ```bash
@@ -59,21 +65,26 @@ cargo build --release --features new --no-default-features
 cp target/release/bench /tmp/bench_new
 cargo build --release --features pr857 --no-default-features
 cp target/release/bench /tmp/bench_pr857
+cargo build --release --features latest_main --no-default-features
+cp target/release/bench /tmp/bench_latest_main
 
 # Cleanest single-rule signal (149 KB file, 0 matches)
 /tmp/bench_old qwen_minimal.egg 5
 /tmp/bench_new qwen_minimal.egg 5
 /tmp/bench_pr857 qwen_minimal.egg 5
+/tmp/bench_latest_main qwen_minimal.egg 5
 
 # Bigger e-graph: 1600× on the same rule
 /tmp/bench_old qwen_one_cublaslt_rule.egg 5
 /tmp/bench_new qwen_one_cublaslt_rule.egg 5
 /tmp/bench_pr857 qwen_one_cublaslt_rule.egg 5
+/tmp/bench_latest_main qwen_one_cublaslt_rule.egg 5
 
 # Full ruleset: 7.4× total saturation time
 /tmp/bench_old qwen_all_cublaslt_rules.egg 10
 /tmp/bench_new qwen_all_cublaslt_rules.egg 10
 /tmp/bench_pr857 qwen_all_cublaslt_rules.egg 10
+/tmp/bench_latest_main qwen_all_cublaslt_rules.egg 10
 ```
 
 To regenerate the five-run timing scatter plot:
