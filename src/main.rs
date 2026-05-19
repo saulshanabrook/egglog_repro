@@ -1,9 +1,20 @@
 use std::time::Instant;
 
-#[cfg(feature = "old")]
-use egglog_old as egglog;
 #[cfg(feature = "new")]
 use egglog_new as egglog;
+#[cfg(feature = "old")]
+use egglog_old as egglog;
+#[cfg(feature = "pr857")]
+use egglog_pr857 as egglog;
+
+#[cfg(not(any(feature = "old", feature = "new", feature = "pr857")))]
+compile_error!("enable exactly one of the old, new, or pr857 features");
+#[cfg(any(
+    all(feature = "old", feature = "new"),
+    all(feature = "old", feature = "pr857"),
+    all(feature = "new", feature = "pr857"),
+))]
+compile_error!("enable exactly one of the old, new, or pr857 features");
 
 fn main() {
     let path = std::env::args()

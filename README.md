@@ -38,26 +38,42 @@ Three self-contained `.egg` programs, each runnable by `parse_and_run_program`:
 All three produce **identical final tuple counts** on OLD and NEW, so the
 optimisation is still correct.
 
+## Candidate fix branch
+
+This harness can also build against PR
+[`#857`](https://github.com/egraphs-good/egglog/pull/857), pinned to head
+commit `345fa8d93ff904865c1b69cffbaeeedf6b88cc09`.
+
+On a local run, that branch reduces the target zero-match cublaslt rule from
+~22 ms to ~0.4 ms on `qwen_minimal.egg`, and from ~104 ms to ~0.7 ms on
+`qwen_one_cublaslt_rule.egg`. The full cublaslt ruleset total drops from
+~1.85 s on NEW to ~0.19 s on the PR branch, with identical final tuple counts.
+
 ## Reproduce
 
 ```bash
-# Build the bench harness against each rev
+# Build the bench harness against each rev / branch
 cargo build --release --features old --no-default-features
 cp target/release/bench /tmp/bench_old
 cargo build --release --features new --no-default-features
 cp target/release/bench /tmp/bench_new
+cargo build --release --features pr857 --no-default-features
+cp target/release/bench /tmp/bench_pr857
 
 # Cleanest single-rule signal (149 KB file, 0 matches)
 /tmp/bench_old qwen_minimal.egg 5
 /tmp/bench_new qwen_minimal.egg 5
+/tmp/bench_pr857 qwen_minimal.egg 5
 
 # Bigger e-graph: 1600× on the same rule
 /tmp/bench_old qwen_one_cublaslt_rule.egg 5
 /tmp/bench_new qwen_one_cublaslt_rule.egg 5
+/tmp/bench_pr857 qwen_one_cublaslt_rule.egg 5
 
 # Full ruleset: 7.4× total saturation time
 /tmp/bench_old qwen_all_cublaslt_rules.egg 10
 /tmp/bench_new qwen_all_cublaslt_rules.egg 10
+/tmp/bench_pr857 qwen_all_cublaslt_rules.egg 10
 ```
 
 ## The slow rule
