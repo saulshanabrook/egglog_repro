@@ -100,6 +100,12 @@ writes:
 
 - `results/timings_scatter.csv`
 - `results/timings_scatter.png`
+- `results/timing_percent_change.csv`
+- `results/timing_percent_change.png`
+
+The percent-change CSV uses the old serial (`parallel off`) mean for each
+benchmark as the baseline and reports ratio-of-means percent change with a
+one-level Fieller-style 95% confidence interval.
 
 ## The slow rule
 

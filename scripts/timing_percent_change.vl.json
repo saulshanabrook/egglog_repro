@@ -1,0 +1,204 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "title": {
+    "text": "egglog #872 percent change vs old serial baseline",
+    "subtitle": "Points are ratio-of-means percent change; bars are 95% CIs on a log-ratio scale"
+  },
+  "padding": {
+    "left": 5,
+    "top": 5,
+    "right": 5,
+    "bottom": 35
+  },
+  "data": {
+    "url": "../results/timing_percent_change.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "experiment_order": "number",
+        "variant_order": "number",
+        "parallel_order": "number",
+        "n_baseline": "number",
+        "n": "number",
+        "baseline_mean_ms": "number",
+        "mean_ms": "number",
+        "ratio_mean": "number",
+        "percent_change": "number",
+        "ci_lower_ratio": "number",
+        "ci_upper_ratio": "number",
+        "ci_lower_percent": "number",
+        "ci_upper_percent": "number"
+      }
+    }
+  },
+  "facet": {
+    "row": {
+      "field": "experiment",
+      "type": "nominal",
+      "sort": {
+        "field": "experiment_order",
+        "op": "min",
+        "order": "ascending"
+      },
+      "title": null,
+      "header": {
+        "labelOrient": "top",
+        "labelFontSize": 13,
+        "labelFontWeight": "bold",
+        "labelPadding": 6
+      }
+    }
+  },
+  "spec": {
+    "width": 860,
+    "height": 230,
+    "layer": [
+      {
+        "mark": {
+          "type": "rule",
+          "strokeDash": [4, 4],
+          "opacity": 0.35
+        },
+        "encoding": {
+          "y": {
+            "datum": 1,
+            "type": "quantitative"
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "rule",
+          "strokeWidth": 2,
+          "opacity": 0.65
+        },
+        "encoding": {
+          "x": {
+            "field": "variant",
+            "type": "nominal",
+            "sort": {
+              "field": "variant_order",
+              "op": "min",
+              "order": "ascending"
+            },
+            "axis": {
+              "title": "Commit",
+              "labelAngle": 0
+            }
+          },
+          "xOffset": {
+            "field": "parallel",
+            "type": "nominal",
+            "sort": {
+              "field": "parallel_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          },
+          "y": {
+            "field": "ci_lower_ratio",
+            "type": "quantitative",
+            "scale": {
+              "type": "log",
+              "base": 10,
+              "nice": false
+            },
+            "axis": {
+              "title": null,
+              "values": [0.7, 0.8, 1, 2, 10, 100, 1000, 3000],
+              "labelExpr": "datum.value === 1 ? '0%' : datum.value < 1 ? format((datum.value - 1) * 100, '.0f') + '%' : '+' + format((datum.value - 1) * 100, '.2s') + '%'"
+            }
+          },
+          "y2": {
+            "field": "ci_upper_ratio"
+          },
+          "color": {
+            "field": "parallel",
+            "type": "nominal",
+            "sort": {
+              "field": "parallel_order",
+              "op": "min",
+              "order": "ascending"
+            },
+            "legend": {
+              "title": "Mode",
+              "orient": "top"
+            }
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "point",
+          "filled": true,
+          "size": 85,
+          "opacity": 0.75,
+          "stroke": "white",
+          "strokeWidth": 0.8
+        },
+        "encoding": {
+          "x": {
+            "field": "variant",
+            "type": "nominal",
+            "sort": {
+              "field": "variant_order",
+              "op": "min",
+              "order": "ascending"
+            },
+            "axis": {
+              "title": "Commit",
+              "labelAngle": 0
+            }
+          },
+          "xOffset": {
+            "field": "parallel",
+            "type": "nominal",
+            "sort": {
+              "field": "parallel_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          },
+          "y": {
+            "field": "ratio_mean",
+            "type": "quantitative"
+          },
+          "color": {
+            "field": "parallel",
+            "type": "nominal",
+            "sort": {
+              "field": "parallel_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "scale": {
+      "x": "shared",
+      "y": "shared",
+      "color": "shared"
+    }
+  },
+  "config": {
+    "axis": {
+      "grid": true,
+      "titleFontSize": 13,
+      "labelFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12
+    },
+    "title": {
+      "fontSize": 16,
+      "anchor": "start"
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

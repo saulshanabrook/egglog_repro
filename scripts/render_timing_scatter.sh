@@ -6,6 +6,9 @@ OUT_DIR="$ROOT/results"
 CSV="$OUT_DIR/timings_scatter.csv"
 SPEC="$ROOT/scripts/timings_scatter.vl.json"
 PNG="$OUT_DIR/timings_scatter.png"
+PERCENT_CSV="$OUT_DIR/timing_percent_change.csv"
+PERCENT_SPEC="$ROOT/scripts/timing_percent_change.vl.json"
+PERCENT_PNG="$OUT_DIR/timing_percent_change.png"
 BIN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/egglog-repro-bins.XXXXXX")"
 
 trap 'rm -rf "$BIN_DIR"' EXIT
@@ -22,6 +25,10 @@ cd "$ROOT"
 
 if [[ ! -f "$SPEC" ]]; then
   printf 'missing Vega-Lite spec: %s\n' "$SPEC" >&2
+  exit 1
+fi
+if [[ ! -f "$PERCENT_SPEC" ]]; then
+  printf 'missing Vega-Lite spec: %s\n' "$PERCENT_SPEC" >&2
   exit 1
 fi
 
@@ -116,7 +123,12 @@ for mode_i in "${!parallel_labels[@]}"; do
   done
 done
 
+node "$ROOT/scripts/compute_timing_percent_change.mjs" "$CSV" "$PERCENT_CSV"
+
 npx --yes --package vega-lite@6.4.3 --package canvas vl2png --seed 1 "$SPEC" "$PNG"
+npx --yes --package vega-lite@6.4.3 --package canvas vl2png "$PERCENT_SPEC" "$PERCENT_PNG"
 
 printf 'Wrote %s\n' "$CSV"
 printf 'Rendered %s from %s\n' "$PNG" "$SPEC"
+printf 'Wrote %s\n' "$PERCENT_CSV"
+printf 'Rendered %s from %s\n' "$PERCENT_PNG" "$PERCENT_SPEC"
