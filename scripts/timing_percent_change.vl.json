@@ -1,9 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Plots the ratio-of-execution-time-means percent changes and 95% CIs precomputed by scripts/compute_timing_percent_change.mjs, following Kalibera and Jones. Timeout or failed rows are treated as right-censored lower-bound observations.",
+  "description": "Plots ratio-of-execution-time-means percent changes and 95% CIs precomputed by scripts/compute_timing_percent_change.mjs, following Kalibera and Jones. Timeout rows are exact capped-runtime observations; if any run times out, the plotted interval uses the capped Fieller lower bound and an infinite upper bound for the true uncapped runtime ratio.",
   "title": {
     "text": "egglog #872 percent change vs old serial baseline",
-    "subtitle": "Vertical lines are 95% CIs; upward triangles are lower-bounded right-censored intervals"
+    "subtitle": "Vertical lines are 95% CIs; upward triangles use capped-Fieller lower bounds for true uncapped ratios"
   },
   "padding": {
     "left": 5,

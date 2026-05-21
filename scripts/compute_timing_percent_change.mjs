@@ -12,9 +12,11 @@ import { readFileSync, writeFileSync } from "node:fs";
 // Temam, Wu, and Hu, "Statistical Performance Comparisons of Computers"
 // (HPCA 2012, doi:10.1109/HPCA.2012.6169043).
 //
-// timeout_or_failed rows are treated as right-censored runtimes: the recorded
-// time_ms is the timeout cutoff/lower-bound value, so true runtime is >= time_ms.
-// For any censored comparison, the ratio CI is therefore [lower, Infinity).
+// timeout_or_failed rows are exact capped-runtime observations for
+// C=min(T, timeout). If a comparison has timeouts, we compute the ordinary
+// ratio CI on capped values, then use only its lower bound for the true
+// uncapped runtime ratio because E[C] <= E[T]. The uncapped upper bound is
+// therefore Infinity.
 
 const [, , inputPath = "results/timings_scatter.csv", outputPath = "results/timing_percent_change.csv"] =
   process.argv;
@@ -63,40 +65,6 @@ const tCritical95 = [
   2.048,
   2.045,
   2.042,
-];
-
-const tCriticalOneSided95 = [
-  null,
-  6.314,
-  2.92,
-  2.353,
-  2.132,
-  2.015,
-  1.943,
-  1.895,
-  1.86,
-  1.833,
-  1.812,
-  1.796,
-  1.782,
-  1.771,
-  1.761,
-  1.753,
-  1.746,
-  1.74,
-  1.734,
-  1.729,
-  1.725,
-  1.721,
-  1.717,
-  1.714,
-  1.711,
-  1.708,
-  1.706,
-  1.703,
-  1.701,
-  1.699,
-  1.697,
 ];
 
 function parseCsv(text) {
@@ -182,10 +150,6 @@ function interpolateTCritical(df) {
   return interpolateTCriticalFromTable(df, tCritical95, 1.96);
 }
 
-function interpolateOneSidedTCritical95(df) {
-  return interpolateTCriticalFromTable(df, tCriticalOneSided95, 1.645);
-}
-
 function ratioConfidenceInterval(oldValues, newValues) {
   const oldN = oldValues.length;
   const newN = newValues.length;
@@ -245,56 +209,12 @@ function countTimeouts(samples) {
   return samples.filter((sample) => sample.timedOut).length;
 }
 
-function upperMeanBound(values, alpha = 0.025) {
-  const n = values.length;
-  const valueMean = mean(values);
-  const valueVariance = sampleVariance(values, valueMean);
-  const t = alpha === 0.025 ? interpolateTCritical(n - 1) : interpolateOneSidedTCritical95(n - 1);
-  return valueMean + t * Math.sqrt(valueVariance / n);
-}
-
-function allTimeoutLowerBound(samples, alpha) {
-  const cutoffs = samples.map((sample) => sample.timeMs);
-  const uniqueCutoffs = new Set(cutoffs);
-  const tau = uniqueCutoffs.size === 1 ? cutoffs[0] : Math.min(...cutoffs);
-  return tau * alpha ** (1 / samples.length);
-}
-
-function censoredMeanLowerBound(samples, alpha) {
-  const timeoutCount = countTimeouts(samples);
-  if (timeoutCount === 0) {
-    throw new Error("censoredMeanLowerBound requires at least one censored sample");
-  }
-  if (timeoutCount === samples.length) {
-    return allTimeoutLowerBound(samples, alpha);
-  }
-
-  const lowerValues = sampleValues(samples);
-  const lowerMean = mean(lowerValues);
-  const lowerVariance = sampleVariance(lowerValues, lowerMean);
-  const t = alpha === 0.025 ? interpolateTCritical(samples.length - 1) : interpolateOneSidedTCritical95(samples.length - 1);
-  return Math.max(0, lowerMean - t * Math.sqrt(lowerVariance / samples.length));
-}
-
-function censoredRatioConfidenceInterval(oldValues, newSamples) {
-  const oldMean = mean(oldValues);
-  const newValues = sampleValues(newSamples);
-  const newMean = mean(newValues);
-  const oldUpper = upperMeanBound(oldValues, 0.025);
-  const newLower = censoredMeanLowerBound(newSamples, 0.025);
-  const ratio = newMean / oldMean;
-  const ratioLower = Math.max(newLower, 0) / oldUpper;
-
+function cappedRuntimeRatioLowerBound(oldValues, newSamples) {
+  const cappedCi = ratioConfidenceInterval(oldValues, sampleValues(newSamples));
   return {
-    ratio,
-    lower: Math.max(ratioLower, Number.MIN_VALUE),
+    ...cappedCi,
     upper: Infinity,
-    method:
-      countTimeouts(newSamples) === newSamples.length
-        ? "right_censored_all_timeout_lower_bound"
-        : "right_censored_mixed_lower_bound",
-    oldMean,
-    newMean,
+    method: `${cappedCi.method}_capped_runtime_lower_bound`,
   };
 }
 
@@ -347,7 +267,7 @@ for (const [experiment, experimentOrder] of experiments) {
     const nTimeout = countTimeouts(samples);
     const ci =
       nTimeout > 0
-        ? censoredRatioConfidenceInterval(baselineValues, samples)
+        ? cappedRuntimeRatioLowerBound(baselineValues, samples)
         : ratioConfidenceInterval(baselineValues, sampleValues(samples));
     outputRows.push({
       experiment,
