@@ -1,113 +1,145 @@
 parallel,experiment,variant,run,metric,time_ms,tuples,status
-parallel off,gemma4_moe,old,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma4_moe,old,2,total runtime ms,75000,,timeout_or_failed
-parallel off,llama,old,1,total runtime ms,1222,16761,complete
-parallel off,llama,old,2,total runtime ms,1212,16761,complete
-parallel off,whisper,old,1,total runtime ms,30208,26184,complete
-parallel off,whisper,old,2,total runtime ms,30368,26184,complete
-parallel off,gemma,old,1,total runtime ms,73228,67904,complete
-parallel off,gemma,old,2,total runtime ms,72844,67904,complete
-parallel off,qwen3_moe,old,1,total runtime ms,2297,31986,complete
-parallel off,qwen3_moe,old,2,total runtime ms,2298,31986,complete
-parallel off,qwen,old,1,total runtime ms,1524,21873,complete
-parallel off,qwen,old,2,total runtime ms,1530,21873,complete
-parallel off,paged_llama,old,1,total runtime ms,1198,16270,complete
-parallel off,paged_llama,old,2,total runtime ms,1193,16270,complete
-parallel off,gemma4_moe,new,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma4_moe,new,2,total runtime ms,75000,,timeout_or_failed
-parallel off,llama,new,1,total runtime ms,25417,16761,complete
-parallel off,llama,new,2,total runtime ms,21835,16761,complete
-parallel off,whisper,new,1,total runtime ms,75000,,timeout_or_failed
-parallel off,whisper,new,2,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma,new,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma,new,2,total runtime ms,75000,,timeout_or_failed
-parallel off,qwen3_moe,new,1,total runtime ms,53169,31986,complete
-parallel off,qwen3_moe,new,2,total runtime ms,52651,31986,complete
-parallel off,qwen,new,1,total runtime ms,34062,21873,complete
-parallel off,qwen,new,2,total runtime ms,34052,21873,complete
-parallel off,paged_llama,new,1,total runtime ms,75000,,timeout_or_failed
-parallel off,paged_llama,new,2,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma4_moe,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma4_moe,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel off,llama,PR #857,1,total runtime ms,2551,16761,complete
-parallel off,llama,PR #857,2,total runtime ms,2562,16761,complete
-parallel off,whisper,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel off,whisper,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel off,qwen3_moe,PR #857,1,total runtime ms,5912,31986,complete
-parallel off,qwen3_moe,PR #857,2,total runtime ms,5951,31986,complete
-parallel off,qwen,PR #857,1,total runtime ms,3344,21873,complete
-parallel off,qwen,PR #857,2,total runtime ms,3396,21873,complete
-parallel off,paged_llama,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel off,paged_llama,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma4_moe,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma4_moe,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel off,llama,main 8c1c70b,1,total runtime ms,2622,16761,complete
-parallel off,llama,main 8c1c70b,2,total runtime ms,2614,16761,complete
-parallel off,whisper,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel off,whisper,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel off,gemma,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel off,qwen3_moe,main 8c1c70b,1,total runtime ms,6127,31986,complete
-parallel off,qwen3_moe,main 8c1c70b,2,total runtime ms,6340,31986,complete
-parallel off,qwen,main 8c1c70b,1,total runtime ms,3549,21873,complete
-parallel off,qwen,main 8c1c70b,2,total runtime ms,4072,21873,complete
-parallel off,paged_llama,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel off,paged_llama,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,old,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,old,2,total runtime ms,75000,,timeout_or_failed
-parallel on,llama,old,1,total runtime ms,2663,16761,complete
-parallel on,llama,old,2,total runtime ms,2634,16761,complete
-parallel on,whisper,old,1,total runtime ms,21490,26184,complete
-parallel on,whisper,old,2,total runtime ms,22018,26184,complete
-parallel on,gemma,old,1,total runtime ms,42751,67904,complete
-parallel on,gemma,old,2,total runtime ms,49090,67904,complete
-parallel on,qwen3_moe,old,1,total runtime ms,1947,31986,complete
-parallel on,qwen3_moe,old,2,total runtime ms,1883,31986,complete
-parallel on,qwen,old,1,total runtime ms,1668,21873,complete
-parallel on,qwen,old,2,total runtime ms,1657,21873,complete
-parallel on,paged_llama,old,1,total runtime ms,2763,16270,complete
-parallel on,paged_llama,old,2,total runtime ms,2694,16270,complete
-parallel on,gemma4_moe,new,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,new,2,total runtime ms,75000,,timeout_or_failed
-parallel on,llama,new,1,total runtime ms,25785,16761,complete
-parallel on,llama,new,2,total runtime ms,24036,16761,complete
-parallel on,whisper,new,1,total runtime ms,75000,,timeout_or_failed
-parallel on,whisper,new,2,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma,new,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma,new,2,total runtime ms,75000,,timeout_or_failed
-parallel on,qwen3_moe,new,1,total runtime ms,19726,31986,complete
-parallel on,qwen3_moe,new,2,total runtime ms,21544,31986,complete
-parallel on,qwen,new,1,total runtime ms,29728,21873,complete
-parallel on,qwen,new,2,total runtime ms,31152,21873,complete
-parallel on,paged_llama,new,1,total runtime ms,75000,,timeout_or_failed
-parallel on,paged_llama,new,2,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel on,llama,PR #857,1,total runtime ms,3178,16761,complete
-parallel on,llama,PR #857,2,total runtime ms,3017,16761,complete
-parallel on,whisper,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel on,whisper,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel on,qwen3_moe,PR #857,1,total runtime ms,5671,31986,complete
-parallel on,qwen3_moe,PR #857,2,total runtime ms,5740,31986,complete
-parallel on,qwen,PR #857,1,total runtime ms,3942,21873,complete
-parallel on,qwen,PR #857,2,total runtime ms,3954,21873,complete
-parallel on,paged_llama,PR #857,1,total runtime ms,75000,,timeout_or_failed
-parallel on,paged_llama,PR #857,2,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma4_moe,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel on,llama,main 8c1c70b,1,total runtime ms,2890,16761,complete
-parallel on,llama,main 8c1c70b,2,total runtime ms,2887,16761,complete
-parallel on,whisper,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel on,whisper,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel on,gemma,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
-parallel on,qwen3_moe,main 8c1c70b,1,total runtime ms,5053,31986,complete
-parallel on,qwen3_moe,main 8c1c70b,2,total runtime ms,5083,31986,complete
-parallel on,qwen,main 8c1c70b,1,total runtime ms,3415,21873,complete
-parallel on,qwen,main 8c1c70b,2,total runtime ms,3489,21873,complete
-parallel on,paged_llama,main 8c1c70b,1,total runtime ms,75000,,timeout_or_failed
-parallel on,paged_llama,main 8c1c70b,2,total runtime ms,75000,,timeout_or_failed
+parallel off,llama,old,1,total runtime ms,1242,16761,complete
+parallel off,llama,old,2,total runtime ms,1248,16761,complete
+parallel off,llama,old,3,total runtime ms,1236,16761,complete
+parallel off,whisper,old,1,total runtime ms,30520,26184,complete
+parallel off,whisper,old,2,total runtime ms,30340,26184,complete
+parallel off,whisper,old,3,total runtime ms,30290,26184,complete
+parallel off,gemma,old,1,total runtime ms,74292,67904,complete
+parallel off,gemma,old,2,total runtime ms,74148,67904,complete
+parallel off,gemma,old,3,total runtime ms,74851,67904,complete
+parallel off,qwen3_moe,old,1,total runtime ms,2329,31986,complete
+parallel off,qwen3_moe,old,2,total runtime ms,2344,31986,complete
+parallel off,qwen3_moe,old,3,total runtime ms,2331,31986,complete
+parallel off,qwen,old,1,total runtime ms,1596,21873,complete
+parallel off,qwen,old,2,total runtime ms,1556,21873,complete
+parallel off,qwen,old,3,total runtime ms,1603,21873,complete
+parallel off,paged_llama,old,1,total runtime ms,1216,16270,complete
+parallel off,paged_llama,old,2,total runtime ms,1220,16270,complete
+parallel off,paged_llama,old,3,total runtime ms,1223,16270,complete
+parallel off,llama,new,1,total runtime ms,21986,16761,complete
+parallel off,llama,new,2,total runtime ms,21949,16761,complete
+parallel off,llama,new,3,total runtime ms,21886,16761,complete
+parallel off,whisper,new,1,total runtime ms,61000,,timeout_or_failed
+parallel off,whisper,new,2,total runtime ms,61000,,timeout_or_failed
+parallel off,whisper,new,3,total runtime ms,61000,,timeout_or_failed
+parallel off,gemma,new,1,total runtime ms,147000,,timeout_or_failed
+parallel off,gemma,new,2,total runtime ms,147000,,timeout_or_failed
+parallel off,gemma,new,3,total runtime ms,147000,,timeout_or_failed
+parallel off,qwen3_moe,new,1,total runtime ms,52539,31986,complete
+parallel off,qwen3_moe,new,2,total runtime ms,52443,31986,complete
+parallel off,qwen3_moe,new,3,total runtime ms,54239,31986,complete
+parallel off,qwen,new,1,total runtime ms,33255,21873,complete
+parallel off,qwen,new,2,total runtime ms,33234,21873,complete
+parallel off,qwen,new,3,total runtime ms,33424,21873,complete
+parallel off,paged_llama,new,1,total runtime ms,60000,,timeout_or_failed
+parallel off,paged_llama,new,2,total runtime ms,60000,,timeout_or_failed
+parallel off,paged_llama,new,3,total runtime ms,60000,,timeout_or_failed
+parallel off,llama,PR #857,1,total runtime ms,2540,16761,complete
+parallel off,llama,PR #857,2,total runtime ms,2563,16761,complete
+parallel off,llama,PR #857,3,total runtime ms,2562,16761,complete
+parallel off,whisper,PR #857,1,total runtime ms,61000,,timeout_or_failed
+parallel off,whisper,PR #857,2,total runtime ms,61000,,timeout_or_failed
+parallel off,whisper,PR #857,3,total runtime ms,61000,,timeout_or_failed
+parallel off,gemma,PR #857,1,total runtime ms,147000,,timeout_or_failed
+parallel off,gemma,PR #857,2,total runtime ms,147000,,timeout_or_failed
+parallel off,gemma,PR #857,3,total runtime ms,147000,,timeout_or_failed
+parallel off,qwen3_moe,PR #857,1,total runtime ms,5849,31986,complete
+parallel off,qwen3_moe,PR #857,2,total runtime ms,5912,31986,complete
+parallel off,qwen3_moe,PR #857,3,total runtime ms,5841,31986,complete
+parallel off,qwen,PR #857,1,total runtime ms,3439,21873,complete
+parallel off,qwen,PR #857,2,total runtime ms,3403,21873,complete
+parallel off,qwen,PR #857,3,total runtime ms,3377,21873,complete
+parallel off,paged_llama,PR #857,1,total runtime ms,60000,,timeout_or_failed
+parallel off,paged_llama,PR #857,2,total runtime ms,60000,,timeout_or_failed
+parallel off,paged_llama,PR #857,3,total runtime ms,60000,,timeout_or_failed
+parallel off,llama,main 8c1c70b,1,total runtime ms,2657,16761,complete
+parallel off,llama,main 8c1c70b,2,total runtime ms,2633,16761,complete
+parallel off,llama,main 8c1c70b,3,total runtime ms,2651,16761,complete
+parallel off,whisper,main 8c1c70b,1,total runtime ms,61000,,timeout_or_failed
+parallel off,whisper,main 8c1c70b,2,total runtime ms,61000,,timeout_or_failed
+parallel off,whisper,main 8c1c70b,3,total runtime ms,61000,,timeout_or_failed
+parallel off,gemma,main 8c1c70b,1,total runtime ms,147000,,timeout_or_failed
+parallel off,gemma,main 8c1c70b,2,total runtime ms,147000,,timeout_or_failed
+parallel off,gemma,main 8c1c70b,3,total runtime ms,147000,,timeout_or_failed
+parallel off,qwen3_moe,main 8c1c70b,1,total runtime ms,6060,31986,complete
+parallel off,qwen3_moe,main 8c1c70b,2,total runtime ms,6065,31986,complete
+parallel off,qwen3_moe,main 8c1c70b,3,total runtime ms,5940,31986,complete
+parallel off,qwen,main 8c1c70b,1,total runtime ms,3472,21873,complete
+parallel off,qwen,main 8c1c70b,2,total runtime ms,3461,21873,complete
+parallel off,qwen,main 8c1c70b,3,total runtime ms,3494,21873,complete
+parallel off,paged_llama,main 8c1c70b,1,total runtime ms,60000,,timeout_or_failed
+parallel off,paged_llama,main 8c1c70b,2,total runtime ms,60000,,timeout_or_failed
+parallel off,paged_llama,main 8c1c70b,3,total runtime ms,60000,,timeout_or_failed
+parallel on,llama,old,1,total runtime ms,2688,16761,complete
+parallel on,llama,old,2,total runtime ms,2682,16761,complete
+parallel on,llama,old,3,total runtime ms,2672,16761,complete
+parallel on,whisper,old,1,total runtime ms,24290,26184,complete
+parallel on,whisper,old,2,total runtime ms,25162,26184,complete
+parallel on,whisper,old,3,total runtime ms,23968,26184,complete
+parallel on,gemma,old,1,total runtime ms,50637,67904,complete
+parallel on,gemma,old,2,total runtime ms,53069,67904,complete
+parallel on,gemma,old,3,total runtime ms,60268,67904,complete
+parallel on,qwen3_moe,old,1,total runtime ms,2213,31986,complete
+parallel on,qwen3_moe,old,2,total runtime ms,2232,31986,complete
+parallel on,qwen3_moe,old,3,total runtime ms,2252,31986,complete
+parallel on,qwen,old,1,total runtime ms,1886,21873,complete
+parallel on,qwen,old,2,total runtime ms,1855,21873,complete
+parallel on,qwen,old,3,total runtime ms,1745,21873,complete
+parallel on,paged_llama,old,1,total runtime ms,2769,16270,complete
+parallel on,paged_llama,old,2,total runtime ms,2751,16270,complete
+parallel on,paged_llama,old,3,total runtime ms,2770,16270,complete
+parallel on,llama,new,1,total runtime ms,23977,16761,complete
+parallel on,llama,new,2,total runtime ms,23408,16761,complete
+parallel on,llama,new,3,total runtime ms,23558,16761,complete
+parallel on,whisper,new,1,total runtime ms,61000,,timeout_or_failed
+parallel on,whisper,new,2,total runtime ms,61000,,timeout_or_failed
+parallel on,whisper,new,3,total runtime ms,61000,,timeout_or_failed
+parallel on,gemma,new,1,total runtime ms,147000,,timeout_or_failed
+parallel on,gemma,new,2,total runtime ms,147000,,timeout_or_failed
+parallel on,gemma,new,3,total runtime ms,147000,,timeout_or_failed
+parallel on,qwen3_moe,new,1,total runtime ms,17653,31986,complete
+parallel on,qwen3_moe,new,2,total runtime ms,18245,31986,complete
+parallel on,qwen3_moe,new,3,total runtime ms,19951,31986,complete
+parallel on,qwen,new,1,total runtime ms,28105,21873,complete
+parallel on,qwen,new,2,total runtime ms,29745,21873,complete
+parallel on,qwen,new,3,total runtime ms,28396,21873,complete
+parallel on,paged_llama,new,1,total runtime ms,60000,,timeout_or_failed
+parallel on,paged_llama,new,2,total runtime ms,60000,,timeout_or_failed
+parallel on,paged_llama,new,3,total runtime ms,60000,,timeout_or_failed
+parallel on,llama,PR #857,1,total runtime ms,2970,16761,complete
+parallel on,llama,PR #857,2,total runtime ms,3039,16761,complete
+parallel on,llama,PR #857,3,total runtime ms,3117,16761,complete
+parallel on,whisper,PR #857,1,total runtime ms,61000,,timeout_or_failed
+parallel on,whisper,PR #857,2,total runtime ms,61000,,timeout_or_failed
+parallel on,whisper,PR #857,3,total runtime ms,61000,,timeout_or_failed
+parallel on,gemma,PR #857,1,total runtime ms,147000,,timeout_or_failed
+parallel on,gemma,PR #857,2,total runtime ms,147000,,timeout_or_failed
+parallel on,gemma,PR #857,3,total runtime ms,147000,,timeout_or_failed
+parallel on,qwen3_moe,PR #857,1,total runtime ms,5715,31986,complete
+parallel on,qwen3_moe,PR #857,2,total runtime ms,5344,31986,complete
+parallel on,qwen3_moe,PR #857,3,total runtime ms,5391,31986,complete
+parallel on,qwen,PR #857,1,total runtime ms,3782,21873,complete
+parallel on,qwen,PR #857,2,total runtime ms,3598,21873,complete
+parallel on,qwen,PR #857,3,total runtime ms,3593,21873,complete
+parallel on,paged_llama,PR #857,1,total runtime ms,60000,,timeout_or_failed
+parallel on,paged_llama,PR #857,2,total runtime ms,60000,,timeout_or_failed
+parallel on,paged_llama,PR #857,3,total runtime ms,60000,,timeout_or_failed
+parallel on,llama,main 8c1c70b,1,total runtime ms,3055,16761,complete
+parallel on,llama,main 8c1c70b,2,total runtime ms,3026,16761,complete
+parallel on,llama,main 8c1c70b,3,total runtime ms,3072,16761,complete
+parallel on,whisper,main 8c1c70b,1,total runtime ms,61000,,timeout_or_failed
+parallel on,whisper,main 8c1c70b,2,total runtime ms,61000,,timeout_or_failed
+parallel on,whisper,main 8c1c70b,3,total runtime ms,61000,,timeout_or_failed
+parallel on,gemma,main 8c1c70b,1,total runtime ms,147000,,timeout_or_failed
+parallel on,gemma,main 8c1c70b,2,total runtime ms,147000,,timeout_or_failed
+parallel on,gemma,main 8c1c70b,3,total runtime ms,147000,,timeout_or_failed
+parallel on,qwen3_moe,main 8c1c70b,1,total runtime ms,4966,31986,complete
+parallel on,qwen3_moe,main 8c1c70b,2,total runtime ms,4983,31986,complete
+parallel on,qwen3_moe,main 8c1c70b,3,total runtime ms,4989,31986,complete
+parallel on,qwen,main 8c1c70b,1,total runtime ms,3350,21873,complete
+parallel on,qwen,main 8c1c70b,2,total runtime ms,3453,21873,complete
+parallel on,qwen,main 8c1c70b,3,total runtime ms,3351,21873,complete
+parallel on,paged_llama,main 8c1c70b,1,total runtime ms,60000,,timeout_or_failed
+parallel on,paged_llama,main 8c1c70b,2,total runtime ms,60000,,timeout_or_failed
+parallel on,paged_llama,main 8c1c70b,3,total runtime ms,60000,,timeout_or_failed
