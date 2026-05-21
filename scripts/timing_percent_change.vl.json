@@ -1,9 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Plots the ratio-of-execution-time-means percent changes and one-level Fieller-style 95% CIs precomputed by scripts/compute_timing_percent_change.mjs, following Kalibera and Jones, Quantifying Performance Changes with Effect Size Confidence Intervals.",
+  "description": "Plots the ratio-of-execution-time-means percent changes and 95% CIs precomputed by scripts/compute_timing_percent_change.mjs, following Kalibera and Jones. Timeout or failed rows are treated as right-censored lower-bound observations.",
   "title": {
     "text": "egglog #872 percent change vs old serial baseline",
-    "subtitle": "Vertical lines are 95% CIs; labels show ratio-of-means percent change"
+    "subtitle": "Vertical lines are 95% CIs; upward triangles are lower-bounded right-censored intervals"
   },
   "padding": {
     "left": 5,
@@ -21,20 +21,25 @@
         "parallel_order": "number",
         "n_baseline": "number",
         "n": "number",
+        "n_timeout": "number",
         "baseline_mean_ms": "number",
         "mean_ms": "number",
         "ratio_mean": "number",
         "percent_change": "number",
         "ci_lower_ratio": "number",
-        "ci_upper_ratio": "number",
         "ci_lower_percent": "number",
-        "ci_upper_percent": "number"
+        "ci_upper_ratio_plot": "number",
+        "ci_upper_is_infinite": "boolean"
       }
     }
   },
   "transform": [
     {
       "calculate": "abs(datum.percent_change) >= 1000 ? format(datum.percent_change, '+.3s') + '%' : format(datum.percent_change, '+.0f') + '%'",
+      "as": "base_percent_label"
+    },
+    {
+      "calculate": "datum.ci_upper_is_infinite ? '≥' + datum.base_percent_label : datum.base_percent_label",
       "as": "percent_label"
     },
     {
@@ -126,7 +131,7 @@
             "type": "quantitative"
           },
           "y2": {
-            "field": "ci_upper_ratio"
+            "field": "ci_upper_ratio_plot"
           },
           "color": {
             "field": "experiment",
@@ -144,11 +149,63 @@
         }
       },
       {
+        "transform": [
+          {
+            "filter": "datum.ci_upper_is_infinite"
+          }
+        ],
+        "mark": {
+          "type": "point",
+          "shape": "triangle-up",
+          "filled": true,
+          "size": 70,
+          "opacity": 0.72
+        },
+        "encoding": {
+          "x": {
+            "field": "parallel",
+            "type": "nominal",
+            "sort": {
+              "field": "parallel_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          },
+          "xOffset": {
+            "field": "experiment_offset",
+            "type": "quantitative",
+            "scale": {
+              "range": [-42, 42]
+            }
+          },
+          "y": {
+            "field": "ci_upper_ratio_plot",
+            "type": "quantitative"
+          },
+          "color": {
+            "field": "experiment",
+            "type": "nominal",
+            "sort": {
+              "field": "experiment_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          }
+        }
+      },
+      {
         "mark": {
           "type": "text",
-          "align": "left",
+          "align": {
+            "expr": "datum.experiment_offset < 0 ? 'right' : 'left'"
+          },
           "baseline": "middle",
-          "dx": 7,
+          "dx": {
+            "expr": "datum.experiment_offset < 0 ? -7 : 7"
+          },
+          "dy": {
+            "expr": "datum.ci_upper_is_infinite ? ((datum.experiment_order % 3) - 1) * 9 : 0"
+          },
           "fontSize": 11
         },
         "encoding": {

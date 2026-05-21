@@ -5,12 +5,16 @@ import { readFileSync, writeFileSync } from "node:fs";
 // from Kalibera and Jones, "Quantifying Performance Changes with Effect Size
 // Confidence Intervals" (University of Kent Technical Report 4-12,
 // arXiv:2007.10899). This script intentionally computes a one-level summary
-// over the complete process-level runs in timings_scatter.csv; it does not
-// attempt the full hierarchical experiment design from Kalibera and Jones, "Rigorous
+// over the process-level runs in timings_scatter.csv; it does not attempt the
+// full hierarchical experiment design from Kalibera and Jones, "Rigorous
 // Benchmarking in Reasonable Time" (ISMM 2013, doi:10.1145/2464157.2464160),
 // and it does not implement the HPT suite-level method from Chen, Chen, Guo,
 // Temam, Wu, and Hu, "Statistical Performance Comparisons of Computers"
 // (HPCA 2012, doi:10.1109/HPCA.2012.6169043).
+//
+// timeout_or_failed rows are treated as right-censored runtimes: the recorded
+// time_ms is the timeout cutoff/lower-bound value, so true runtime is >= time_ms.
+// For any censored comparison, the ratio CI is therefore [lower, Infinity).
 
 const [, , inputPath = "results/timings_scatter.csv", outputPath = "results/timing_percent_change.csv"] =
   process.argv;
@@ -59,6 +63,40 @@ const tCritical95 = [
   2.048,
   2.045,
   2.042,
+];
+
+const tCriticalOneSided95 = [
+  null,
+  6.314,
+  2.92,
+  2.353,
+  2.132,
+  2.015,
+  1.943,
+  1.895,
+  1.86,
+  1.833,
+  1.812,
+  1.796,
+  1.782,
+  1.771,
+  1.761,
+  1.753,
+  1.746,
+  1.74,
+  1.734,
+  1.729,
+  1.725,
+  1.721,
+  1.717,
+  1.714,
+  1.711,
+  1.708,
+  1.706,
+  1.703,
+  1.701,
+  1.699,
+  1.697,
 ];
 
 function parseCsv(text) {
@@ -127,17 +165,25 @@ function welchDegreesOfFreedom(oldVariance, oldN, newVariance, newN) {
   return denominator > 0 ? numerator / denominator : Math.min(oldN, newN) - 1;
 }
 
-function interpolateTCritical(df) {
-  if (!Number.isFinite(df) || df <= 1) return tCritical95[1];
-  if (df >= 30) return 1.96;
+function interpolateTCriticalFromTable(df, table, largeDfCritical) {
+  if (!Number.isFinite(df) || df <= 1) return table[1];
+  if (df >= 30) return largeDfCritical;
 
   const lower = Math.floor(df);
   const upper = Math.ceil(df);
-  if (lower === upper) return tCritical95[lower];
+  if (lower === upper) return table[lower];
 
-  const lowerT = tCritical95[lower];
-  const upperT = tCritical95[upper];
+  const lowerT = table[lower];
+  const upperT = table[upper];
   return lowerT + (upperT - lowerT) * (df - lower);
+}
+
+function interpolateTCritical(df) {
+  return interpolateTCriticalFromTable(df, tCritical95, 1.96);
+}
+
+function interpolateOneSidedTCritical95(df) {
+  return interpolateTCriticalFromTable(df, tCriticalOneSided95, 1.645);
 }
 
 function ratioConfidenceInterval(oldValues, newValues) {
@@ -191,8 +237,79 @@ function ratioConfidenceInterval(oldValues, newValues) {
   };
 }
 
+function sampleValues(samples) {
+  return samples.map((sample) => sample.timeMs);
+}
+
+function countTimeouts(samples) {
+  return samples.filter((sample) => sample.timedOut).length;
+}
+
+function upperMeanBound(values, alpha = 0.025) {
+  const n = values.length;
+  const valueMean = mean(values);
+  const valueVariance = sampleVariance(values, valueMean);
+  const t = alpha === 0.025 ? interpolateTCritical(n - 1) : interpolateOneSidedTCritical95(n - 1);
+  return valueMean + t * Math.sqrt(valueVariance / n);
+}
+
+function allTimeoutLowerBound(samples, alpha) {
+  const cutoffs = samples.map((sample) => sample.timeMs);
+  const uniqueCutoffs = new Set(cutoffs);
+  const tau = uniqueCutoffs.size === 1 ? cutoffs[0] : Math.min(...cutoffs);
+  return tau * alpha ** (1 / samples.length);
+}
+
+function censoredMeanLowerBound(samples, alpha) {
+  const timeoutCount = countTimeouts(samples);
+  if (timeoutCount === 0) {
+    throw new Error("censoredMeanLowerBound requires at least one censored sample");
+  }
+  if (timeoutCount === samples.length) {
+    return allTimeoutLowerBound(samples, alpha);
+  }
+
+  const lowerValues = sampleValues(samples);
+  const lowerMean = mean(lowerValues);
+  const lowerVariance = sampleVariance(lowerValues, lowerMean);
+  const t = alpha === 0.025 ? interpolateTCritical(samples.length - 1) : interpolateOneSidedTCritical95(samples.length - 1);
+  return Math.max(0, lowerMean - t * Math.sqrt(lowerVariance / samples.length));
+}
+
+function censoredRatioConfidenceInterval(oldValues, newSamples) {
+  const oldMean = mean(oldValues);
+  const newValues = sampleValues(newSamples);
+  const newMean = mean(newValues);
+  const oldUpper = upperMeanBound(oldValues, 0.025);
+  const newLower = censoredMeanLowerBound(newSamples, 0.025);
+  const ratio = newMean / oldMean;
+  const ratioLower = Math.max(newLower, 0) / oldUpper;
+
+  return {
+    ratio,
+    lower: Math.max(ratioLower, Number.MIN_VALUE),
+    upper: Infinity,
+    method:
+      countTimeouts(newSamples) === newSamples.length
+        ? "right_censored_all_timeout_lower_bound"
+        : "right_censored_mixed_lower_bound",
+    oldMean,
+    newMean,
+  };
+}
+
 function keyFor(row) {
   return `${row.experiment}\u0000${row.variant}\u0000${row.parallel}`;
+}
+
+function sampleFromRow(row) {
+  if (row.status === "complete") {
+    return { timeMs: Number(row.time_ms), timedOut: false };
+  }
+  if (row.status === "timeout_or_failed") {
+    return { timeMs: Number(row.time_ms), timedOut: true };
+  }
+  throw new Error(`unsupported timing row status: ${row.status}`);
 }
 
 const rows = parseCsv(readFileSync(inputPath, "utf8"));
@@ -200,37 +317,38 @@ const experiments = new Map();
 const groups = new Map();
 
 for (const row of rows) {
-  if (row.status && row.status !== "complete") {
-    continue;
-  }
-
   if (!experiments.has(row.experiment)) {
     experiments.set(row.experiment, experiments.size);
   }
 
   const key = keyFor(row);
   if (!groups.has(key)) groups.set(key, []);
-  groups.get(key).push(Number(row.time_ms));
+  groups.get(key).push(sampleFromRow(row));
 }
 
 const outputRows = [];
 for (const [experiment, experimentOrder] of experiments) {
   const baselineKey = `${experiment}\u0000old\u0000parallel off`;
-  const baselineValues = groups.get(baselineKey);
-  if (!baselineValues || baselineValues.length < 2) {
+  const baselineSamples = groups.get(baselineKey);
+  if (!baselineSamples || baselineSamples.length < 2 || countTimeouts(baselineSamples) > 0) {
     continue;
   }
+  const baselineValues = sampleValues(baselineSamples);
 
-  for (const [key, values] of groups) {
+  for (const [key, samples] of groups) {
     const [groupExperiment, variant, rawParallel] = key.split("\u0000");
     if (groupExperiment !== experiment) continue;
     if (variant === "old" && rawParallel === "parallel off") continue;
-    if (values.length < 2) continue;
+    if (samples.length < 2) continue;
 
     const parallel = parallelLabels.get(rawParallel);
     if (!parallel) throw new Error(`unknown parallel mode: ${rawParallel}`);
 
-    const ci = ratioConfidenceInterval(baselineValues, values);
+    const nTimeout = countTimeouts(samples);
+    const ci =
+      nTimeout > 0
+        ? censoredRatioConfidenceInterval(baselineValues, samples)
+        : ratioConfidenceInterval(baselineValues, sampleValues(samples));
     outputRows.push({
       experiment,
       experiment_order: experimentOrder,
@@ -239,17 +357,34 @@ for (const [experiment, experimentOrder] of experiments) {
       parallel: parallel.label,
       parallel_order: parallel.order,
       n_baseline: baselineValues.length,
-      n: values.length,
+      n: samples.length,
+      n_timeout: nTimeout,
       baseline_mean_ms: ci.oldMean,
       mean_ms: ci.newMean,
       ratio_mean: ci.ratio,
       percent_change: (ci.ratio - 1) * 100,
       ci_lower_ratio: ci.lower,
-      ci_upper_ratio: ci.upper,
+      ci_upper_ratio: Number.isFinite(ci.upper) ? ci.upper : "Infinity",
       ci_lower_percent: (ci.lower - 1) * 100,
-      ci_upper_percent: (ci.upper - 1) * 100,
+      ci_upper_percent: Number.isFinite(ci.upper) ? (ci.upper - 1) * 100 : "Infinity",
+      ci_upper_is_infinite: !Number.isFinite(ci.upper),
+      ci_upper_ratio_plot: Number.isFinite(ci.upper) ? ci.upper : "",
       ci_method: ci.method,
     });
+  }
+}
+
+const maxRatioForPlot = Math.max(
+  1,
+  ...outputRows.flatMap((row) =>
+    [row.ratio_mean, row.ci_lower_ratio, Number(row.ci_upper_ratio)]
+      .filter((value) => Number.isFinite(value) && value > 0),
+  ),
+);
+const ratioPlotUpper = maxRatioForPlot * 1.35;
+for (const row of outputRows) {
+  if (row.ci_upper_is_infinite) {
+    row.ci_upper_ratio_plot = ratioPlotUpper;
   }
 }
 
@@ -269,6 +404,7 @@ const headers = [
   "parallel_order",
   "n_baseline",
   "n",
+  "n_timeout",
   "baseline_mean_ms",
   "mean_ms",
   "ratio_mean",
@@ -277,6 +413,8 @@ const headers = [
   "ci_upper_ratio",
   "ci_lower_percent",
   "ci_upper_percent",
+  "ci_upper_is_infinite",
+  "ci_upper_ratio_plot",
   "ci_method",
 ];
 

@@ -38,9 +38,9 @@ These are total `parse_and_run_program` times from
 old/original sweep: `llama 60s`, `whisper 61s`, `gemma 147s`, `qwen3_moe 60s`,
 `qwen 60s`, and `paged_llama 60s`. A `>` value means all three runs in that
 cell exceeded the cap and were recorded as `timeout_or_failed`. The timing
-chart includes those timeout rows at the cap when computing raw timing means
-and 95% CIs; the percent-change CSV excludes timeout rows and only reports
-cells with at least two complete samples and a complete old-serial baseline.
+and percent-change charts treat those timeout rows as right-censored lower
+bounds. Open-ended CI bars show lower-bounded intervals rather than dropping
+the timed-out cells.
 
 ## Reproduce
 
@@ -57,6 +57,7 @@ if you want a longer sweep. It reads the static Vega-Lite specs in `scripts/`
 and writes:
 
 - `results/timings_scatter.csv`
+- `results/timing_mean_ci.csv`
 - `results/timings_scatter.png`
 - `results/timing_percent_change.csv`
 - `results/timing_percent_change.png`
@@ -66,6 +67,9 @@ benchmark as the baseline and reports ratio-of-means percent change with a
 one-level Fieller-style 95% confidence interval, following the
 ratio-of-execution-time-means effect-size framing from Kalibera and Jones'
 *Quantifying Performance Changes with Effect Size Confidence Intervals*.
+When a comparison has timed-out runs, the timeout cutoff is treated as a
+right-censored lower-bound observation: the reported CI is `[lower, infinity)`
+and the chart draws the bar upward to the plot cap with a triangle marker.
 This script treats each process-level run in `results/timings_scatter.csv`
 as one sample; it does not attempt the full hierarchical experiment
 dimensioning from Kalibera and Jones' *Rigorous Benchmarking in Reasonable
@@ -163,5 +167,5 @@ finally constructs a `cublaslt` op invocation. The 4-element stride lists
   etc.) but the current evidence still points at planner/runtime behavior,
   not a semantic difference in the data.
 - Timeout rows in `results/timings_scatter.csv` are censored observations at
-  the configured cap. They are included in the raw timing mean/CI chart but
-  are not used for ratio-of-means confidence intervals.
+  the configured cap. They are included in both CI charts as lower-bounded
+  right-censored observations.

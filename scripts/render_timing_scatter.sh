@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="$ROOT/results"
 CSV="$OUT_DIR/timings_scatter.csv"
+TIMING_SUMMARY_CSV="$OUT_DIR/timing_mean_ci.csv"
 SPEC="$ROOT/scripts/timings_scatter.vl.json"
 PNG="$OUT_DIR/timings_scatter.png"
 PERCENT_CSV="$OUT_DIR/timing_percent_change.csv"
@@ -133,12 +134,14 @@ for mode_i in "${!parallel_labels[@]}"; do
   done
 done
 
+node "$ROOT/scripts/compute_timing_mean_ci.mjs" "$CSV" "$TIMING_SUMMARY_CSV"
 node "$ROOT/scripts/compute_timing_percent_change.mjs" "$CSV" "$PERCENT_CSV"
 
 npx --yes --package vega-lite@6.4.3 --package canvas vl2png --seed 1 "$SPEC" "$PNG"
 npx --yes --package vega-lite@6.4.3 --package canvas vl2png "$PERCENT_SPEC" "$PERCENT_PNG"
 
 printf 'Wrote %s\n' "$CSV"
+printf 'Wrote %s\n' "$TIMING_SUMMARY_CSV"
 printf 'Rendered %s from %s\n' "$PNG" "$SPEC"
 printf 'Wrote %s\n' "$PERCENT_CSV"
 printf 'Rendered %s from %s\n' "$PERCENT_PNG" "$PERCENT_SPEC"

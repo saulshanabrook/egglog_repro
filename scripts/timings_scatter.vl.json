@@ -1,9 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Plots per-benchmark timing means and Vega-Lite aggregate 95% CIs from results/timings_scatter.csv. Timeout or failed rows are included at their recorded per-run cap.",
+  "description": "Plots per-benchmark timing means and precomputed 95% CIs from results/timing_mean_ci.csv. Timeout or failed rows are treated as right-censored lower-bound observations.",
   "title": {
     "text": "egglog #872 timing means by model file",
-    "subtitle": "Vertical lines are 95% CIs of recorded run times; timeout/failed rows are included at the cap"
+    "subtitle": "Vertical lines are 95% CIs; upward triangles are lower-bounded right-censored intervals"
   },
   "padding": {
     "left": 5,
@@ -12,101 +12,23 @@
     "bottom": 35
   },
   "data": {
-    "url": "../results/timings_scatter.csv",
+    "url": "../results/timing_mean_ci.csv",
     "format": {
       "type": "csv",
       "parse": {
-        "run": "number",
-        "time_ms": "number",
-        "tuples": "number"
+        "experiment_order": "number",
+        "variant_order": "number",
+        "parallel_order": "number",
+        "n": "number",
+        "n_timeout": "number",
+        "mean_ms": "number",
+        "ci_lower_ms": "number",
+        "ci_upper_ms_plot": "number",
+        "ci_upper_is_infinite": "boolean"
       }
     }
   },
   "transform": [
-    {
-      "window": [
-        {
-          "op": "row_number",
-          "as": "source_row"
-        }
-      ]
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "min",
-          "field": "source_row",
-          "as": "experiment_order"
-        }
-      ],
-      "groupby": ["experiment"]
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "min",
-          "field": "source_row",
-          "as": "variant_order"
-        }
-      ],
-      "groupby": ["variant"]
-    },
-    {
-      "calculate": "datum.parallel === 'parallel off' ? 'serial' : 'default Rayon'",
-      "as": "parallel_label"
-    },
-    {
-      "calculate": "datum.parallel === 'parallel off' ? 0 : 1",
-      "as": "parallel_order"
-    },
-    {
-      "calculate": "datum.status === 'complete' ? 0 : 1",
-      "as": "timeout_flag"
-    },
-    {
-      "aggregate": [
-        {
-          "op": "mean",
-          "field": "time_ms",
-          "as": "mean_time_ms"
-        },
-        {
-          "op": "ci0",
-          "field": "time_ms",
-          "as": "ci_lower_ms"
-        },
-        {
-          "op": "ci1",
-          "field": "time_ms",
-          "as": "ci_upper_ms"
-        },
-        {
-          "op": "min",
-          "field": "experiment_order",
-          "as": "experiment_order"
-        },
-        {
-          "op": "min",
-          "field": "variant_order",
-          "as": "variant_order"
-        },
-        {
-          "op": "min",
-          "field": "parallel_order",
-          "as": "parallel_order"
-        },
-        {
-          "op": "count",
-          "as": "n"
-        },
-        {
-          "op": "max",
-          "field": "timeout_flag",
-          "as": "any_timeout"
-        }
-      ],
-      "groupby": ["experiment", "variant", "parallel_label"]
-    },
     {
       "joinaggregate": [
         {
@@ -121,11 +43,11 @@
       "as": "experiment_offset"
     },
     {
-      "calculate": "datum.mean_time_ms >= 1000 ? format(datum.mean_time_ms / 1000, '.2~f') + 's' : format(datum.mean_time_ms, '.0f') + 'ms'",
+      "calculate": "datum.mean_ms >= 1000 ? format(datum.mean_ms / 1000, '.2~f') + 's' : format(datum.mean_ms, '.0f') + 'ms'",
       "as": "mean_time_label"
     },
     {
-      "calculate": "datum.any_timeout ? '>' + datum.mean_time_label : datum.mean_time_label",
+      "calculate": "datum.ci_upper_is_infinite ? '≥' + datum.mean_time_label : datum.mean_time_label",
       "as": "time_label"
     }
   ],
@@ -157,7 +79,7 @@
         },
         "encoding": {
           "x": {
-            "field": "parallel_label",
+            "field": "parallel",
             "type": "nominal",
             "sort": {
               "field": "parallel_order",
@@ -191,7 +113,7 @@
             }
           },
           "y2": {
-            "field": "ci_upper_ms"
+            "field": "ci_upper_ms_plot"
           },
           "color": {
             "field": "experiment",
@@ -209,16 +131,21 @@
         }
       },
       {
+        "transform": [
+          {
+            "filter": "datum.ci_upper_is_infinite"
+          }
+        ],
         "mark": {
-          "type": "text",
-          "align": "left",
-          "baseline": "middle",
-          "dx": 7,
-          "fontSize": 11
+          "type": "point",
+          "shape": "triangle-up",
+          "filled": true,
+          "size": 70,
+          "opacity": 0.72
         },
         "encoding": {
           "x": {
-            "field": "parallel_label",
+            "field": "parallel",
             "type": "nominal",
             "sort": {
               "field": "parallel_order",
@@ -234,7 +161,54 @@
             }
           },
           "y": {
-            "field": "mean_time_ms",
+            "field": "ci_upper_ms_plot",
+            "type": "quantitative"
+          },
+          "color": {
+            "field": "experiment",
+            "type": "nominal",
+            "sort": {
+              "field": "experiment_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": {
+            "expr": "datum.experiment_offset < 0 ? 'right' : 'left'"
+          },
+          "baseline": "middle",
+          "dx": {
+            "expr": "datum.experiment_offset < 0 ? -7 : 7"
+          },
+          "dy": {
+            "expr": "datum.ci_upper_is_infinite ? ((datum.experiment_order % 3) - 1) * 9 : 0"
+          },
+          "fontSize": 11
+        },
+        "encoding": {
+          "x": {
+            "field": "parallel",
+            "type": "nominal",
+            "sort": {
+              "field": "parallel_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          },
+          "xOffset": {
+            "field": "experiment_offset",
+            "type": "quantitative",
+            "scale": {
+              "range": [-42, 42]
+            }
+          },
+          "y": {
+            "field": "mean_ms",
             "type": "quantitative"
           },
           "text": {
