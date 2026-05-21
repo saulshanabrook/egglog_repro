@@ -37,10 +37,10 @@ These are total `parse_and_run_program` times from
 `max(ceil(2x max old/original complete timing), 60s)`, derived from the prior
 old/original sweep: `llama 60s`, `whisper 61s`, `gemma 147s`, `qwen3_moe 60s`,
 `qwen 60s`, and `paged_llama 60s`. A `>` value means all three runs in that
-cell exceeded the cap and were recorded as `timeout_or_failed`. The scatter
-plot includes those timeout rows at the cap; the percent-change CSV excludes
-timeout rows and only reports cells with at least two complete samples and a
-complete old-serial baseline.
+cell exceeded the cap and were recorded as `timeout_or_failed`. The timing
+chart includes those timeout rows at the cap when computing raw timing means
+and 95% CIs; the percent-change CSV excludes timeout rows and only reports
+cells with at least two complete samples and a complete old-serial baseline.
 
 ## Reproduce
 
@@ -163,5 +163,5 @@ finally constructs a `cublaslt` op invocation. The 4-element stride lists
   etc.) but the current evidence still points at planner/runtime behavior,
   not a semantic difference in the data.
 - Timeout rows in `results/timings_scatter.csv` are censored observations at
-  the configured cap. They are useful in the scatter plot but are not used for
-  ratio-of-means confidence intervals.
+  the configured cap. They are included in the raw timing mean/CI chart but
+  are not used for ratio-of-means confidence intervals.
