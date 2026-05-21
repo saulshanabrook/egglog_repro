@@ -209,12 +209,110 @@
         )
     )
     (function dtype (IR) DType :merge new)
-    
+
 
 (ruleset base_cleanup)
 
 
+(rule ((= ?m (MReplace ?a ?b ?c))) ((delete (MReplace ?a ?b ?c))) :ruleset base_cleanup)
+(rule ((= ?m (MReplaceList ?a ?b ?c))) ((delete (MReplaceList ?a ?b ?c))) :ruleset base_cleanup)
+(rule ((= ?m (ReplaceNthFromEnd ?a ?b ?c))) ((delete (ReplaceNthFromEnd ?a ?b ?c))) :ruleset base_cleanup)
+(rule ((= ?m (RemoveNthFromEnd ?a ?b))) ((delete (RemoveNthFromEnd ?a ?b))) :ruleset base_cleanup)
+(rule ((= ?m (RowMajor ?x))) ((delete (RowMajor ?x))) :ruleset base_cleanup)
+(rule ((= ?m (len ?x))) ((delete (len ?x))) :ruleset base_cleanup)
+(rule ((= ?m (nth_from_end ?x ?y))) ((delete (nth_from_end ?x ?y))) :ruleset base_cleanup)
+(rule ((= ?m (n_elements ?x))) ((delete (n_elements ?x))) :ruleset base_cleanup)
 
+(rule ((= ?__rw0 (Op (Add ?v86_shape ?v86_a_strides ?v86_b_strides ?v86_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Add ?v86_shape ?v86_a_strides ?v86_b_strides ?v86_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelAdd ?v86_shape ?v86_a_strides ?v86_b_strides ?v86_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Mul ?v87_shape ?v87_a_strides ?v87_b_strides ?v87_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dt (dtype ?__first_inp))) ((union ?__rw0 (Op (KernelMul ?v87_shape ?v87_a_strides ?v87_b_strides ?v87_out_strides ?__dt) (ICons ?__first_inp ?__tail)))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Mod ?v88_shape ?v88_a_strides ?v88_b_strides ?v88_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Mod ?v88_shape ?v88_a_strides ?v88_b_strides ?v88_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelMod ?v88_shape ?v88_a_strides ?v88_b_strides ?v88_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (LessThan ?v89_shape ?v89_a_strides ?v89_b_strides ?v89_out_strides) (ICons ?__inp_a (ICons ?__inp_b (INil))))) (= ?__dt (dtype ?__inp_a))) ((union ?__rw0 (Op (KernelLessThan ?v89_shape ?v89_a_strides ?v89_b_strides ?v89_out_strides ?__dt) (ICons ?__inp_a (ICons ?__inp_b (INil)))))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Iota ?v90_expr ?v90_range) ?__inputs))) ((union ?__rw0 (Op (KernelIota ?v90_expr ?v90_range) ?__inputs)) (set (dtype (Op (KernelIota ?v90_expr ?v90_range) ?__inputs)) (Int))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Gather ?v91_index_shape ?v91_index_strides ?v91_data_shape ?v91_data_strides) (ICons ?__indexes (ICons ?__data ?__tail)))) (= ?__dt (dtype ?__data))) ((union ?__rw0 (Op (KernelGather ?v91_index_shape ?v91_index_strides ?v91_data_shape ?v91_data_strides (RowMajor ?v91_index_shape) ?__dt) (ICons ?__indexes (ICons ?__data (INil)))))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Scatter ?v92_dest_shape ?v92_dest_strides ?v92_index_shape ?v92_index_strides ?v92_src_strides) (ICons ?__dest (ICons ?__indexes (ICons ?__src (INil)))))) (= ?__dt (dtype ?__src))) ((union ?__rw0 (Op (KernelScatter ?v92_dest_shape ?v92_dest_strides ?v92_index_shape ?v92_index_strides ?v92_src_strides (RowMajor ?v92_dest_shape) ?__dt) (ICons ?__dest (ICons ?__indexes (ICons ?__src (INil))))))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Sum ?v93_shape ?v93_iters ?v93_strides ?v93_iter_stride ?v93_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Sum ?v93_shape ?v93_iters ?v93_strides ?v93_iter_stride ?v93_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelSum ?v93_shape ?v93_iters ?v93_strides ?v93_iter_stride ?v93_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Max ?v94_shape ?v94_iters ?v94_strides ?v94_iter_stride ?v94_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Max ?v94_shape ?v94_iters ?v94_strides ?v94_iter_stride ?v94_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelMax ?v94_shape ?v94_iters ?v94_strides ?v94_iter_stride ?v94_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Exp2 ?v95_shape ?v95_strides ?v95_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Exp2 ?v95_shape ?v95_strides ?v95_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelExp2 ?v95_shape ?v95_strides ?v95_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Log2 ?v96_shape ?v96_strides ?v96_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Log2 ?v96_shape ?v96_strides ?v96_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelLog2 ?v96_shape ?v96_strides ?v96_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Sin ?v97_shape ?v97_strides ?v97_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Sin ?v97_shape ?v97_strides ?v97_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelSin ?v97_shape ?v97_strides ?v97_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Recip ?v98_shape ?v98_strides ?v98_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Recip ?v98_shape ?v98_strides ?v98_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelRecip ?v98_shape ?v98_strides ?v98_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Sqrt ?v99_shape ?v99_strides ?v99_out_strides) ?__inputs)) (= ?__dt (dtype (Op (Sqrt ?v99_shape ?v99_strides ?v99_out_strides) ?__inputs)))) ((union ?__rw0 (Op (KernelSqrt ?v99_shape ?v99_strides ?v99_out_strides ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Constant ?v100_value) ?__inputs))) ((union ?__rw0 (Op (KernelConstant ?v100_value) ?__inputs)) (set (dtype (Op (KernelConstant ?v100_value) ?__inputs)) (F32))) :ruleset kernel_lower)
+(rule ((= ?__rw0 (Op (Cast ?v101_size ?v101_dtype) (ICons ?__inp (INil)))) (= ?__in_dt (dtype ?__inp))) ((union ?__rw0 (Op (KernelCast ?v101_size ?__in_dt ?v101_dtype) (ICons ?__inp (INil))))) :ruleset kernel_lower)
+(rule
+                (
+                    (= ?gather (Op (Gather ?idx_shape ?idx_stride ?embed_shape ?embed_stride) (ICons ?indices (ICons ?embed_table (INil)))))
+                    (= (len ?idx_shape) 2)
+                    (= ?indices (Op (Add ?add_shape ?mul_stride ?iota_stride ?add_out_stride) (ICons ?mul_result (ICons ?iota_result (INil)))))
+                    (= ?mul_result (Op (Mul ?mul_shape ?token_cast_stride ?mul_const_stride ?mul_out_stride) (ICons ?token_ids_cast (ICons ?mul_const (INil)))))
+                    (= ?token_ids_cast (Op (Cast ?cast_size ?cast_dtype) (ICons ?token_ids (INil))))
+                    (= ?embed_dim (nth_from_end ?embed_shape 0))
+                    (= ?batch_shape (RemoveNthFromEnd ?idx_shape 0))
+                    (= ?out_stride_batch (RemoveNthFromEnd ?add_out_stride 0))
+                )
+                (
+                    (let ?ke (Op (KernelEmbed ?batch_shape ?token_cast_stride ?out_stride_batch ?embed_dim) (ICons ?token_ids_cast (ICons ?embed_table (INil)))))
+                    (union ?gather ?ke)
+                    (set (dtype ?ke) (F32))
+                )
+                :ruleset kernel_specialize
+                :name "kernel embed with cast mul"
+            )
+(rule
+                (
+                    (= ?gather (Op (Gather ?idx_shape ?idx_stride ?embed_shape ?embed_stride) (ICons ?indices (ICons ?embed_table (INil)))))
+                    (= (len ?idx_shape) 2)
+                    (= ?indices (Op (Add ?add_shape ?iota_stride ?mul_stride ?add_out_stride) (ICons ?iota_result (ICons ?mul_result (INil)))))
+                    (= ?mul_result (Op (Mul ?mul_shape ?token_cast_stride ?mul_const_stride ?mul_out_stride) (ICons ?token_ids_cast (ICons ?mul_const (INil)))))
+                    (= ?token_ids_cast (Op (Cast ?cast_size ?cast_dtype) (ICons ?token_ids (INil))))
+                    (= ?embed_dim (nth_from_end ?embed_shape 0))
+                    (= ?batch_shape (RemoveNthFromEnd ?idx_shape 0))
+                    (= ?out_stride_batch (RemoveNthFromEnd ?add_out_stride 0))
+                )
+                (
+                    (let ?ke (Op (KernelEmbed ?batch_shape ?token_cast_stride ?out_stride_batch ?embed_dim) (ICons ?token_ids_cast (ICons ?embed_table (INil)))))
+                    (union ?gather ?ke)
+                    (set (dtype ?ke) (F32))
+                )
+                :ruleset kernel_specialize
+                :name "kernel embed with cast mul reversed"
+            )
+(rule
+                (
+                    (= ?gather (Op (Gather ?idx_shape ?idx_stride ?embed_shape ?embed_stride) (ICons ?indices (ICons ?embed_table (INil)))))
+                    (= (len ?idx_shape) 2)
+                    (= ?indices (Op (Add ?add_shape ?mul_stride ?iota_stride ?add_out_stride) (ICons ?mul_result (ICons ?iota_result (INil)))))
+                    (= ?mul_result (Op (Mul ?mul_shape ?token_stride ?mul_const_stride ?mul_out_stride) (ICons ?token_ids (ICons ?mul_const (INil)))))
+                    (= ?embed_dim (nth_from_end ?embed_shape 0))
+                    (= ?batch_shape (RemoveNthFromEnd ?idx_shape 0))
+                    (= ?out_stride_batch (RemoveNthFromEnd ?add_out_stride 0))
+                )
+                (
+                    (let ?ke (Op (KernelEmbed ?batch_shape ?token_stride ?out_stride_batch ?embed_dim) (ICons ?token_ids (ICons ?embed_table (INil)))))
+                    (union ?gather ?ke)
+                    (set (dtype ?ke) (F32))
+                )
+                :ruleset kernel_specialize
+                :name "kernel embed with mul"
+            )
+(rule
+                (
+                    (= ?gather (Op (Gather ?idx_shape ?idx_stride ?embed_shape ?embed_stride) (ICons ?indices (ICons ?embed_table (INil)))))
+                    (= (len ?idx_shape) 2)
+                    (= ?indices (Op (Add ?add_shape ?iota_stride ?mul_stride ?add_out_stride) (ICons ?iota_result (ICons ?mul_result (INil)))))
+                    (= ?mul_result (Op (Mul ?mul_shape ?token_stride ?mul_const_stride ?mul_out_stride) (ICons ?token_ids (ICons ?mul_const (INil)))))
+                    (= ?embed_dim (nth_from_end ?embed_shape 0))
+                    (= ?batch_shape (RemoveNthFromEnd ?idx_shape 0))
+                    (= ?out_stride_batch (RemoveNthFromEnd ?add_out_stride 0))
+                )
+                (
+                    (let ?ke (Op (KernelEmbed ?batch_shape ?token_stride ?out_stride_batch ?embed_dim) (ICons ?token_ids (ICons ?embed_table (INil)))))
+                    (union ?gather ?ke)
+                    (set (dtype ?ke) (F32))
+                )
+                :ruleset kernel_specialize
+                :name "kernel embed with mul reversed"
+            )
 (rule
                 (
                     ; Match Mul node (broadcast multiply)
@@ -310,12 +408,102 @@
             )
 (relation consumed_buffer_ilist_contains (IList IR))
 (rule
+                    ((= ?list (ICons ?head ?tail)))
+                    ((consumed_buffer_ilist_contains ?list ?head))
+                    :ruleset cleanup
+                    :name "consumed-buffer-ilist-contains-head"
+                )
+(rule
+                    ((= ?list (ICons ?head ?tail))
+                     (consumed_buffer_ilist_contains ?tail ?item))
+                    ((consumed_buffer_ilist_contains ?list ?item))
+                    :ruleset cleanup
+                    :name "consumed-buffer-ilist-contains-tail"
+                )
+(rule
+                    (
+                        (= ?scatter (Op (KernelScatter ?ds ?dst ?is ?istr ?ss ?os ?dt)
+                            (ICons ?dest (ICons ?indexes (ICons ?src (INil))))))
+                        (= ?dst ?os)
+                        (= ?dty (dtype ?src))
+                    )
+                    (
+                        (let ?consumed (ConsumedBuffer ?dest))
+                        (let ?nocopy (Op (KernelScatterNoCopy ?ds ?dst ?is ?istr ?ss ?os ?dt)
+                            (ICons ?consumed (ICons ?indexes (ICons ?src (INil))))))
+                        (union ?scatter ?nocopy)
+                        (set (dtype ?nocopy) ?dty)
+                    )
+                    :ruleset buffer_reuse
+                    :name "scatter to scatter-no-copy"
+                )
+(rule
                     ((= ?cb (ConsumedBuffer ?a))
                      (= ?dt (dtype ?a)))
                     ((set (dtype ?cb) ?dt))
                     :ruleset dtype_prop
                     :name "consumed-buffer-dtype"
                 )
+(rule
+                ((= ?cb (ConsumedBuffer ?a))
+                 (= ?op1 (Op ?k1 ?ilist1))
+                 (consumed_buffer_ilist_contains ?ilist1 ?cb)
+                 (= ?op2 (Op ?k2 ?ilist2))
+                 (!= ?op1 ?op2)
+                 (consumed_buffer_ilist_contains ?ilist2 ?a))
+                ((delete (ConsumedBuffer ?a)))
+                :ruleset cleanup
+                :name "consumed-buffer-cleanup-shared-op-use"
+            )
+(rule
+                ((= ?cb (ConsumedBuffer ?dest))
+                 (= ?scatter (Op (KernelScatter ?ds ?dst ?is ?istr ?ss ?os ?dt)
+                     (ICons ?dest (ICons ?indexes (ICons ?src (INil))))))
+                 (= ?nocopy (Op (KernelScatterNoCopy ?ds ?dst ?is ?istr ?ss ?os ?dt)
+                     (ICons ?cb (ICons ?indexes (ICons ?src (INil)))))))
+                ((delete (Op (KernelScatter ?ds ?dst ?is ?istr ?ss ?os ?dt)
+                     (ICons ?dest (ICons ?indexes (ICons ?src (INil)))))))
+                :ruleset post_cleanup
+                :name "scatter-no-copy-dominates-valid-consumed-buffer"
+            )
+(rule
+                ((= ?cb (ConsumedBuffer ?a)))
+                ((union ?cb ?a)
+                 (delete (ConsumedBuffer ?a)))
+                :ruleset base_cleanup
+                :name "consumed-buffer-resolve"
+            )
+(rule ((= ?__rw0 (Op (Softmax ?v102_shape ?v102_in_strides ?v102_out_strides ?v102_reduce_dim ?v102_reduce_stride) ?__inputs)) (= ?__dt (dtype (Op (Softmax ?v102_shape ?v102_in_strides ?v102_out_strides ?v102_reduce_dim ?v102_reduce_stride) ?__inputs)))) ((union ?__rw0 (Op (KernelSoftmax ?v102_shape ?v102_in_strides ?v102_out_strides ?v102_reduce_dim ?v102_reduce_stride ?__dt) ?__inputs))) :ruleset kernel_lower)
+(rule
+                (
+                    (= ?sm (Op (Softmax ?shape ?in_strides ?out_strides ?reduce_dim ?reduce_stride) ?inputs))
+                )
+                (
+                    (let ?ksm (Op (KernelSoftmax ?shape ?in_strides ?out_strides ?reduce_dim ?reduce_stride (F32)) ?inputs))
+                    (union ?sm ?ksm)
+                    (set (dtype ?ksm) (F32))
+                )
+                :ruleset kernel_lower
+                :name "softmax-to-kernel-f32"
+            )
+(rule
+                (
+                    (= ?mul (Op (Mul ?shape ?x_stride ?const_stride ?inter_stride) (ICons ?x (ICons ?exp_const (INil)))))
+                    (= ?exp2 (Op (Exp2 ?shape ?inter_stride ?out_stride) (ICons ?mul (INil))))
+                    (= ?dt (dtype ?x))
+                    (= ?cv (Op (Constant ?val) (INil)))
+                    (= ?exp_const ?cv)
+                    (> ?val 1.44)
+                    (< ?val 1.45)
+                )
+                (
+                    (let ?kexp (Op (KernelExp ?shape ?x_stride ?out_stride ?dt) (ICons ?x (INil))))
+                    (union ?exp2 ?kexp)
+                    (set (dtype ?kexp) ?dt)
+                )
+                :ruleset direct_kernel
+                :name "direct-exp-fusion"
+            )
 (datatype*
                     (KernelSigmoidScaledState
                         (MkKernelSigmoidScaledState IR EList EList DType)
@@ -362,6 +550,1080 @@
                 :ruleset direct_kernel
                 :name "direct-sigmoid-fusion"
             )
+(rule (
+                        (= ?u1 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSin-KernelSin")
+(rule (
+                        (= ?u1 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSin-KernelSqrt")
+(rule (
+                        (= ?u1 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSin-KernelExp")
+(rule (
+                        (= ?u1 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSin-KernelExp2")
+(rule (
+                        (= ?u1 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSin-KernelLog2")
+(rule (
+                        (= ?u1 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSin-KernelRecip")
+(rule (
+                        (= ?u1 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSqrt-KernelSin")
+(rule (
+                        (= ?u1 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSqrt-KernelSqrt")
+(rule (
+                        (= ?u1 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSqrt-KernelExp")
+(rule (
+                        (= ?u1 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSqrt-KernelExp2")
+(rule (
+                        (= ?u1 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSqrt-KernelLog2")
+(rule (
+                        (= ?u1 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelSqrt-KernelRecip")
+(rule (
+                        (= ?u1 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp-KernelSin")
+(rule (
+                        (= ?u1 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp-KernelSqrt")
+(rule (
+                        (= ?u1 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp-KernelExp")
+(rule (
+                        (= ?u1 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp-KernelExp2")
+(rule (
+                        (= ?u1 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp-KernelLog2")
+(rule (
+                        (= ?u1 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp-KernelRecip")
+(rule (
+                        (= ?u1 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp2-KernelSin")
+(rule (
+                        (= ?u1 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp2-KernelSqrt")
+(rule (
+                        (= ?u1 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp2-KernelExp")
+(rule (
+                        (= ?u1 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp2-KernelExp2")
+(rule (
+                        (= ?u1 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp2-KernelLog2")
+(rule (
+                        (= ?u1 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelExp2-KernelRecip")
+(rule (
+                        (= ?u1 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelLog2-KernelSin")
+(rule (
+                        (= ?u1 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelLog2-KernelSqrt")
+(rule (
+                        (= ?u1 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelLog2-KernelExp")
+(rule (
+                        (= ?u1 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelLog2-KernelExp2")
+(rule (
+                        (= ?u1 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelLog2-KernelLog2")
+(rule (
+                        (= ?u1 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelLog2-KernelRecip")
+(rule (
+                        (= ?u1 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelRecip-KernelSin")
+(rule (
+                        (= ?u1 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelRecip-KernelSqrt")
+(rule (
+                        (= ?u1 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelRecip-KernelExp")
+(rule (
+                        (= ?u1 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelRecip-KernelExp2")
+(rule (
+                        (= ?u1 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelRecip-KernelLog2")
+(rule (
+                        (= ?u1 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?x (INil))))
+                        (= ?u2 (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?u1 (INil))))
+                     ) (
+                        (let ?fs (Op (FusionStart ?shape ?s ?dt) (ICons ?x (INil))))
+                        (let ?fu1 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fs (INil))))
+                        (let ?fu2 (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?fu1 (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu2 (INil))))
+                        (union ?u2 ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-U-KernelRecip-KernelRecip")
+(rule (
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelSin ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedSin ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Add-KernelSin")
+(rule (
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelSqrt ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedSqrt ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Add-KernelSqrt")
+(rule (
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelExp ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedExp ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Add-KernelExp")
+(rule (
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelExp2 ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedExp2 ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Add-KernelExp2")
+(rule (
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelLog2 ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedLog2 ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Add-KernelLog2")
+(rule (
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelRecip ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedRecip ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Add-KernelRecip")
+(rule (
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelSin ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedSin ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Mul-KernelSin")
+(rule (
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelSqrt ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedSqrt ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Mul-KernelSqrt")
+(rule (
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelExp ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedExp ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Mul-KernelExp")
+(rule (
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelExp2 ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedExp2 ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Mul-KernelExp2")
+(rule (
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelLog2 ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedLog2 ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Mul-KernelLog2")
+(rule (
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?b (INil)))))
+                        (= ?u (Op (KernelRecip ?shape ?o_s ?o_s ?dt) (ICons ?bin (INil))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fu (Op (FusedRecip ?shape ?o_s ?o_s ?dt) (ICons ?fbin (INil))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fu (INil))))
+                        (union ?u ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-U-Mul-KernelRecip")
+(rule (
+                        (= ?u (Op (KernelSin ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSin ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelSin-Add")
+(rule (
+                        (= ?u (Op (KernelSin ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSin ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelSin-Add")
+(rule (
+                        (= ?u (Op (KernelSin ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSin ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelSin-Mul")
+(rule (
+                        (= ?u (Op (KernelSin ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSin ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelSin-Mul")
+(rule (
+                        (= ?u (Op (KernelSqrt ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSqrt ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelSqrt-Add")
+(rule (
+                        (= ?u (Op (KernelSqrt ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSqrt ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelSqrt-Add")
+(rule (
+                        (= ?u (Op (KernelSqrt ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSqrt ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelSqrt-Mul")
+(rule (
+                        (= ?u (Op (KernelSqrt ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedSqrt ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelSqrt-Mul")
+(rule (
+                        (= ?u (Op (KernelExp ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelExp-Add")
+(rule (
+                        (= ?u (Op (KernelExp ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelExp-Add")
+(rule (
+                        (= ?u (Op (KernelExp ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelExp-Mul")
+(rule (
+                        (= ?u (Op (KernelExp ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelExp-Mul")
+(rule (
+                        (= ?u (Op (KernelExp2 ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelExp2-Add")
+(rule (
+                        (= ?u (Op (KernelExp2 ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelExp2-Add")
+(rule (
+                        (= ?u (Op (KernelExp2 ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelExp2-Mul")
+(rule (
+                        (= ?u (Op (KernelExp2 ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedExp2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelExp2-Mul")
+(rule (
+                        (= ?u (Op (KernelLog2 ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedLog2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelLog2-Add")
+(rule (
+                        (= ?u (Op (KernelLog2 ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedLog2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelLog2-Add")
+(rule (
+                        (= ?u (Op (KernelLog2 ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedLog2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelLog2-Mul")
+(rule (
+                        (= ?u (Op (KernelLog2 ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedLog2 ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelLog2-Mul")
+(rule (
+                        (= ?u (Op (KernelRecip ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedRecip ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelRecip-Add")
+(rule (
+                        (= ?u (Op (KernelRecip ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedRecip ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedAdd ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelRecip-Add")
+(rule (
+                        (= ?u (Op (KernelRecip ?shape ?u_s ?u_s ?dt) (ICons ?a (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                     (ICons ?u (ICons ?b (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?u_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedRecip ?shape ?u_s ?u_s ?dt) (ICons ?fs_a (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?u_s ?b_s ?o_s ?dt)
+                                       (ICons ?fu (ICons ?fs_b (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-lhs-KernelRecip-Mul")
+(rule (
+                        (= ?u (Op (KernelRecip ?shape ?u_s ?u_s ?dt) (ICons ?b (INil))))
+                        (= ?bin (Op (KernelMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                     (ICons ?a (ICons ?u (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?u_s ?dt) (ICons ?b (INil))))
+                        (let ?fu (Op (FusedRecip ?shape ?u_s ?u_s ?dt) (ICons ?fs_b (INil))))
+                        (let ?fbin (Op (FusedMul ?shape ?a_s ?u_s ?o_s ?dt)
+                                       (ICons ?fs_a (ICons ?fu (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                        (union ?bin ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-U-B-rhs-KernelRecip-Mul")
+(rule (
+                        (= ?bi (Op (KernelAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelAdd ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                    (ICons ?bi (ICons ?c (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedAdd ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                       (ICons ?fbi (ICons ?fs_c (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-lhs-Add-Add")
+(rule (
+                        (= ?bi (Op (KernelAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelAdd ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                    (ICons ?c (ICons ?bi (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedAdd ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                       (ICons ?fs_c (ICons ?fbi (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-rhs-Add-Add")
+(rule (
+                        (= ?bi (Op (KernelAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelMul ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                    (ICons ?bi (ICons ?c (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedMul ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                       (ICons ?fbi (ICons ?fs_c (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-lhs-Add-Mul")
+(rule (
+                        (= ?bi (Op (KernelAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelMul ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                    (ICons ?c (ICons ?bi (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedAdd ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedMul ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                       (ICons ?fs_c (ICons ?fbi (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-rhs-Add-Mul")
+(rule (
+                        (= ?bi (Op (KernelMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelAdd ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                    (ICons ?bi (ICons ?c (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedAdd ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                       (ICons ?fbi (ICons ?fs_c (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-lhs-Mul-Add")
+(rule (
+                        (= ?bi (Op (KernelMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelAdd ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                    (ICons ?c (ICons ?bi (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedAdd ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                       (ICons ?fs_c (ICons ?fbi (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-rhs-Mul-Add")
+(rule (
+                        (= ?bi (Op (KernelMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelMul ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                    (ICons ?bi (ICons ?c (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedMul ?shape ?oi_s ?co_s ?oo_s ?dt)
+                                       (ICons ?fbi (ICons ?fs_c (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-lhs-Mul-Mul")
+(rule (
+                        (= ?bi (Op (KernelMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                    (ICons ?a (ICons ?b (INil)))))
+                        (= ?bo (Op (KernelMul ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                    (ICons ?c (ICons ?bi (INil)))))
+                     ) (
+                        (let ?fs_a (Op (FusionStart ?shape ?ai_s ?dt) (ICons ?a (INil))))
+                        (let ?fs_b (Op (FusionStart ?shape ?bi_s ?dt) (ICons ?b (INil))))
+                        (let ?fs_c (Op (FusionStart ?shape ?co_s ?dt) (ICons ?c (INil))))
+                        (let ?fbi (Op (FusedMul ?shape ?ai_s ?bi_s ?oi_s ?dt)
+                                       (ICons ?fs_a (ICons ?fs_b (INil)))))
+                        (let ?fbo (Op (FusedMul ?shape ?co_s ?oi_s ?oo_s ?dt)
+                                       (ICons ?fs_c (ICons ?fbi (INil)))))
+                        (let ?fe (Op (FusionEnd ?shape ?oo_s ?dt) (ICons ?fbo (INil))))
+                        (union ?bo ?fe)
+                     ) :ruleset fusion_pair :name "pair-fuse-B-B-rhs-Mul-Mul")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?inner (INil))))
+                    (= ?u (Op (KernelSin ?shape ?s ?s ?dt) (ICons ?fe (INil))))
+                 ) (
+                    (let ?fu (Op (FusedSin ?shape ?s ?s ?dt) (ICons ?inner (INil))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu (INil))))
+                    (union ?u ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-U-KernelSin")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?inner (INil))))
+                    (= ?u (Op (KernelSqrt ?shape ?s ?s ?dt) (ICons ?fe (INil))))
+                 ) (
+                    (let ?fu (Op (FusedSqrt ?shape ?s ?s ?dt) (ICons ?inner (INil))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu (INil))))
+                    (union ?u ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-U-KernelSqrt")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?inner (INil))))
+                    (= ?u (Op (KernelExp ?shape ?s ?s ?dt) (ICons ?fe (INil))))
+                 ) (
+                    (let ?fu (Op (FusedExp ?shape ?s ?s ?dt) (ICons ?inner (INil))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu (INil))))
+                    (union ?u ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-U-KernelExp")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?inner (INil))))
+                    (= ?u (Op (KernelExp2 ?shape ?s ?s ?dt) (ICons ?fe (INil))))
+                 ) (
+                    (let ?fu (Op (FusedExp2 ?shape ?s ?s ?dt) (ICons ?inner (INil))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu (INil))))
+                    (union ?u ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-U-KernelExp2")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?inner (INil))))
+                    (= ?u (Op (KernelLog2 ?shape ?s ?s ?dt) (ICons ?fe (INil))))
+                 ) (
+                    (let ?fu (Op (FusedLog2 ?shape ?s ?s ?dt) (ICons ?inner (INil))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu (INil))))
+                    (union ?u ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-U-KernelLog2")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?inner (INil))))
+                    (= ?u (Op (KernelRecip ?shape ?s ?s ?dt) (ICons ?fe (INil))))
+                 ) (
+                    (let ?fu (Op (FusedRecip ?shape ?s ?s ?dt) (ICons ?inner (INil))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?s ?dt) (ICons ?fu (INil))))
+                    (union ?u ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-U-KernelRecip")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?a_s ?dt) (ICons ?inner_a (INil))))
+                    (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                 (ICons ?fe (ICons ?b (INil)))))
+                 ) (
+                    (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                    (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                   (ICons ?inner_a (ICons ?fs_b (INil)))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                    (union ?bin ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-B-lhs-Add")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?b_s ?dt) (ICons ?inner_b (INil))))
+                    (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                 (ICons ?a (ICons ?fe (INil)))))
+                 ) (
+                    (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                    (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                   (ICons ?fs_a (ICons ?inner_b (INil)))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                    (union ?bin ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-B-rhs-Add")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?a_s ?dt) (ICons ?inner_a (INil))))
+                    (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                 (ICons ?fe (ICons ?b (INil)))))
+                 ) (
+                    (let ?fs_b (Op (FusionStart ?shape ?b_s ?dt) (ICons ?b (INil))))
+                    (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                   (ICons ?inner_a (ICons ?fs_b (INil)))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                    (union ?bin ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-B-lhs-Mul")
+(rule (
+                    (= ?fe (Op (FusionEnd ?shape ?b_s ?dt) (ICons ?inner_b (INil))))
+                    (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                 (ICons ?a (ICons ?fe (INil)))))
+                 ) (
+                    (let ?fs_a (Op (FusionStart ?shape ?a_s ?dt) (ICons ?a (INil))))
+                    (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                   (ICons ?fs_a (ICons ?inner_b (INil)))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                    (union ?bin ?new_fe)
+                 ) :ruleset fusion_grow :name "grow-FE-B-rhs-Mul")
+(rule (
+                    (= ?fe_a (Op (FusionEnd ?shape ?a_s ?dt) (ICons ?inner_a (INil))))
+                    (= ?fe_b (Op (FusionEnd ?shape ?b_s ?dt) (ICons ?inner_b (INil))))
+                    (= ?bin (Op (KernelAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                 (ICons ?fe_a (ICons ?fe_b (INil)))))
+                 ) (
+                    (let ?fbin (Op (FusedAdd ?shape ?a_s ?b_s ?o_s ?dt)
+                                   (ICons ?inner_a (ICons ?inner_b (INil)))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                    (union ?bin ?new_fe)
+                    (subsume (Op (FusionEnd ?shape ?a_s ?dt) (ICons ?inner_a (INil))))
+                    (subsume (Op (FusionEnd ?shape ?b_s ?dt) (ICons ?inner_b (INil))))
+                 ) :ruleset fusion_merge :name "merge-FE-FE-Add")
+(rule (
+                    (= ?fe_a (Op (FusionEnd ?shape ?a_s ?dt) (ICons ?inner_a (INil))))
+                    (= ?fe_b (Op (FusionEnd ?shape ?b_s ?dt) (ICons ?inner_b (INil))))
+                    (= ?bin (Op (KernelMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                 (ICons ?fe_a (ICons ?fe_b (INil)))))
+                 ) (
+                    (let ?fbin (Op (FusedMul ?shape ?a_s ?b_s ?o_s ?dt)
+                                   (ICons ?inner_a (ICons ?inner_b (INil)))))
+                    (let ?new_fe (Op (FusionEnd ?shape ?o_s ?dt) (ICons ?fbin (INil))))
+                    (union ?bin ?new_fe)
+                    (subsume (Op (FusionEnd ?shape ?a_s ?dt) (ICons ?inner_a (INil))))
+                    (subsume (Op (FusionEnd ?shape ?b_s ?dt) (ICons ?inner_b (INil))))
+                 ) :ruleset fusion_merge :name "merge-FE-FE-Mul")
 (relation cublaslt_base_dtype (DType))
                  (cublaslt_base_dtype (F32))
                  (cublaslt_base_dtype (F16))
@@ -1842,7 +3104,7 @@
             (ICons ?a (ICons ?b ?matmul_tail))))
 
         (= ?scale (Op (Constant ?alpha) (INil)))
-        ; alpha=1.0 hash-conses ?fused == ?matmul; the union merges Mul into ?matmul's eclass and saturate diverges. 
+        ; alpha=1.0 hash-conses ?fused == ?matmul; the union merges Mul into ?matmul's eclass and saturate diverges.
         (!= ?alpha 1.0)
         (= ?scaled (Op (Mul ?shape
             ?matmul_strides
@@ -1885,7 +3147,7 @@
             (ICons ?a (ICons ?b ?matmul_tail))))
 
         (= ?scale (Op (Constant ?alpha) (INil)))
-        ; See 2d alpha scale: alpha=1.0 makes (saturate ...) diverge.   
+        ; See 2d alpha scale: alpha=1.0 makes (saturate ...) diverge.
         (!= ?alpha 1.0)
         (= ?scaled (Op (Mul ?shape
             ?matmul_strides
@@ -3186,6 +4448,24 @@
 )
 
 (rule
+                ((= ?mul (Op (KernelMul ?shape ?as ?bs ?os ?dt) ?inputs))
+                 (= (MNum 0) (nth_from_end ?as 1))
+                 (= (MNum 0) (nth_from_end ?bs 2))
+                 (= ?sum (Op (Sum ?sshape ?sk ?ssi ?sks ?sso) (ICons ?mul (INil))))
+                 (= ?sum (Op (cublaslt ?cm ?cn ?ck ?cta ?ctb ?cao ?cbo ?cco ?cdo ?clda ?cldb ?cldc ?cldd ?cbc ?csa ?csb ?csc ?csd ?cadt ?cbdt ?ccdt ?cddt ?ccompute ?cscale ?calpha ?cbeta ?cepilogue) ?ci)))
+                ((delete (Op (KernelMul ?shape ?as ?bs ?os ?dt) ?inputs)))
+                :ruleset cleanup
+            )
+(rule
+                ((= ?mul (Op (KernelMul ?shape ?as ?bs ?os ?dt) ?inputs))
+                 (= (MNum 0) (nth_from_end ?as 1))
+                 (= (MNum 0) (nth_from_end ?bs 2))
+                 (= ?sum (Op (Sum ?sshape ?sk ?ssi ?sks ?sso) (ICons ?mul (INil))))
+                 (= ?sum (Op (KernelBatchMatMul ?bos ?bk ?bas ?baks ?bbs ?bbks ?bouts ?bdt) ?bi)))
+                ((delete (Op (KernelMul ?shape ?as ?bs ?os ?dt) ?inputs)))
+                :ruleset cleanup
+            )
+(rule
                 (
                     (= ?e (Op (GLUMoE ?gu_io ?dn_io ?gu_matmul_k ?dn_matmul_k ?output_k ?gu_within_range ?dn_within_range ?mode) ?inputs))
                 )
@@ -3239,20 +4519,207 @@
 (function glumoe_swiglu_down (IR) GLUMoESwiGLUDownState :merge new)
 (function glumoe_gemma_down (IR) GLUMoEGemmaDownState :merge new)
 
+(rule
+    (
+        (= ?iota_base (Op (Iota ?io ?iota_base_range) (INil)))
+        (= ?mul_base (Op (Mul ?mul_base_shape ?mul_base_a_stride ?mul_base_b_stride ?mul_base_out_stride) (ICons ?topk_idx (ICons ?iota_base (INil)))))
+        (= ?iota_within (Op (Iota (MIter) ?iota_within_range) (INil)))
+        (= ?add_idx (Op (Add ?add_shape ?add_a_stride ?add_b_stride ?add_out_stride) (ICons ?mul_base (ICons ?iota_within (INil)))))
+    )
+    (
+        (set (glumoe_expert_index ?add_idx)
+            (MkGLUMoEExpertIndexState ?io ?iota_within_range ?topk_idx))
+    )
+    :ruleset glumoe
+    :name "GLUMoE expert index marker"
+)
 
+(rule
+    (
+        (= ?index_state (glumoe_expert_index ?idx))
+        (= ?index_state (MkGLUMoEExpertIndexState ?io ?within_range ?topk_idx))
+        (= ?gathered (Op (Gather ?gather_idx_shape ?gather_idx_stride ?gather_data_shape ?gather_data_stride) (ICons ?idx (ICons ?weights (INil)))))
+        (= ?f32 (Op (Cast ?f32_size (F32)) (ICons ?gathered (INil))))
+    )
+    (
+        (set (glumoe_expert_gather ?f32)
+            (MkGLUMoEExpertGatherState ?io ?within_range ?topk_idx ?weights))
+    )
+    :ruleset glumoe
+    :name "GLUMoE expert gather marker"
+)
 
+(rule
+    (
+        (= ?gather_state (glumoe_expert_gather ?gu_f32))
+        (= ?gather_state (MkGLUMoEExpertGatherState ?gu_io ?gu_iota_within_range ?topk_idx ?gate_up_w))
+        (= ?gu_matmul_mul (Op (Mul ?gu_matmul_mul_shape ?gu_matmul_a_stride ?gu_matmul_b_stride ?gu_matmul_mul_out_stride) (ICons ?x (ICons ?gu_f32 (INil)))))
+        (= ?gu_matmul (Op (Sum ?gu_matmul_out_shape ?gu_matmul_k ?gu_matmul_in_stride ?gu_matmul_k_stride ?gu_matmul_out_stride) (ICons ?gu_matmul_mul (INil))))
+    )
+    (
+        (set (glumoe_gate_up ?gu_matmul)
+            (MkGLUMoEGateUpState ?gu_io ?gu_matmul_k ?gu_iota_within_range ?x ?topk_idx ?gate_up_w))
+    )
+    :ruleset glumoe
+    :name "GLUMoE gate-up matmul marker"
+)
 
 ; ===== SwiGLU activation marker =====
+(rule
+    (
+        (= ?gate_up_state (glumoe_gate_up ?gu_matmul))
+        (= ?gate_up_state (MkGLUMoEGateUpState ?gu_io ?gu_matmul_k ?gu_within_range ?x ?topk_idx ?gate_up_w))
+
+        (= ?up_iota (Op (Iota ?up_iota_expr ?up_iota_range) (INil)))
+        (= ?up_slice (Op (Gather ?up_gather_idx_shape ?up_gather_idx_stride ?up_gather_data_shape ?up_gather_data_stride) (ICons ?up_iota (ICons ?gu_matmul (INil)))))
+
+        (= ?neg1 (Op (Constant -1.000000) (INil)))
+        (= ?neg_gate (Op (Mul ?silu_shape1 ?silu_a_stride1 ?silu_b_stride1 ?silu_out_stride1) (ICons ?gu_matmul (ICons ?neg1 (INil)))))
+        (= ?log2e (Op (Constant 1.442695) (INil)))
+        (= ?scaled (Op (Mul ?silu_shape2 ?silu_a_stride2 ?silu_b_stride2 ?silu_out_stride2) (ICons ?neg_gate (ICons ?log2e (INil)))))
+        (= ?exp2_val (Op (Exp2 ?silu_shape3 ?silu_in_stride3 ?silu_out_stride3) (ICons ?scaled (INil))))
+        (= ?one (Op (Constant 1.000000) (INil)))
+        (= ?plus1 (Op (Add ?silu_shape4 ?silu_a_stride4 ?silu_b_stride4 ?silu_out_stride4) (ICons ?exp2_val (ICons ?one (INil)))))
+        (= ?sigmoid (Op (Recip ?silu_shape5 ?silu_in_stride5 ?silu_out_stride5) (ICons ?plus1 (INil))))
+        (= ?silu_out (Op (Mul ?silu_shape6 ?silu_a_stride6 ?silu_b_stride6 ?silu_out_stride6) (ICons ?gu_matmul (ICons ?sigmoid (INil)))))
+        (= ?swiglu_out (Op (Mul ?swiglu_shape ?swiglu_a_stride ?swiglu_b_stride ?swiglu_out_stride) (ICons ?silu_out (ICons ?up_slice (INil)))))
+    )
+    (
+        (set (glumoe_swiglu ?swiglu_out) (MkGLUMoESwiGLUState ?gate_up_state))
+    )
+    :ruleset glumoe
+    :name "GLUMoE swiglu marker"
+)
 
 ; ===== Gemma GELU activation marker =====
+(rule
+    (
+        (= ?gate_up_state (glumoe_gate_up ?gu_matmul))
+        (= ?gate_up_state (MkGLUMoEGateUpState ?gu_io ?gu_matmul_k ?gu_within_range ?x ?topk_idx ?gate_up_w))
+
+        (= ?up_iota (Op (Iota ?up_iota_expr ?up_iota_range) (INil)))
+        (= ?up_slice (Op (Gather ?up_gather_idx_shape ?up_gather_idx_stride ?up_gather_data_shape ?up_gather_data_stride) (ICons ?up_iota (ICons ?gu_matmul (INil)))))
+
+        (= ?gelu_coeff_inner (Op (Constant 0.044715) (INil)))
+        (= ?gelu_inner_scaled (Op (Mul ?gelu_inner_scaled_shape ?gelu_inner_scaled_a_stride ?gelu_inner_scaled_b_stride ?gelu_inner_scaled_out_stride) (ICons ?gu_matmul (ICons ?gelu_coeff_inner (INil)))))
+        (= ?gelu_inner_quad (Op (Mul ?gelu_inner_quad_shape ?gelu_inner_quad_a_stride ?gelu_inner_quad_b_stride ?gelu_inner_quad_out_stride) (ICons ?gelu_inner_scaled (ICons ?gu_matmul (INil)))))
+        (= ?gelu_one (Op (Constant 1.000000) (INil)))
+        (= ?gelu_poly (Op (Add ?gelu_poly_shape ?gelu_poly_a_stride ?gelu_poly_b_stride ?gelu_poly_out_stride) (ICons ?gelu_inner_quad (ICons ?gelu_one (INil)))))
+        (= ?gelu_coeff_outer (Op (Constant 1.595769) (INil)))
+        (= ?gelu_outer_scaled (Op (Mul ?gelu_outer_scaled_shape ?gelu_outer_scaled_a_stride ?gelu_outer_scaled_b_stride ?gelu_outer_scaled_out_stride) (ICons ?gu_matmul (ICons ?gelu_coeff_outer (INil)))))
+        (= ?gelu_scaled (Op (Mul ?gelu_scaled_shape ?gelu_scaled_a_stride ?gelu_scaled_b_stride ?gelu_scaled_out_stride) (ICons ?gelu_outer_scaled (ICons ?gelu_poly (INil)))))
+        (= ?neg1 (Op (Constant -1.000000) (INil)))
+        (= ?gelu_neg (Op (Mul ?gelu_neg_shape ?gelu_neg_a_stride ?gelu_neg_b_stride ?gelu_neg_out_stride) (ICons ?gelu_scaled (ICons ?neg1 (INil)))))
+        (= ?log2e (Op (Constant 1.442695) (INil)))
+        (= ?gelu_exp_scaled (Op (Mul ?gelu_exp_scaled_shape ?gelu_exp_scaled_a_stride ?gelu_exp_scaled_b_stride ?gelu_exp_scaled_out_stride) (ICons ?gelu_neg (ICons ?log2e (INil)))))
+        (= ?gelu_exp2_val (Op (Exp2 ?gelu_exp_shape ?gelu_exp_in_stride ?gelu_exp_out_stride) (ICons ?gelu_exp_scaled (INil))))
+        (= ?gelu_plus1 (Op (Add ?gelu_plus1_shape ?gelu_plus1_a_stride ?gelu_plus1_b_stride ?gelu_plus1_out_stride) (ICons ?gelu_exp2_val (ICons ?gelu_one (INil)))))
+        (= ?gelu_sigmoid (Op (Recip ?gelu_sigmoid_shape ?gelu_sigmoid_in_stride ?gelu_sigmoid_out_stride) (ICons ?gelu_plus1 (INil))))
+        (= ?gelu_out (Op (Mul ?gelu_out_shape ?gelu_out_a_stride ?gelu_out_b_stride ?gelu_out_out_stride) (ICons ?gu_matmul (ICons ?gelu_sigmoid (INil)))))
+        (= ?gemma_out (Op (Mul ?geglu_shape ?geglu_a_stride ?geglu_b_stride ?geglu_out_stride) (ICons ?gelu_out (ICons ?up_slice (INil)))))
+    )
+    (
+        (set (glumoe_gemma_gelu ?gemma_out) (MkGLUMoEGemmaGELUState ?gate_up_state))
+    )
+    :ruleset glumoe
+    :name "GLUMoE gemma gelu marker"
+)
 
 ; ===== SwiGLU down marker =====
+(rule
+    (
+        (= ?swiglu_state (glumoe_swiglu ?swiglu_out))
+        (= ?swiglu_state (MkGLUMoESwiGLUState ?gate_up_state))
+
+        (= ?gather_state (glumoe_expert_gather ?dn_f32))
+        (= ?gather_state (MkGLUMoEExpertGatherState ?dn_io ?dn_iota_within_range ?topk_idx ?down_w))
+        (= ?dn_matmul_mul (Op (Mul ?dn_matmul_mul_shape ?dn_matmul_a_stride ?dn_matmul_b_stride ?dn_matmul_mul_out_stride) (ICons ?swiglu_out (ICons ?dn_f32 (INil)))))
+        (= ?dn_matmul (Op (Sum ?dn_matmul_out_shape ?dn_matmul_k ?dn_matmul_in_stride ?dn_matmul_k_stride ?dn_matmul_out_stride) (ICons ?dn_matmul_mul (INil))))
+    )
+    (
+        (set (glumoe_swiglu_down ?dn_matmul)
+            (MkGLUMoESwiGLUDownState ?dn_io ?dn_matmul_k ?dn_iota_within_range ?swiglu_state ?topk_idx ?down_w))
+    )
+    :ruleset glumoe
+    :name "GLUMoE swiglu down marker"
+)
 
 ; ===== Gemma GELU down marker =====
+(rule
+    (
+        (= ?gemma_state (glumoe_gemma_gelu ?gemma_out))
+        (= ?gemma_state (MkGLUMoEGemmaGELUState ?gate_up_state))
+
+        (= ?gather_state (glumoe_expert_gather ?dn_f32))
+        (= ?gather_state (MkGLUMoEExpertGatherState ?dn_io ?dn_iota_within_range ?topk_idx ?down_w))
+        (= ?dn_matmul_mul (Op (Mul ?dn_matmul_mul_shape ?dn_matmul_a_stride ?dn_matmul_b_stride ?dn_matmul_mul_out_stride) (ICons ?gemma_out (ICons ?dn_f32 (INil)))))
+        (= ?dn_matmul (Op (Sum ?dn_matmul_out_shape ?dn_matmul_k ?dn_matmul_in_stride ?dn_matmul_k_stride ?dn_matmul_out_stride) (ICons ?dn_matmul_mul (INil))))
+    )
+    (
+        (set (glumoe_gemma_down ?dn_matmul)
+            (MkGLUMoEGemmaDownState ?dn_io ?dn_matmul_k ?dn_iota_within_range ?gemma_state ?topk_idx ?down_w))
+    )
+    :ruleset glumoe
+    :name "GLUMoE gemma down marker"
+)
 
 ; ===== Final fusion: mode 0 (SwiGLU) =====
+(rule
+    (
+        (= ?down_state (glumoe_swiglu_down ?dn_matmul))
+        (= ?down_state (MkGLUMoESwiGLUDownState ?dn_io ?dn_matmul_k ?dn_within_range ?swiglu_state ?topk_idx ?down_w))
+        (= ?swiglu_state (MkGLUMoESwiGLUState ?gate_up_state))
+        (= ?gate_up_state (MkGLUMoEGateUpState ?gu_io ?gu_matmul_k ?gu_within_range ?x ?topk_idx ?gate_up_w))
+
+        (= ?weighted (Op (Mul ?weighted_shape ?weighted_a_stride ?weighted_b_stride ?weighted_out_stride) (ICons ?dn_matmul (ICons ?topk_vals (INil)))))
+        (= ?output (Op (Sum ?output_shape ?output_k ?output_in_stride ?output_k_stride ?output_out_stride) (ICons ?weighted (INil))))
+    )
+    (
+        (let ?glumoe (Op (GLUMoE
+            ?gu_io ?dn_io ?gu_matmul_k ?dn_matmul_k ?output_k
+            ?gu_within_range ?dn_within_range (MNum 0))
+            (ICons ?x (ICons ?topk_idx (ICons ?topk_vals (ICons ?gate_up_w (ICons ?down_w (ICons ?topk_vals (INil)))))))))
+        (union ?output ?glumoe)
+        (subsume (Op (Sum ?output_shape ?output_k ?output_in_stride ?output_k_stride ?output_out_stride) (ICons ?weighted (INil))))
+        (subsume (Op (KernelSum ?output_shape ?output_k ?output_in_stride ?output_k_stride ?output_out_stride (F32)) (ICons ?weighted (INil))))
+    )
+    :ruleset glumoe
+    :name "GLUMoE fused expert computation (swiglu)"
+)
 
 ; ===== Final fusion: mode 1 (Gemma GELU) =====
+(rule
+    (
+        (= ?down_state (glumoe_gemma_down ?dn_matmul))
+        (= ?down_state (MkGLUMoEGemmaDownState ?dn_io ?dn_matmul_k ?dn_within_range ?gemma_state ?topk_idx ?down_w))
+        (= ?gemma_state (MkGLUMoEGemmaGELUState ?gate_up_state))
+        (= ?gate_up_state (MkGLUMoEGateUpState ?gu_io ?gu_matmul_k ?gu_within_range ?x ?topk_idx ?gate_up_w))
+
+        ; Gemma expert weights: topk_weights = normed_topk * per_expert_scale.gather(topk_idx)
+        (= ?per_expert_vals (Op (Gather ?scale_gather_idx_shape ?scale_gather_idx_stride ?scale_gather_data_shape ?scale_gather_data_stride) (ICons ?topk_idx (ICons ?per_expert_scale (INil)))))
+        (= ?topk_row_offsets (Op (Iota ?topk_row_offsets_expr ?topk_row_offsets_range) (INil)))
+        (= ?topk_flat_idx (Op (Add ?topk_flat_idx_shape ?topk_flat_idx_a_stride ?topk_flat_idx_b_stride ?topk_flat_idx_out_stride) (ICons ?topk_row_offsets (ICons ?topk_idx (INil)))))
+        (= ?topk_vals (Op (Gather ?topk_vals_gather_idx_shape ?topk_vals_gather_idx_stride ?topk_vals_gather_data_shape ?topk_vals_gather_data_stride) (ICons ?topk_flat_idx (ICons ?routing_weights (INil)))))
+        (= ?topk_norm (Op (Sum ?topk_norm_shape ?output_k ?topk_norm_in_stride ?topk_norm_k_stride ?topk_norm_out_stride) (ICons ?topk_vals (INil))))
+        (= ?topk_norm_factor (Op (Recip ?topk_norm_recip_shape ?topk_norm_recip_in_stride ?topk_norm_recip_out_stride) (ICons ?topk_norm (INil))))
+        (= ?normed_topk (Op (Mul ?normed_topk_shape ?normed_topk_a_stride ?normed_topk_b_stride ?normed_topk_out_stride) (ICons ?topk_vals (ICons ?topk_norm_factor (INil)))))
+        (= ?expert_weights (Op (Mul ?expert_weights_shape ?expert_weights_a_stride ?expert_weights_b_stride ?expert_weights_out_stride) (ICons ?normed_topk (ICons ?per_expert_vals (INil)))))
+
+        (= ?weighted (Op (Mul ?weighted_shape ?weighted_a_stride ?weighted_b_stride ?weighted_out_stride) (ICons ?dn_matmul (ICons ?expert_weights (INil)))))
+        (= ?output (Op (Sum ?output_shape ?output_k ?output_in_stride ?output_k_stride ?output_out_stride) (ICons ?weighted (INil))))
+    )
+    (
+        (let ?glumoe (Op (GLUMoE
+            ?gu_io ?dn_io ?gu_matmul_k ?dn_matmul_k ?output_k
+            ?gu_within_range ?dn_within_range (MNum 1))
+            (ICons ?x (ICons ?topk_idx (ICons ?topk_vals (ICons ?gate_up_w (ICons ?down_w (ICons ?per_expert_scale (INil)))))))))
+        (union ?output ?glumoe)
+        (subsume (Op (Sum ?output_shape ?output_k ?output_in_stride ?output_k_stride ?output_out_stride) (ICons ?weighted (INil))))
+        (subsume (Op (KernelSum ?output_shape ?output_k ?output_in_stride ?output_k_stride ?output_out_stride (F32)) (ICons ?weighted (INil))))
+    )
+    :ruleset glumoe
+    :name "GLUMoE fused expert computation (gemma_gelu)"
+)
 
 ; FlashInfer batch decode attention rewrite rule.
 ;
@@ -3380,12 +4847,12 @@
     :name "FlashInfer batch decode attention"
 )
 
-(rule ((= ?__e (Input ?v17_node ?v17_label ?v17_dtype))) ((set (dtype ?__e) ?v17_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (Output ?v18_inp ?v18_node)) (= ?__dty (dtype ?v18_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (CustomOpKind ?v19_id ?v19_dtype) ?__inputs))) ((set (dtype ?__e) ?v19_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (LoopStart ?v20_inp ?v20_loop_id ?v20_slot_idx ?v20_iters ?v20_dtype))) ((set (dtype ?__e) ?v20_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (LoopEnd ?v21_inp ?v21_loop_id ?v21_slot_idx ?v21_dtype))) ((set (dtype ?__e) ?v21_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (LoopInput ?v22_loop_id ?v22_stream_id ?v22_dtype) ?__inputs))) ((set (dtype ?__e) ?v22_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Input ?v103_node ?v103_label ?v103_dtype))) ((set (dtype ?__e) ?v103_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Output ?v104_inp ?v104_node)) (= ?__dty (dtype ?v104_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (CustomOpKind ?v105_id ?v105_dtype) ?__inputs))) ((set (dtype ?__e) ?v105_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (LoopStart ?v106_inp ?v106_loop_id ?v106_slot_idx ?v106_iters ?v106_dtype))) ((set (dtype ?__e) ?v106_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (LoopEnd ?v107_inp ?v107_loop_id ?v107_slot_idx ?v107_dtype))) ((set (dtype ?__e) ?v107_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (LoopInput ?v108_loop_id ?v108_stream_id ?v108_dtype) ?__inputs))) ((set (dtype ?__e) ?v108_dtype)) :ruleset dtype_prop)
 
             (relation identical_inputs (IList))
 
@@ -3421,19 +4888,19 @@
                   ((union ?e ?x))
                   :ruleset expr
                   :name "LoopInputStatic inline")
-            
-(rule ((= ?__e (Op (LoopInputStatic ?v23_loop_id ?v23_stream_id ?v23_dtype) ?__inputs))) ((set (dtype ?__e) ?v23_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (LoopOutput ?v24_loop_id ?v24_stream_id ?v24_dtype) ?__inputs))) ((set (dtype ?__e) ?v24_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (LoopOutputSelect ?v25_loop_id ?v25_stream_id ?v25_iter ?v25_dtype) ?__inputs))) ((set (dtype ?__e) ?v25_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Constant ?v26_value) ?__inputs))) ((set (dtype ?__e) (F32))) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Cast ?v27_size ?v27_dtype) ?__inputs))) ((set (dtype ?__e) ?v27_dtype)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Iota ?v28_expr ?v28_range) ?__inputs))) ((set (dtype ?__e) (Int))) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Exp2 ?v29_shape ?v29_strides ?v29_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Log2 ?v30_shape ?v30_strides ?v30_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Sin ?v31_shape ?v31_strides ?v31_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Recip ?v32_shape ?v32_strides ?v32_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Sqrt ?v33_shape ?v33_strides ?v33_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Add ?v34_shape ?v34_a_strides ?v34_b_strides ?v34_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+
+(rule ((= ?__e (Op (LoopInputStatic ?v109_loop_id ?v109_stream_id ?v109_dtype) ?__inputs))) ((set (dtype ?__e) ?v109_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (LoopOutput ?v110_loop_id ?v110_stream_id ?v110_dtype) ?__inputs))) ((set (dtype ?__e) ?v110_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (LoopOutputSelect ?v111_loop_id ?v111_stream_id ?v111_iter ?v111_dtype) ?__inputs))) ((set (dtype ?__e) ?v111_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Constant ?v112_value) ?__inputs))) ((set (dtype ?__e) (F32))) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Cast ?v113_size ?v113_dtype) ?__inputs))) ((set (dtype ?__e) ?v113_dtype)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Iota ?v114_expr ?v114_range) ?__inputs))) ((set (dtype ?__e) (Int))) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Exp2 ?v115_shape ?v115_strides ?v115_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Log2 ?v116_shape ?v116_strides ?v116_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Sin ?v117_shape ?v117_strides ?v117_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Recip ?v118_shape ?v118_strides ?v118_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Sqrt ?v119_shape ?v119_strides ?v119_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Add ?v120_shape ?v120_a_strides ?v120_b_strides ?v120_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
 (rule
             (
                 (= ?ls (LoopStart ?initial ?loop_id ?slot_idx (MNum 2) ?dt))
@@ -3530,7 +4997,7 @@
             :ruleset expr
             :name "unroll Add body trips=4 state=1"
         )
-(rule ((= ?__e (Op (Mul ?v35_shape ?v35_a_strides ?v35_b_strides ?v35_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Mul ?v121_shape ?v121_a_strides ?v121_b_strides ?v121_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
 (rule
             (
                 (= ?ls (LoopStart ?initial ?loop_id ?slot_idx (MNum 2) ?dt))
@@ -3627,7 +5094,7 @@
             :ruleset expr
             :name "unroll Mul body trips=4 state=1"
         )
-(rule ((= ?__e (Op (Mod ?v36_shape ?v36_a_strides ?v36_b_strides ?v36_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Mod ?v122_shape ?v122_a_strides ?v122_b_strides ?v122_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
 (rule
             (
                 (= ?ls (LoopStart ?initial ?loop_id ?slot_idx (MNum 2) ?dt))
@@ -3724,7 +5191,7 @@
             :ruleset expr
             :name "unroll Mod body trips=4 state=1"
         )
-(rule ((= ?__e (Op (LessThan ?v37_shape ?v37_a_strides ?v37_b_strides ?v37_out_strides) ?__inputs))) ((set (dtype ?__e) (Bool))) :ruleset dtype_prop)
+(rule ((= ?__e (Op (LessThan ?v123_shape ?v123_a_strides ?v123_b_strides ?v123_out_strides) ?__inputs))) ((set (dtype ?__e) (Bool))) :ruleset dtype_prop)
 (rule
             (
                 (= ?ls (LoopStart ?initial ?loop_id ?slot_idx (MNum 2) ?dt))
@@ -3821,9 +5288,9 @@
             :ruleset expr
             :name "unroll LessThan body trips=4 state=1"
         )
-(rule ((= ?__e (Op (Gather ?v38_index_shape ?v38_index_strides ?v38_data_shape ?v38_data_strides) (ICons ?__indexes (ICons ?__data ?__tail)))) (= ?__dty (dtype ?__data))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Scatter ?v39_dest_shape ?v39_dest_strides ?v39_index_shape ?v39_index_strides ?v39_src_strides) (ICons ?__dest (ICons ?__indexes (ICons ?__src ?__tail))))) (= ?__dty (dtype ?__src))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Sum ?v40_shape ?v40_iters ?v40_strides ?v40_iter_stride ?v40_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Gather ?v124_index_shape ?v124_index_strides ?v124_data_shape ?v124_data_strides) (ICons ?__indexes (ICons ?__data ?__tail)))) (= ?__dty (dtype ?__data))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Scatter ?v125_dest_shape ?v125_dest_strides ?v125_index_shape ?v125_index_strides ?v125_src_strides) (ICons ?__dest (ICons ?__indexes (ICons ?__src ?__tail))))) (= ?__dty (dtype ?__src))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Sum ?v126_shape ?v126_iters ?v126_strides ?v126_iter_stride ?v126_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
 ; Squeeze: remove outermost dim=1 from Mul+Sum
 ; [1, d1, d2, ...] → [d1, d2, ...] via direct union
 ;
@@ -3836,6 +5303,55 @@
 ; (1*N = N) and downstream ops use their own strides to index into the
 ; flat buffer, which has the same layout regardless of the leading dim=1.
 
+(rule
+    (
+        ; Match Mul + Sum pattern (Op wrapper syntax)
+        (= ?mul (Op (Mul ?mul_shape ?a_stride ?b_stride ?mul_out_stride) (ICons ?a (ICons ?b (INil)))))
+        (= ?sum (Op (Sum ?sum_shape ?k ?sum_in_stride ?k_stride ?sum_out_stride) (ICons ?mul (INil))))
+
+        ; Sum output shape starts with 1
+        (= ?sum_shape (ECons (MNum 1) ?rest_sum_shape))
+        ; Result must have >= 2 dims (don't collapse below 2D)
+        (!= ?rest_sum_shape (ENil))
+        (= ?rest_sum_len (len ?rest_sum_shape))
+        (>= ?rest_sum_len 2)
+
+        ; Mul shape also starts with 1
+        (= ?mul_shape (ECons (MNum 1) ?rest_mul_shape))
+
+        ; Destructure all stride lists to drop first element
+        (= ?a_stride (ECons ?as0 ?rest_as))
+        (= ?b_stride (ECons ?bs0 ?rest_bs))
+        (= ?mul_out_stride (ECons ?mos0 ?rest_mos))
+        (= ?sum_in_stride (ECons ?sis0 ?rest_sis))
+        (= ?sum_out_stride (ECons ?sos0 ?rest_sos))
+
+        ; Get dtype
+        (= ?dt (dtype ?a))
+    )
+    (
+        ; Create collapsed Mul (drop outermost dim from all lists)
+        (let ?new_mul (Op (Mul ?rest_mul_shape
+            ?rest_as
+            ?rest_bs
+            ?rest_mos)
+            (ICons ?a (ICons ?b (INil)))))
+
+        ; Create collapsed Sum
+        (let ?new_sum (Op (Sum ?rest_sum_shape ?k
+            ?rest_sis ?k_stride ?rest_sos)
+            (ICons ?new_mul (INil))))
+
+        ; Direct union — no wrapper needed
+        (union ?sum ?new_sum)
+
+        ; Propagate dtype
+        (set (dtype ?new_mul) ?dt)
+        (set (dtype ?new_sum) ?dt)
+    )
+    :ruleset matmul_flatten
+    :name "batch-collapse squeeze dim=1"
+)
 
 ; Batch-merge: collapse outermost two dims when A is contiguous, B is broadcast
 ; [d0, d1, ...] → [d0*d1, ...] via direct union
@@ -3848,6 +5364,67 @@
 ; Direct union is safe because the total element count is preserved
 ; (d0*d1 = d0*d1) and the flat buffer layout is identical.
 
+(rule
+    (
+        (= ?mul (Op (Mul ?mul_shape ?a_stride ?b_stride ?mul_out_stride) (ICons ?a (ICons ?b (INil)))))
+        (= ?sum (Op (Sum ?sum_shape ?k ?sum_in_stride ?k_stride ?sum_out_stride) (ICons ?mul (INil))))
+
+        ; Sum shape has >= 3 dims (result will have >= 2)
+        (= ?sum_shape (ECons ?sd0 (ECons ?sd1 ?rest_sum_shape)))
+        (!= ?rest_sum_shape (ENil))
+
+        ; Mul shape
+        (= ?mul_shape (ECons ?d0 (ECons ?d1 ?rest_mul_shape)))
+
+        ; A strides: a_s0 = a_s1 * d1 (contiguous)
+        (= ?a_stride (ECons ?as0 (ECons ?as1 ?rest_as)))
+        (= ?as0 (MMul ?as1 ?d1))
+
+        ; B strides: broadcast on both leading dims
+        (= ?b_stride (ECons (MNum 0) (ECons (MNum 0) ?rest_bs)))
+
+        ; Mul output strides: contiguous (os0 = os1 * d1)
+        (= ?mul_out_stride (ECons ?mos0 (ECons ?mos1 ?rest_mos)))
+        (= ?mos0 (MMul ?mos1 ?d1))
+
+        ; Sum input strides: contiguous leading
+        (= ?sum_in_stride (ECons ?sis0 (ECons ?sis1 ?rest_sis)))
+        (= ?sis0 (MMul ?sis1 ?sd1))
+
+        ; Sum output strides: contiguous leading
+        (= ?sum_out_stride (ECons ?sos0 (ECons ?sos1 ?rest_sos)))
+        (= ?sos0 (MMul ?sos1 ?sd1))
+
+        (= ?dt (dtype ?a))
+    )
+    (
+        ; Merged dimensions
+        (let ?new_d (MMul ?d0 ?d1))
+        (let ?new_sd (MMul ?sd0 ?sd1))
+
+        ; Collapsed Mul: merged leading dim, A uses as1, B uses 0
+        (let ?new_mul (Op (Mul (ECons ?new_d ?rest_mul_shape)
+            (ECons ?as1 ?rest_as)
+            (ECons (MNum 0) ?rest_bs)
+            (ECons ?mos1 ?rest_mos))
+            (ICons ?a (ICons ?b (INil)))))
+
+        ; Collapsed Sum
+        (let ?new_sum (Op (Sum (ECons ?new_sd ?rest_sum_shape)
+            ?k
+            (ECons ?sis1 ?rest_sis)
+            ?k_stride
+            (ECons ?sos1 ?rest_sos))
+            (ICons ?new_mul (INil))))
+
+        ; Direct union
+        (union ?sum ?new_sum)
+        (set (dtype ?new_mul) ?dt)
+        (set (dtype ?new_sum) ?dt)
+    )
+    :ruleset matmul_flatten
+    :name "batch-collapse merge A-contiguous B-broadcast"
+)
 
 ; Batch-merge: collapse outermost two dims when B is contiguous, A is broadcast
 ; [d0, d1, ...] → [d0*d1, ...] via direct union
@@ -3857,18 +5434,1228 @@
 ;   - A is broadcast on both leading dims: a_stride[0] = 0, a_stride[1] = 0
 ;   - Output strides are contiguous on the leading dims
 
+(rule
+    (
+        (= ?mul (Op (Mul ?mul_shape ?a_stride ?b_stride ?mul_out_stride) (ICons ?a (ICons ?b (INil)))))
+        (= ?sum (Op (Sum ?sum_shape ?k ?sum_in_stride ?k_stride ?sum_out_stride) (ICons ?mul (INil))))
 
-(rule ((= ?__e (Op (Max ?v41_shape ?v41_iters ?v41_strides ?v41_iter_stride ?v41_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
-(rule ((= ?__e (Op (Softmax ?v42_shape ?v42_in_strides ?v42_out_strides ?v42_reduce_dim ?v42_reduce_stride) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+        ; Sum shape has >= 3 dims
+        (= ?sum_shape (ECons ?sd0 (ECons ?sd1 ?rest_sum_shape)))
+        (!= ?rest_sum_shape (ENil))
+
+        ; Mul shape
+        (= ?mul_shape (ECons ?d0 (ECons ?d1 ?rest_mul_shape)))
+
+        ; A strides: broadcast on both leading dims
+        (= ?a_stride (ECons (MNum 0) (ECons (MNum 0) ?rest_as)))
+
+        ; B strides: b_s0 = b_s1 * d1 (contiguous)
+        (= ?b_stride (ECons ?bs0 (ECons ?bs1 ?rest_bs)))
+        (= ?bs0 (MMul ?bs1 ?d1))
+
+        ; Mul output strides: contiguous (os0 = os1 * d1)
+        (= ?mul_out_stride (ECons ?mos0 (ECons ?mos1 ?rest_mos)))
+        (= ?mos0 (MMul ?mos1 ?d1))
+
+        ; Sum input strides: contiguous leading
+        (= ?sum_in_stride (ECons ?sis0 (ECons ?sis1 ?rest_sis)))
+        (= ?sis0 (MMul ?sis1 ?sd1))
+
+        ; Sum output strides: contiguous leading
+        (= ?sum_out_stride (ECons ?sos0 (ECons ?sos1 ?rest_sos)))
+        (= ?sos0 (MMul ?sos1 ?sd1))
+
+        (= ?dt (dtype ?a))
+    )
+    (
+        ; Merged dimensions
+        (let ?new_d (MMul ?d0 ?d1))
+        (let ?new_sd (MMul ?sd0 ?sd1))
+
+        ; Collapsed Mul: merged leading dim, A uses 0, B uses bs1
+        (let ?new_mul (Op (Mul (ECons ?new_d ?rest_mul_shape)
+            (ECons (MNum 0) ?rest_as)
+            (ECons ?bs1 ?rest_bs)
+            (ECons ?mos1 ?rest_mos))
+            (ICons ?a (ICons ?b (INil)))))
+
+        ; Collapsed Sum
+        (let ?new_sum (Op (Sum (ECons ?new_sd ?rest_sum_shape)
+            ?k
+            (ECons ?sis1 ?rest_sis)
+            ?k_stride
+            (ECons ?sos1 ?rest_sos))
+            (ICons ?new_mul (INil))))
+
+        ; Direct union
+        (union ?sum ?new_sum)
+        (set (dtype ?new_mul) ?dt)
+        (set (dtype ?new_sum) ?dt)
+    )
+    :ruleset matmul_flatten
+    :name "batch-collapse merge B-contiguous A-broadcast"
+)
+
+(rule ((= ?__e (Op (Max ?v127_shape ?v127_iters ?v127_strides ?v127_iter_stride ?v127_out_strides) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
+(rule ((= ?__e (Op (Softmax ?v128_shape ?v128_in_strides ?v128_out_strides ?v128_reduce_dim ?v128_reduce_stride) (ICons ?__first_inp ?__tail))) (= ?__dty (dtype ?__first_inp))) ((set (dtype ?__e) ?__dty)) :ruleset dtype_prop)
 
 (ruleset cuda_memory_analysis)
 (relation cuda_output_bytes (OpKind Expression))
 (relation cuda_local_memory (IR Expression))
 
+(rule ((= ?node (Input ?id ?label ?dtype)))
+      ((cuda_local_memory ?node (MNum 0)))
+      :ruleset cuda_memory_analysis
+      :name "cuda-memory-input")
 
+(rule ((= ?node (Output ?inp ?id)))
+      ((cuda_local_memory ?node (MNum 0)))
+      :ruleset cuda_memory_analysis
+      :name "cuda-memory-output")
 
+(rule ((= ?node (OutputJoin ?a ?b)))
+      ((cuda_local_memory ?node (MNum 0)))
+      :ruleset cuda_memory_analysis
+      :name "cuda-memory-output-join")
 
+(rule ((= ?node (Op ?kind ?inputs))
+       (cuda_output_bytes ?kind ?bytes))
+      ((cuda_local_memory ?node ?bytes))
+      :ruleset cuda_memory_analysis
+      :name "cuda-memory-op-local")
 
+(rule
+    ((= ?kind (FusedAdd ?shape ?a_strides ?b_strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedAdd-zero"
+)
+(rule
+    ((= ?kind (FusedExp ?shape ?strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedExp-zero"
+)
+(rule
+    ((= ?kind (FusedExp2 ?shape ?strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedExp2-zero"
+)
+(rule
+    ((= ?kind (FusedLog2 ?shape ?strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedLog2-zero"
+)
+(rule
+    ((= ?kind (FusedMul ?shape ?a_strides ?b_strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedMul-zero"
+)
+(rule
+    ((= ?kind (FusedRecip ?shape ?strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedRecip-zero"
+)
+(rule
+    ((= ?kind (FusedSin ?shape ?strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedSin-zero"
+)
+(rule
+    ((= ?kind (FusedSqrt ?shape ?strides ?out_strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusedSqrt-zero"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-F32-bytes"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-F16-bytes"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-Bf16-bytes"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-Int-bytes"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-Bool-bytes"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-I4-bytes"
+)
+(rule
+    ((= ?kind (FusionEnd ?shape ?strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionEnd-TF32-bytes"
+)
+(rule
+    ((= ?kind (FusionStart ?shape ?strides ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-FusionStart-zero"
+)
+(rule
+    ((= ?kind (GLUMoE ?gu_io ?dn_io ?gu_matmul_k ?dn_matmul_k ?output_k ?gu_within_range ?dn_within_range ?mode)))
+    ((cuda_output_bytes ?kind (MMul (MMul (MVar "s") ?gu_matmul_k) (MNum 4))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-GLUMoE-f32-glumoe"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelAdd ?shape ?a_strides ?b_strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelAdd-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatMul ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatMul-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelBatchMatVec ?out_shape ?k_dim ?a_stride ?a_k_stride ?b_stride ?b_k_stride ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelBatchMatVec-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (F32) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (F16) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (Bf16) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (Int) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (Bool) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (I4) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelCast ?size (TF32) ?src_dtype)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?size (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelCast-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelConstant ?value)))
+    ((cuda_output_bytes ?kind (MNum 4)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelConstant-f32-scalar"
+)
+(rule
+    ((= ?kind (KernelEmbed ?batch_shape ?token_stride ?out_stride ?embed_dim))
+     (= ?__cuda_elems (n_elements ?batch_shape)))
+    ((cuda_output_bytes ?kind (MMul (MMul ?__cuda_elems ?embed_dim) (MNum 4))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelEmbed-f32-embed"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelExp ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelExp2 ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelExp2-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelGather ?out_shape ?index_strides ?data_shape ?data_strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?out_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelGather-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelIota ?expr ?range)))
+    ((cuda_output_bytes ?kind (MMul ?range (MNum 4))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelIota-int-range"
+)
+(rule
+    ((= ?kind (KernelLessThan ?shape ?a_strides ?b_strides ?out_strides ?dtype))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind ?__cuda_elems))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLessThan-bool-shape"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelLog2 ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelLog2-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelMax ?shape ?iters ?strides ?iter_stride ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMax-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelMean ?shape ?iters ?strides ?iter_stride ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMean-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelMod ?shape ?a_strides ?b_strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMod-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelMul ?shape ?a_strides ?b_strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelMul-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelRecip ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelRecip-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelScatter ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatter-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelScatterNoCopy ?dest_shape ?dest_strides ?index_shape ?index_strides ?src_strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?dest_shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelScatterNoCopy-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelSigmoid ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSigmoid-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelSin ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSin-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelSoftmax ?shape ?in_strides ?out_strides ?reduce_dim ?reduce_stride ?dtype))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MMul ?__cuda_elems (MNum 4))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSoftmax-f32-shape"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelSqrt ?shape ?strides ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSqrt-TF32-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (F32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-F32-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (F16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-F16-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (Bf16)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-Bf16-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (Int)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-Int-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (Bool)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-Bool-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (I4)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-I4-bytes"
+)
+(rule
+    ((= ?kind (KernelSum ?shape ?iters ?strides ?iter_stride ?out_strides (TF32)))
+     (= ?__cuda_elems (n_elements ?shape)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul ?__cuda_elems (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-KernelSum-TF32-bytes"
+)
+(rule
+    ((= ?kind (LoopInput ?loop_id ?stream_id ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-LoopInput-zero"
+)
+(rule
+    ((= ?kind (LoopInputStatic ?loop_id ?stream_id ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-LoopInputStatic-zero"
+)
+(rule
+    ((= ?kind (LoopOutput ?loop_id ?stream_id ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-LoopOutput-zero"
+)
+(rule
+    ((= ?kind (LoopOutputSelect ?loop_id ?stream_id ?iter ?dtype)))
+    ((cuda_output_bytes ?kind (MNum 0)))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-LoopOutputSelect-zero"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (F32) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-F32-bytes"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (F16) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-F16-bytes"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (Bf16) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 16)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-Bf16-bytes"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (Int) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 32)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-Int-bytes"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (Bool) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 8)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-Bool-bytes"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (I4) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 4)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-I4-bytes"
+)
+(rule
+    ((= ?kind (cublaslt ?m ?n ?k ?a_layout ?b_layout ?a_order ?b_order ?c_order ?d_order ?lda ?ldb ?ldc ?ldd ?batch_count ?stride_a ?stride_b ?stride_c ?stride_d ?a_dtype ?b_dtype ?c_dtype (TF32) ?compute_type ?scale_dtype ?alpha ?beta ?epilogue)))
+    ((cuda_output_bytes ?kind (MCeilDiv (MMul (MMul (MMul ?batch_count ?m) ?n) (MNum 19)) (MNum 8))))
+    :ruleset cuda_memory_analysis
+    :name "cuda-memory-cublaslt-TF32-bytes"
+)
 (let t0 (Input 0 "input" (Int)))
 (let t1 (Input 1 "token_ids" (Int)))
 (let t2 (Input 2 "kv_cache.0.k" (F32)))
@@ -5923,5 +8710,28 @@
 (let t2052 (OutputJoin t2051 t1367))
 (let t2053 (OutputJoin t2052 t1368))
 
-
-(run-schedule (seq (saturate expr) (saturate dtype_prop) (run matmul_backend)))
+(run-schedule (saturate (seq
+        (saturate (seq
+            (saturate expr)
+            (saturate dtype_prop)
+            (run matmul_flatten)
+            (run kernel_lower)
+            (run direct_kernel)
+            (run kernel_specialize)
+            (run buffer_reuse)
+            (run matmul_backend)
+            (run glumoe)
+            (run fusion_pair)
+        ))
+        (saturate (seq
+            (saturate expr)
+            (saturate dtype_prop)
+            (run fusion_grow)
+            (run fusion_merge)
+        ))
+    )))
+(run-schedule (saturate expr))
+(run-schedule (saturate cleanup))
+(run-schedule (saturate post_cleanup))
+(run-schedule (saturate base_cleanup))
+(run-schedule (saturate cuda_memory_analysis))

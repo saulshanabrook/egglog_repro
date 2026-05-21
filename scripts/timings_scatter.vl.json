@@ -1,6 +1,9 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "title": "egglog #872 repro timings, 5 runs per variant and parallel mode",
+  "title": {
+    "text": "egglog #872 repro timings by model file",
+    "subtitle": "Timeout or failed rows are plotted at the configured per-run cap"
+  },
   "padding": {
     "left": 5,
     "top": 5,
@@ -114,6 +117,14 @@
           "title": "Variant",
           "orient": "top"
         }
+      },
+      "shape": {
+        "field": "status",
+        "type": "nominal",
+        "legend": {
+          "title": "Status",
+          "orient": "top"
+        }
       }
     }
   },
@@ -136,6 +147,7 @@
     },
     "title": {
       "fontSize": 16,
+      "subtitleFontSize": 12,
       "anchor": "start"
     },
     "view": {

@@ -5,8 +5,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 // from Kalibera and Jones, "Quantifying Performance Changes with Effect Size
 // Confidence Intervals" (University of Kent Technical Report 4-12,
 // arXiv:2007.10899). This script intentionally computes a one-level summary
-// over the five process-level runs in timings_scatter.csv; it does not attempt
-// the full hierarchical experiment design from Kalibera and Jones, "Rigorous
+// over the complete process-level runs in timings_scatter.csv; it does not
+// attempt the full hierarchical experiment design from Kalibera and Jones, "Rigorous
 // Benchmarking in Reasonable Time" (ISMM 2013, doi:10.1145/2464157.2464160),
 // and it does not implement the HPT suite-level method from Chen, Chen, Guo,
 // Temam, Wu, and Hu, "Statistical Performance Comparisons of Computers"
@@ -200,6 +200,10 @@ const experiments = new Map();
 const groups = new Map();
 
 for (const row of rows) {
+  if (row.status && row.status !== "complete") {
+    continue;
+  }
+
   if (!experiments.has(row.experiment)) {
     experiments.set(row.experiment, experiments.size);
   }
@@ -213,14 +217,15 @@ const outputRows = [];
 for (const [experiment, experimentOrder] of experiments) {
   const baselineKey = `${experiment}\u0000old\u0000parallel off`;
   const baselineValues = groups.get(baselineKey);
-  if (!baselineValues?.length) {
-    throw new Error(`missing old serial baseline for ${experiment}`);
+  if (!baselineValues || baselineValues.length < 2) {
+    continue;
   }
 
   for (const [key, values] of groups) {
     const [groupExperiment, variant, rawParallel] = key.split("\u0000");
     if (groupExperiment !== experiment) continue;
     if (variant === "old" && rawParallel === "parallel off") continue;
+    if (values.length < 2) continue;
 
     const parallel = parallelLabels.get(rawParallel);
     if (!parallel) throw new Error(`unknown parallel mode: ${rawParallel}`);

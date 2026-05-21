@@ -38,7 +38,16 @@
       "as": "percent_label"
     },
     {
-      "calculate": "datum.experiment_order - 1",
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "experiment_order",
+          "as": "max_experiment_order"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.experiment_order - datum.max_experiment_order / 2",
       "as": "experiment_offset"
     }
   ],
@@ -109,8 +118,7 @@
             "field": "experiment_offset",
             "type": "quantitative",
             "scale": {
-              "domain": [-1, 1],
-              "range": [-18, 18]
+              "range": [-42, 42]
             }
           },
           "y": {
@@ -157,8 +165,7 @@
             "field": "experiment_offset",
             "type": "quantitative",
             "scale": {
-              "domain": [-1, 1],
-              "range": [-18, 18]
+              "range": [-42, 42]
             }
           },
           "y": {

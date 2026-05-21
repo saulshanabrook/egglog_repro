@@ -3,100 +3,54 @@
 ## Summary
 
 Between egglog rev `0a8cc35a6c68d0460c20449d5fa19ca3caba2923` and
-`2e5657bbb2c1a90fba31002da61381815f891b6f` (~250 commits), small-graph rule
-application got a bit faster, but **multi-atom rules with ~25-30 LHS atoms
-regressed 400-1600× per invocation** against e-graphs of a few thousand
-tuples. The slow rules in this repro have **0 matches** on both egglog
-versions — the optimisation is correct, same final e-graph in both cases,
-only the time differs.
+`2e5657bbb2c1a90fba31002da61381815f891b6f` (~250 commits), full luminal-shaped
+model `.egg` programs show large total-runtime regressions. With the bounded
+local sweep checked in here (`RUNS=2`, `BENCH_TIMEOUT_SECONDS=75`), `new`
+serial completes `llama`, `qwen3_moe`, and `qwen` at roughly 19-23× the old
+serial mean, while `gemma4_moe`, `whisper`, `gemma`, and `paged_llama` exceed
+the 75 s cap.
 
-The same regression manifests upstream as luminal LLM compile-time hangs
-(gemma, paged_llama, gemma4_moe), 4 flashinfer cuda tests that pass in
-~1.5 s on the old rev hanging >120 s on the new one, and a 14× egglog-runtime
-regression on the qwen LLM compile pipeline.
+The same harness also compares PR
+[`#857`](https://github.com/egraphs-good/egglog/pull/857), pinned to
+`345fa8d93ff904865c1b69cffbaeeedf6b88cc09`, and latest upstream `main`,
+pinned to `8c1c70b03b805b9a0062272ba64552cd5738454c`. On these full-model
+inputs, PR #857 and latest main improve the qwen/llama-family cases relative
+to `new`, but still time out on several larger model files under the 75 s cap.
 
 ## Files
 
-Three self-contained `.egg` programs, each runnable by `parse_and_run_program`:
+Seven self-contained `.egg` programs, each runnable by `parse_and_run_program`:
 
-| file | rules | lets | bytes | OLD total | NEW total | target-rule OLD | target-rule NEW |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| `qwen_minimal.egg`              | 138 | 1213 | 149 KB | 0.24 s | 0.20 s | **0.11 ms** | **51 ms** (~470×) |
-| `qwen_one_cublaslt_rule.egg`    | 138 | 2053 | 230 KB | 0.52 s | 0.50 s | **0.15 ms** | **245 ms** (~1600×) |
-| `qwen_all_cublaslt_rules.egg`   |  95 | 2053 | 329 KB | 0.57 s | 4.26 s | — | — (7.4× total) |
+| file | size | old serial mean | new serial | PR #857 serial | main serial |
+|---|---:|---:|---:|---:|---:|
+| `gemma4_moe.egg` | 1.4 MB | >75 s | >75 s | >75 s | >75 s |
+| `llama.egg` | 445 KB | 1.22 s | 23.63 s | 2.56 s | 2.62 s |
+| `whisper.egg` | 478 KB | 30.29 s | >75 s | >75 s | >75 s |
+| `gemma.egg` | 917 KB | 73.04 s | >75 s | >75 s | >75 s |
+| `qwen3_moe.egg` | 524 KB | 2.30 s | 52.91 s | 5.93 s | 6.23 s |
+| `qwen.egg` | 474 KB | 1.53 s | 34.06 s | 3.37 s | 3.81 s |
+| `paged_llama.egg` | 437 KB | 1.20 s | >75 s | >75 s | >75 s |
 
-- `qwen_minimal.egg` — the smallest variant that still triggers the slow
-  path. Has `expr` + `dtype_prop` rulesets plus the one slow rule. Below
-  ~1213 let-defs the slow rule's first premise has no candidate `Op(Mul,...)`
-  to enumerate so the planner short-circuits and the regression vanishes.
-- `qwen_one_cublaslt_rule.egg` — same rules as `qwen_minimal` but with the
-  full qwen-3-4b e-graph (2053 let-defs). Same rule, bigger per-rule time.
-- `qwen_all_cublaslt_rules.egg` — drops `expr`+`dtype_prop` rules that
-  weren't firing, keeps all 17 multi-atom `matmul_backend` rules so the
-  total saturation time shows the cumulative regression.
-
-All three produce **identical final tuple counts** on OLD and NEW, so the
-optimisation is still correct.
-
-## Candidate fix branch
-
-This harness can also build against PR
-[`#857`](https://github.com/egraphs-good/egglog/pull/857), pinned to head
-commit `345fa8d93ff904865c1b69cffbaeeedf6b88cc09`.
-
-On a local run, that branch reduces the target zero-match cublaslt rule from
-~22 ms to ~0.4 ms on `qwen_minimal.egg`, and from ~104 ms to ~0.7 ms on
-`qwen_one_cublaslt_rule.egg`. The full cublaslt ruleset total drops from
-~1.85 s on NEW to ~0.19 s on the PR branch, with identical final tuple counts.
-
-The harness also includes latest upstream `main`, pinned to commit
-`8c1c70b03b805b9a0062272ba64552cd5738454c` (`main 8c1c70b` in the plot).
-On the same five-run local timing sweep, latest `main` stays in the same
-range as PR #857: ~0.40 ms on `qwen_minimal.egg`, ~0.77 ms on
-`qwen_one_cublaslt_rule.egg`, and ~0.19 s on the full cublaslt ruleset.
+These are total `parse_and_run_program` times from
+`results/timings_scatter.csv`, using two runs per cell. `>75 s` means both
+runs in that cell exceeded the configured timeout and were recorded as
+`timeout_or_failed`. The scatter plot includes those timeout rows at the cap;
+the percent-change CSV excludes timeout rows and only reports cells with at
+least two complete samples and a complete old-serial baseline.
 
 ## Reproduce
-
-```bash
-# Build the bench harness against each rev / branch
-cargo build --release --features old --no-default-features
-cp target/release/bench /tmp/bench_old
-cargo build --release --features new --no-default-features
-cp target/release/bench /tmp/bench_new
-cargo build --release --features pr857 --no-default-features
-cp target/release/bench /tmp/bench_pr857
-cargo build --release --features latest_main --no-default-features
-cp target/release/bench /tmp/bench_latest_main
-
-# Cleanest single-rule signal (149 KB file, 0 matches)
-/tmp/bench_old qwen_minimal.egg 5
-/tmp/bench_new qwen_minimal.egg 5
-/tmp/bench_pr857 qwen_minimal.egg 5
-/tmp/bench_latest_main qwen_minimal.egg 5
-
-# Bigger e-graph: 1600× on the same rule
-/tmp/bench_old qwen_one_cublaslt_rule.egg 5
-/tmp/bench_new qwen_one_cublaslt_rule.egg 5
-/tmp/bench_pr857 qwen_one_cublaslt_rule.egg 5
-/tmp/bench_latest_main qwen_one_cublaslt_rule.egg 5
-
-# Full ruleset: 7.4× total saturation time
-/tmp/bench_old qwen_all_cublaslt_rules.egg 10
-/tmp/bench_new qwen_all_cublaslt_rules.egg 10
-/tmp/bench_pr857 qwen_all_cublaslt_rules.egg 10
-/tmp/bench_latest_main qwen_all_cublaslt_rules.egg 10
-```
-
-To regenerate the five-run timing scatter plot:
 
 ```bash
 scripts/render_timing_scatter.sh
 ```
 
-This runs each benchmark both with Rayon parallelism disabled
+The script builds the bench harness against `old`, `new`, `pr857`, and
+`latest_main`, then runs every model file both with Rayon parallelism disabled
 (`RAYON_NUM_THREADS=1`, labeled `parallel off`) and with the default Rayon
-thread pool (`parallel on`). It reads `scripts/timings_scatter.vl.json` and
-writes:
+thread pool (`parallel on`). By default it uses two runs per cell and a 75 s
+per-run timeout; override those with `RUNS=...` and
+`BENCH_TIMEOUT_SECONDS=...` if you want a longer sweep. It reads the static
+Vega-Lite specs in `scripts/` and writes:
 
 - `results/timings_scatter.csv`
 - `results/timings_scatter.png`
@@ -129,9 +83,8 @@ shown here. In that summary chart, `serial` means `RAYON_NUM_THREADS=1`;
 
 ## The slow rule
 
-All slow rules are 25-30 atom joins with several `nth_from_end` lookups
-and constraint atoms. The single rule in `qwen_minimal.egg` /
-`qwen_one_cublaslt_rule.egg`:
+The model files contain 25-30 atom `matmul_backend` joins with several
+`nth_from_end` lookups and constraint atoms. A representative rule shape is:
 
 ```egglog
 (rule
@@ -202,11 +155,9 @@ finally constructs a `cublaslt` op invocation. The 4-element stride lists
 
 ## Notes
 
-- The minimal file (`qwen_minimal.egg`) is the cleanest signal: ~0.11 ms vs
-  ~51 ms for **one** invocation of **one** rule, with 0 matches, against
-  ~4750 tuples. Smaller e-graphs (below ~1213 let-defs in the slimmed
-  file) eliminate all candidate `Op(Mul,...)` shapes the rule's first
-  premise could even enumerate, so the planner short-circuits and the
-  regression vanishes.
 - E-graph contents are luminal-shaped HLIR (`Op (Mul …)`, `Op (Sum …)`,
-  etc.) but the regression is the planner's, not the data's.
+  etc.) but the current evidence still points at planner/runtime behavior,
+  not a semantic difference in the data.
+- Timeout rows in `results/timings_scatter.csv` are censored observations at
+  the configured cap. They are useful in the scatter plot but are not used for
+  ratio-of-means confidence intervals.
