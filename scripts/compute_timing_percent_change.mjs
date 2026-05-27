@@ -255,11 +255,37 @@ for (const [experiment, experimentOrder] of experiments) {
   for (const [key, samples] of groups) {
     const [groupExperiment, variant, rawParallel] = key.split("\u0000");
     if (groupExperiment !== experiment) continue;
-    if (variant === "old" && rawParallel === "parallel off") continue;
     if (samples.length < 2) continue;
 
     const parallel = parallelLabels.get(rawParallel);
     if (!parallel) throw new Error(`unknown parallel mode: ${rawParallel}`);
+
+    if (variant === "old" && rawParallel === "parallel off") {
+      const baselineMean = mean(baselineValues);
+      outputRows.push({
+        experiment,
+        experiment_order: experimentOrder,
+        variant,
+        variant_order: variants.get(variant),
+        parallel: parallel.label,
+        parallel_order: parallel.order,
+        n_baseline: baselineValues.length,
+        n: samples.length,
+        n_timeout: 0,
+        baseline_mean_ms: baselineMean,
+        mean_ms: baselineMean,
+        ratio_mean: 1,
+        percent_change: 0,
+        ci_lower_ratio: 1,
+        ci_upper_ratio: 1,
+        ci_lower_percent: 0,
+        ci_upper_percent: 0,
+        ci_upper_is_infinite: false,
+        ci_upper_ratio_plot: 1,
+        ci_method: "baseline",
+      });
+      continue;
+    }
 
     const nTimeout = countTimeouts(samples);
     const ci =

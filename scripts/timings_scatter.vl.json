@@ -3,7 +3,7 @@
   "description": "Plots per-benchmark timing means and precomputed 95% CIs from results/timing_mean_ci.csv. Timeout or failed rows are treated as right-censored lower-bound observations.",
   "title": {
     "text": "egglog #872 timing means by model file",
-    "subtitle": "Vertical lines are 95% CIs; upward triangles are lower-bounded right-censored intervals"
+    "subtitle": "Lines connect point estimates; vertical bars are 95% CIs"
   },
   "padding": {
     "left": 5,
@@ -30,19 +30,6 @@
   },
   "transform": [
     {
-      "joinaggregate": [
-        {
-          "op": "max",
-          "field": "experiment_order",
-          "as": "max_experiment_order"
-        }
-      ]
-    },
-    {
-      "calculate": "datum.experiment_order - datum.max_experiment_order / 2",
-      "as": "experiment_offset"
-    },
-    {
       "calculate": "datum.mean_ms >= 1000 ? format(datum.mean_ms / 1000, '.2~f') + 's' : format(datum.mean_ms, '.0f') + 'ms'",
       "as": "mean_time_label"
     },
@@ -52,54 +39,73 @@
     }
   ],
   "facet": {
-    "column": {
-      "field": "variant",
+    "row": {
+      "field": "parallel",
       "type": "nominal",
       "sort": {
-        "field": "variant_order",
+        "field": "parallel_order",
         "op": "min",
         "order": "ascending"
       },
-      "title": "Commit",
+      "title": "Mode",
       "header": {
         "labelFontSize": 13,
-        "labelFontWeight": "bold"
+        "labelFontWeight": "bold",
+        "labelAngle": 0,
+        "labelAlign": "left"
       }
     }
   },
   "spec": {
-    "width": 240,
-    "height": 520,
+    "width": 760,
+    "height": 300,
     "layer": [
       {
+        "transform": [
+          {
+            "filter": "datum.experiment_order === 0"
+          }
+        ],
         "mark": {
           "type": "rule",
-          "strokeWidth": 3,
-          "opacity": 0.72
+          "color": "#ddd",
+          "strokeWidth": 1
         },
         "encoding": {
           "x": {
-            "field": "parallel",
-            "type": "nominal",
-            "sort": {
-              "field": "parallel_order",
-              "op": "min",
-              "order": "ascending"
-            },
-            "axis": {
-              "title": null,
-              "labelAngle": 0
-            }
+            "field": "variant_order",
+            "type": "quantitative"
           },
-          "xOffset": {
-            "field": "experiment_offset",
+          "y": {
+            "value": 0
+          },
+          "y2": {
+            "value": 300
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "line",
+          "strokeWidth": 2.25,
+          "opacity": 0.68
+        },
+        "encoding": {
+          "x": {
+            "field": "variant_order",
             "type": "quantitative",
             "scale": {
-              "range": [-42, 42]
+              "nice": false
+            },
+            "axis": {
+              "title": "Commit",
+              "labels": false,
+              "ticks": false,
+              "grid": false
             }
           },
           "y": {
-            "field": "ci_lower_ms",
+            "field": "mean_ms",
             "type": "quantitative",
             "scale": {
               "type": "log",
@@ -108,12 +114,18 @@
             },
             "axis": {
               "title": "Time (ms, log scale)",
-              "values": [1000, 2000, 3000, 10000, 30000, 60000, 100000, 150000],
+              "values": [
+                1000,
+                2000,
+                3000,
+                10000,
+                30000,
+                60000,
+                100000,
+                150000
+              ],
               "labelExpr": "datum.value >= 1000 ? format(datum.value / 1000, '~g') + 's' : format(datum.value, '~g') + 'ms'"
             }
-          },
-          "y2": {
-            "field": "ci_upper_ms_plot"
           },
           "color": {
             "field": "experiment",
@@ -127,41 +139,77 @@
               "title": "Benchmark",
               "orient": "top"
             }
+          },
+          "detail": {
+            "field": "experiment"
+          },
+          "order": {
+            "field": "variant_order",
+            "type": "quantitative"
           }
         }
       },
       {
-        "transform": [
-          {
-            "filter": "datum.ci_upper_is_infinite"
-          }
-        ],
         "mark": {
-          "type": "point",
-          "shape": "triangle-up",
-          "filled": true,
-          "size": 70,
+          "type": "rule",
+          "strokeWidth": 3,
           "opacity": 0.72
         },
         "encoding": {
           "x": {
-            "field": "parallel",
-            "type": "nominal",
-            "sort": {
-              "field": "parallel_order",
-              "op": "min",
-              "order": "ascending"
-            }
-          },
-          "xOffset": {
-            "field": "experiment_offset",
+            "field": "variant_order",
             "type": "quantitative",
             "scale": {
-              "range": [-42, 42]
+              "nice": false
+            },
+            "axis": {
+              "title": "Commit",
+              "labels": false,
+              "ticks": false,
+              "grid": false
             }
           },
           "y": {
-            "field": "ci_upper_ms_plot",
+            "field": "ci_lower_ms",
+            "type": "quantitative"
+          },
+          "y2": {
+            "field": "ci_upper_ms_plot"
+          },
+          "color": {
+            "field": "experiment",
+            "type": "nominal",
+            "sort": {
+              "field": "experiment_order",
+              "op": "min",
+              "order": "ascending"
+            }
+          }
+        }
+      },
+      {
+        "mark": {
+          "type": "point",
+          "filled": true,
+          "size": 28,
+          "opacity": 0.9
+        },
+        "encoding": {
+          "x": {
+            "field": "variant_order",
+            "type": "quantitative",
+            "scale": {
+              "nice": false
+            },
+            "axis": {
+              "title": "Commit",
+              "labels": false,
+              "ticks": false,
+              "grid": false
+            }
+          },
+          "y": {
+            "field": "mean_ms",
             "type": "quantitative"
           },
           "color": {
@@ -179,32 +227,29 @@
         "mark": {
           "type": "text",
           "align": {
-            "expr": "datum.experiment_offset < 0 ? 'right' : 'left'"
+            "expr": "datum.experiment_order < 3 ? 'right' : 'left'"
           },
           "baseline": "middle",
           "dx": {
-            "expr": "datum.experiment_offset < 0 ? -7 : 7"
+            "expr": "datum.experiment_order < 3 ? -7 : 7"
           },
           "dy": {
-            "expr": "datum.ci_upper_is_infinite ? ((datum.experiment_order % 3) - 1) * 9 : 0"
+            "expr": "((datum.experiment_order % 3) - 1) * 4"
           },
-          "fontSize": 11
+          "fontSize": 10
         },
         "encoding": {
           "x": {
-            "field": "parallel",
-            "type": "nominal",
-            "sort": {
-              "field": "parallel_order",
-              "op": "min",
-              "order": "ascending"
-            }
-          },
-          "xOffset": {
-            "field": "experiment_offset",
+            "field": "variant_order",
             "type": "quantitative",
             "scale": {
-              "range": [-42, 42]
+              "nice": false
+            },
+            "axis": {
+              "title": "Commit",
+              "labels": false,
+              "ticks": false,
+              "grid": false
             }
           },
           "y": {
@@ -225,13 +270,39 @@
             }
           }
         }
+      },
+      {
+        "transform": [
+          {
+            "filter": "datum.experiment_order === 0"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "fontSize": 12,
+          "baseline": "top"
+        },
+        "encoding": {
+          "x": {
+            "field": "variant_order",
+            "type": "quantitative"
+          },
+          "y": {
+            "value": 306
+          },
+          "text": {
+            "field": "variant",
+            "type": "nominal"
+          }
+        }
       }
     ]
   },
   "resolve": {
     "scale": {
       "y": "shared",
-      "color": "shared"
+      "color": "shared",
+      "x": "shared"
     }
   },
   "config": {
