@@ -11,7 +11,7 @@ PERCENT_CSV="$OUT_DIR/timing_percent_change.csv"
 PERCENT_SPEC="$ROOT/scripts/timing_percent_change.vl.json"
 PERCENT_PNG="$OUT_DIR/timing_percent_change.png"
 BIN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/egglog-repro-pr896-bins.XXXXXX")"
-RUNS="${RUNS:-3}"
+RUNS="${RUNS:-5}"
 VARIANT="PR #896 no-decomp"
 BIN="$BIN_DIR/bench_pr896_no_decomp"
 

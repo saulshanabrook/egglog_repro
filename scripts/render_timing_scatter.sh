@@ -11,19 +11,17 @@ PERCENT_CSV="$OUT_DIR/timing_percent_change.csv"
 PERCENT_SPEC="$ROOT/scripts/timing_percent_change.vl.json"
 PERCENT_PNG="$OUT_DIR/timing_percent_change.png"
 BIN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/egglog-repro-bins.XXXXXX")"
-RUNS="${RUNS:-3}"
+RUNS="${RUNS:-5}"
 
 trap 'rm -rf "$BIN_DIR"' EXIT
 
 mkdir -p "$OUT_DIR"
 
-features=("old" "new" "pr857" "latest_main" "pr896_no_decomp")
-variants=("old" "new" "PR #857" "main 8c1c70b" "PR #896 no-decomp")
+features=("old" "pr896" "pr896_no_decomp")
+variants=("old" "PR #896" "PR #896 no-decomp")
 bins=(
   "$BIN_DIR/bench_old"
-  "$BIN_DIR/bench_new"
-  "$BIN_DIR/bench_pr857"
-  "$BIN_DIR/bench_latest_main"
+  "$BIN_DIR/bench_pr896"
   "$BIN_DIR/bench_pr896_no_decomp"
 )
 parallel_labels=("parallel off" "parallel on")

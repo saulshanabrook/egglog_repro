@@ -12,6 +12,7 @@ old = ["dep:egglog_old"]
 new = ["dep:egglog_new"]
 pr857 = ["dep:egglog_pr857"]
 latest_main = ["dep:egglog_latest_main"]
+pr896 = ["dep:egglog_pr896_no_decomp"]
 pr896_no_decomp = ["dep:egglog_pr896_no_decomp"]
 
 [dependencies]
