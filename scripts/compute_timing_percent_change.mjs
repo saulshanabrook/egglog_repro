@@ -21,13 +21,6 @@ import { readFileSync, writeFileSync } from "node:fs";
 const [, , inputPath = "results/timings_scatter.csv", outputPath = "results/timing_percent_change.csv"] =
   process.argv;
 
-const variantOrder = new Map([
-  ["old", 0],
-  ["new", 1],
-  ["PR #857", 2],
-  ["main 8c1c70b", 3],
-]);
-
 const parallelLabels = new Map([
   ["parallel off", { label: "serial", order: 0 }],
   ["parallel on", { label: "default Rayon", order: 1 }],
@@ -234,11 +227,15 @@ function sampleFromRow(row) {
 
 const rows = parseCsv(readFileSync(inputPath, "utf8"));
 const experiments = new Map();
+const variants = new Map();
 const groups = new Map();
 
 for (const row of rows) {
   if (!experiments.has(row.experiment)) {
     experiments.set(row.experiment, experiments.size);
+  }
+  if (!variants.has(row.variant)) {
+    variants.set(row.variant, variants.size);
   }
 
   const key = keyFor(row);
@@ -273,7 +270,7 @@ for (const [experiment, experimentOrder] of experiments) {
       experiment,
       experiment_order: experimentOrder,
       variant,
-      variant_order: variantOrder.get(variant) ?? 999,
+      variant_order: variants.get(variant),
       parallel: parallel.label,
       parallel_order: parallel.order,
       n_baseline: baselineValues.length,

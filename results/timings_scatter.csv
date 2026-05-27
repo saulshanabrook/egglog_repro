@@ -143,3 +143,39 @@ parallel on,qwen,main 8c1c70b,3,total runtime ms,3351,21873,complete
 parallel on,paged_llama,main 8c1c70b,1,total runtime ms,60000,,timeout_or_failed
 parallel on,paged_llama,main 8c1c70b,2,total runtime ms,60000,,timeout_or_failed
 parallel on,paged_llama,main 8c1c70b,3,total runtime ms,60000,,timeout_or_failed
+parallel off,llama,PR #896 no-decomp,1,total runtime ms,1925,16761,complete
+parallel off,llama,PR #896 no-decomp,2,total runtime ms,1877,16761,complete
+parallel off,llama,PR #896 no-decomp,3,total runtime ms,1870,16761,complete
+parallel off,whisper,PR #896 no-decomp,1,total runtime ms,8649,26184,complete
+parallel off,whisper,PR #896 no-decomp,2,total runtime ms,8585,26184,complete
+parallel off,whisper,PR #896 no-decomp,3,total runtime ms,8656,26184,complete
+parallel off,gemma,PR #896 no-decomp,1,total runtime ms,43406,67904,complete
+parallel off,gemma,PR #896 no-decomp,2,total runtime ms,43625,67904,complete
+parallel off,gemma,PR #896 no-decomp,3,total runtime ms,43170,67904,complete
+parallel off,qwen3_moe,PR #896 no-decomp,1,total runtime ms,2392,31986,complete
+parallel off,qwen3_moe,PR #896 no-decomp,2,total runtime ms,2362,31986,complete
+parallel off,qwen3_moe,PR #896 no-decomp,3,total runtime ms,2363,31986,complete
+parallel off,qwen,PR #896 no-decomp,1,total runtime ms,2281,21873,complete
+parallel off,qwen,PR #896 no-decomp,2,total runtime ms,2234,21873,complete
+parallel off,qwen,PR #896 no-decomp,3,total runtime ms,2247,21873,complete
+parallel off,paged_llama,PR #896 no-decomp,1,total runtime ms,1102,16270,complete
+parallel off,paged_llama,PR #896 no-decomp,2,total runtime ms,1101,16270,complete
+parallel off,paged_llama,PR #896 no-decomp,3,total runtime ms,1115,16270,complete
+parallel on,llama,PR #896 no-decomp,1,total runtime ms,2728,16761,complete
+parallel on,llama,PR #896 no-decomp,2,total runtime ms,2684,16761,complete
+parallel on,llama,PR #896 no-decomp,3,total runtime ms,2699,16761,complete
+parallel on,whisper,PR #896 no-decomp,1,total runtime ms,3927,26184,complete
+parallel on,whisper,PR #896 no-decomp,2,total runtime ms,4126,26184,complete
+parallel on,whisper,PR #896 no-decomp,3,total runtime ms,4170,26184,complete
+parallel on,gemma,PR #896 no-decomp,1,total runtime ms,14580,67904,complete
+parallel on,gemma,PR #896 no-decomp,2,total runtime ms,14626,67904,complete
+parallel on,gemma,PR #896 no-decomp,3,total runtime ms,15389,67904,complete
+parallel on,qwen3_moe,PR #896 no-decomp,1,total runtime ms,1310,31986,complete
+parallel on,qwen3_moe,PR #896 no-decomp,2,total runtime ms,1287,31986,complete
+parallel on,qwen3_moe,PR #896 no-decomp,3,total runtime ms,1336,31986,complete
+parallel on,qwen,PR #896 no-decomp,1,total runtime ms,1931,21873,complete
+parallel on,qwen,PR #896 no-decomp,2,total runtime ms,1925,21873,complete
+parallel on,qwen,PR #896 no-decomp,3,total runtime ms,1922,21873,complete
+parallel on,paged_llama,PR #896 no-decomp,1,total runtime ms,1284,16270,complete
+parallel on,paged_llama,PR #896 no-decomp,2,total runtime ms,1281,16270,complete
+parallel on,paged_llama,PR #896 no-decomp,3,total runtime ms,1286,16270,complete
