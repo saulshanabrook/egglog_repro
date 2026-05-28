@@ -17,12 +17,12 @@ trap 'rm -rf "$BIN_DIR"' EXIT
 
 mkdir -p "$OUT_DIR"
 
-features=("old" "pr896" "pr896_no_decomp")
-variants=("old" "PR #896" "PR #896 no-decomp")
+features=("old" "latest_main" "latest_main_no_decomp")
+variants=("old" "current main" "current main no-decomp")
 bins=(
   "$BIN_DIR/bench_old"
-  "$BIN_DIR/bench_pr896"
-  "$BIN_DIR/bench_pr896_no_decomp"
+  "$BIN_DIR/bench_current_main"
+  "$BIN_DIR/bench_current_main_no_decomp"
 )
 parallel_labels=("parallel off" "parallel on")
 rayon_threads=("1" "")

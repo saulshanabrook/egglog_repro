@@ -6,41 +6,33 @@ use egglog_new as egglog;
 use egglog_old as egglog;
 #[cfg(feature = "pr857")]
 use egglog_pr857 as egglog;
-#[cfg(feature = "latest_main")]
+#[cfg(any(feature = "latest_main", feature = "latest_main_no_decomp"))]
 use egglog_latest_main as egglog;
-#[cfg(any(feature = "pr896", feature = "pr896_no_decomp"))]
-use egglog_pr896_no_decomp as egglog;
 
 #[cfg(not(any(
     feature = "old",
     feature = "new",
     feature = "pr857",
     feature = "latest_main",
-    feature = "pr896",
-    feature = "pr896_no_decomp"
+    feature = "latest_main_no_decomp"
 )))]
 compile_error!(
-    "enable exactly one of the old, new, pr857, latest_main, pr896, or pr896_no_decomp features"
+    "enable exactly one of the old, new, pr857, latest_main, or latest_main_no_decomp features"
 );
 #[cfg(any(
     all(feature = "old", feature = "new"),
     all(feature = "old", feature = "pr857"),
     all(feature = "old", feature = "latest_main"),
-    all(feature = "old", feature = "pr896"),
-    all(feature = "old", feature = "pr896_no_decomp"),
+    all(feature = "old", feature = "latest_main_no_decomp"),
     all(feature = "new", feature = "pr857"),
     all(feature = "new", feature = "latest_main"),
-    all(feature = "new", feature = "pr896"),
-    all(feature = "new", feature = "pr896_no_decomp"),
+    all(feature = "new", feature = "latest_main_no_decomp"),
     all(feature = "pr857", feature = "latest_main"),
-    all(feature = "pr857", feature = "pr896"),
-    all(feature = "pr857", feature = "pr896_no_decomp"),
-    all(feature = "latest_main", feature = "pr896"),
-    all(feature = "latest_main", feature = "pr896_no_decomp"),
-    all(feature = "pr896", feature = "pr896_no_decomp"),
+    all(feature = "pr857", feature = "latest_main_no_decomp"),
+    all(feature = "latest_main", feature = "latest_main_no_decomp"),
 ))]
 compile_error!(
-    "enable exactly one of the old, new, pr857, latest_main, pr896, or pr896_no_decomp features"
+    "enable exactly one of the old, new, pr857, latest_main, or latest_main_no_decomp features"
 );
 
 fn main() {
@@ -55,7 +47,7 @@ fn main() {
     eprintln!("loaded {} bytes from {}", program.len(), path);
 
     let mut egraph = egglog::EGraph::default();
-    #[cfg(feature = "pr896_no_decomp")]
+    #[cfg(feature = "latest_main_no_decomp")]
     {
         egraph.no_decomp = true;
     }

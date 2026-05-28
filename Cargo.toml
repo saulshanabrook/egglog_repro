@@ -12,15 +12,13 @@ old = ["dep:egglog_old"]
 new = ["dep:egglog_new"]
 pr857 = ["dep:egglog_pr857"]
 latest_main = ["dep:egglog_latest_main"]
-pr896 = ["dep:egglog_pr896_no_decomp"]
-pr896_no_decomp = ["dep:egglog_pr896_no_decomp"]
+latest_main_no_decomp = ["dep:egglog_latest_main"]
 
 [dependencies]
 egglog_old = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "0a8cc35a6c68d0460c20449d5fa19ca3caba2923", optional = true }
 egglog_new = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "2e5657bbb2c1a90fba31002da61381815f891b6f", optional = true }
 egglog_pr857 = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "345fa8d93ff904865c1b69cffbaeeedf6b88cc09", optional = true }
-egglog_latest_main = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "8c1c70b03b805b9a0062272ba64552cd5738454c", optional = true }
-egglog_pr896_no_decomp = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "f58a47bf3a7dd252e44f7b1863f32a38fb6aa0c5", optional = true }
+egglog_latest_main = { package = "egglog", git = "https://github.com/egraphs-good/egglog", rev = "9879e4d720ddbb791e1ccd962048908a193b8292", optional = true }
 
 [profile.release]
 debug = 1

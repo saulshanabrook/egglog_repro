@@ -29,66 +29,6 @@ parallel off,paged_llama,old,2,total runtime ms,1192,16270,complete
 parallel off,paged_llama,old,3,total runtime ms,1209,16270,complete
 parallel off,paged_llama,old,4,total runtime ms,1191,16270,complete
 parallel off,paged_llama,old,5,total runtime ms,1198,16270,complete
-parallel off,llama,PR #896,1,total runtime ms,1763,16761,complete
-parallel off,llama,PR #896,2,total runtime ms,1749,16761,complete
-parallel off,llama,PR #896,3,total runtime ms,1798,16761,complete
-parallel off,llama,PR #896,4,total runtime ms,1754,16761,complete
-parallel off,llama,PR #896,5,total runtime ms,1759,16761,complete
-parallel off,whisper,PR #896,1,total runtime ms,25133,26184,complete
-parallel off,whisper,PR #896,2,total runtime ms,27077,26184,complete
-parallel off,whisper,PR #896,3,total runtime ms,25636,26184,complete
-parallel off,whisper,PR #896,4,total runtime ms,25018,26184,complete
-parallel off,whisper,PR #896,5,total runtime ms,25184,26184,complete
-parallel off,gemma,PR #896,1,total runtime ms,143253,67904,complete
-parallel off,gemma,PR #896,2,total runtime ms,141972,67904,complete
-parallel off,gemma,PR #896,3,total runtime ms,145149,67904,complete
-parallel off,gemma,PR #896,4,total runtime ms,140112,67904,complete
-parallel off,gemma,PR #896,5,total runtime ms,141672,67904,complete
-parallel off,qwen3_moe,PR #896,1,total runtime ms,3694,31986,complete
-parallel off,qwen3_moe,PR #896,2,total runtime ms,3560,31986,complete
-parallel off,qwen3_moe,PR #896,3,total runtime ms,3563,31986,complete
-parallel off,qwen3_moe,PR #896,4,total runtime ms,3610,31986,complete
-parallel off,qwen3_moe,PR #896,5,total runtime ms,3521,31986,complete
-parallel off,qwen,PR #896,1,total runtime ms,2309,21873,complete
-parallel off,qwen,PR #896,2,total runtime ms,2336,21873,complete
-parallel off,qwen,PR #896,3,total runtime ms,2331,21873,complete
-parallel off,qwen,PR #896,4,total runtime ms,2333,21873,complete
-parallel off,qwen,PR #896,5,total runtime ms,2299,21873,complete
-parallel off,paged_llama,PR #896,1,total runtime ms,1728,16270,complete
-parallel off,paged_llama,PR #896,2,total runtime ms,1726,16270,complete
-parallel off,paged_llama,PR #896,3,total runtime ms,1736,16270,complete
-parallel off,paged_llama,PR #896,4,total runtime ms,1736,16270,complete
-parallel off,paged_llama,PR #896,5,total runtime ms,1732,16270,complete
-parallel off,llama,PR #896 no-decomp,1,total runtime ms,1859,16761,complete
-parallel off,llama,PR #896 no-decomp,2,total runtime ms,1855,16761,complete
-parallel off,llama,PR #896 no-decomp,3,total runtime ms,1851,16761,complete
-parallel off,llama,PR #896 no-decomp,4,total runtime ms,1874,16761,complete
-parallel off,llama,PR #896 no-decomp,5,total runtime ms,1861,16761,complete
-parallel off,whisper,PR #896 no-decomp,1,total runtime ms,8651,26184,complete
-parallel off,whisper,PR #896 no-decomp,2,total runtime ms,8613,26184,complete
-parallel off,whisper,PR #896 no-decomp,3,total runtime ms,8619,26184,complete
-parallel off,whisper,PR #896 no-decomp,4,total runtime ms,8623,26184,complete
-parallel off,whisper,PR #896 no-decomp,5,total runtime ms,8585,26184,complete
-parallel off,gemma,PR #896 no-decomp,1,total runtime ms,43748,67904,complete
-parallel off,gemma,PR #896 no-decomp,2,total runtime ms,43353,67904,complete
-parallel off,gemma,PR #896 no-decomp,3,total runtime ms,43588,67904,complete
-parallel off,gemma,PR #896 no-decomp,4,total runtime ms,61997,67904,complete
-parallel off,gemma,PR #896 no-decomp,5,total runtime ms,43430,67904,complete
-parallel off,qwen3_moe,PR #896 no-decomp,1,total runtime ms,2364,31986,complete
-parallel off,qwen3_moe,PR #896 no-decomp,2,total runtime ms,2365,31986,complete
-parallel off,qwen3_moe,PR #896 no-decomp,3,total runtime ms,2362,31986,complete
-parallel off,qwen3_moe,PR #896 no-decomp,4,total runtime ms,2357,31986,complete
-parallel off,qwen3_moe,PR #896 no-decomp,5,total runtime ms,2360,31986,complete
-parallel off,qwen,PR #896 no-decomp,1,total runtime ms,2212,21873,complete
-parallel off,qwen,PR #896 no-decomp,2,total runtime ms,2229,21873,complete
-parallel off,qwen,PR #896 no-decomp,3,total runtime ms,2207,21873,complete
-parallel off,qwen,PR #896 no-decomp,4,total runtime ms,2242,21873,complete
-parallel off,qwen,PR #896 no-decomp,5,total runtime ms,2290,21873,complete
-parallel off,paged_llama,PR #896 no-decomp,1,total runtime ms,1099,16270,complete
-parallel off,paged_llama,PR #896 no-decomp,2,total runtime ms,1096,16270,complete
-parallel off,paged_llama,PR #896 no-decomp,3,total runtime ms,1173,16270,complete
-parallel off,paged_llama,PR #896 no-decomp,4,total runtime ms,1119,16270,complete
-parallel off,paged_llama,PR #896 no-decomp,5,total runtime ms,1107,16270,complete
 parallel on,llama,old,1,total runtime ms,2705,16761,complete
 parallel on,llama,old,2,total runtime ms,2710,16761,complete
 parallel on,llama,old,3,total runtime ms,2707,16761,complete
@@ -119,63 +59,123 @@ parallel on,paged_llama,old,2,total runtime ms,2672,16270,complete
 parallel on,paged_llama,old,3,total runtime ms,2652,16270,complete
 parallel on,paged_llama,old,4,total runtime ms,2647,16270,complete
 parallel on,paged_llama,old,5,total runtime ms,2718,16270,complete
-parallel on,llama,PR #896,1,total runtime ms,1995,16761,complete
-parallel on,llama,PR #896,2,total runtime ms,1992,16761,complete
-parallel on,llama,PR #896,3,total runtime ms,1998,16761,complete
-parallel on,llama,PR #896,4,total runtime ms,2064,16761,complete
-parallel on,llama,PR #896,5,total runtime ms,2056,16761,complete
-parallel on,whisper,PR #896,1,total runtime ms,9203,26184,complete
-parallel on,whisper,PR #896,2,total runtime ms,8818,26184,complete
-parallel on,whisper,PR #896,3,total runtime ms,8629,26184,complete
-parallel on,whisper,PR #896,4,total runtime ms,8825,26184,complete
-parallel on,whisper,PR #896,5,total runtime ms,8853,26184,complete
-parallel on,gemma,PR #896,1,total runtime ms,65243,67904,complete
-parallel on,gemma,PR #896,2,total runtime ms,59091,67904,complete
-parallel on,gemma,PR #896,3,total runtime ms,56744,67904,complete
-parallel on,gemma,PR #896,4,total runtime ms,55778,67904,complete
-parallel on,gemma,PR #896,5,total runtime ms,54026,67904,complete
-parallel on,qwen3_moe,PR #896,1,total runtime ms,1634,31986,complete
-parallel on,qwen3_moe,PR #896,2,total runtime ms,1608,31986,complete
-parallel on,qwen3_moe,PR #896,3,total runtime ms,1666,31986,complete
-parallel on,qwen3_moe,PR #896,4,total runtime ms,1752,31986,complete
-parallel on,qwen3_moe,PR #896,5,total runtime ms,1691,31986,complete
-parallel on,qwen,PR #896,1,total runtime ms,1736,21873,complete
-parallel on,qwen,PR #896,2,total runtime ms,1676,21873,complete
-parallel on,qwen,PR #896,3,total runtime ms,1750,21873,complete
-parallel on,qwen,PR #896,4,total runtime ms,1637,21873,complete
-parallel on,qwen,PR #896,5,total runtime ms,1640,21873,complete
-parallel on,paged_llama,PR #896,1,total runtime ms,1980,16270,complete
-parallel on,paged_llama,PR #896,2,total runtime ms,1980,16270,complete
-parallel on,paged_llama,PR #896,3,total runtime ms,1991,16270,complete
-parallel on,paged_llama,PR #896,4,total runtime ms,1985,16270,complete
-parallel on,paged_llama,PR #896,5,total runtime ms,1978,16270,complete
-parallel on,llama,PR #896 no-decomp,1,total runtime ms,2672,16761,complete
-parallel on,llama,PR #896 no-decomp,2,total runtime ms,2673,16761,complete
-parallel on,llama,PR #896 no-decomp,3,total runtime ms,2648,16761,complete
-parallel on,llama,PR #896 no-decomp,4,total runtime ms,2664,16761,complete
-parallel on,llama,PR #896 no-decomp,5,total runtime ms,2670,16761,complete
-parallel on,whisper,PR #896 no-decomp,1,total runtime ms,3987,26184,complete
-parallel on,whisper,PR #896 no-decomp,2,total runtime ms,4150,26184,complete
-parallel on,whisper,PR #896 no-decomp,3,total runtime ms,4009,26184,complete
-parallel on,whisper,PR #896 no-decomp,4,total runtime ms,3977,26184,complete
-parallel on,whisper,PR #896 no-decomp,5,total runtime ms,4238,26184,complete
-parallel on,gemma,PR #896 no-decomp,1,total runtime ms,14495,67904,complete
-parallel on,gemma,PR #896 no-decomp,2,total runtime ms,14438,67904,complete
-parallel on,gemma,PR #896 no-decomp,3,total runtime ms,14550,67904,complete
-parallel on,gemma,PR #896 no-decomp,4,total runtime ms,14256,67904,complete
-parallel on,gemma,PR #896 no-decomp,5,total runtime ms,14765,67904,complete
-parallel on,qwen3_moe,PR #896 no-decomp,1,total runtime ms,1291,31986,complete
-parallel on,qwen3_moe,PR #896 no-decomp,2,total runtime ms,1286,31986,complete
-parallel on,qwen3_moe,PR #896 no-decomp,3,total runtime ms,1299,31986,complete
-parallel on,qwen3_moe,PR #896 no-decomp,4,total runtime ms,1292,31986,complete
-parallel on,qwen3_moe,PR #896 no-decomp,5,total runtime ms,1274,31986,complete
-parallel on,qwen,PR #896 no-decomp,1,total runtime ms,1926,21873,complete
-parallel on,qwen,PR #896 no-decomp,2,total runtime ms,1921,21873,complete
-parallel on,qwen,PR #896 no-decomp,3,total runtime ms,1899,21873,complete
-parallel on,qwen,PR #896 no-decomp,4,total runtime ms,1912,21873,complete
-parallel on,qwen,PR #896 no-decomp,5,total runtime ms,1908,21873,complete
-parallel on,paged_llama,PR #896 no-decomp,1,total runtime ms,1278,16270,complete
-parallel on,paged_llama,PR #896 no-decomp,2,total runtime ms,1288,16270,complete
-parallel on,paged_llama,PR #896 no-decomp,3,total runtime ms,1301,16270,complete
-parallel on,paged_llama,PR #896 no-decomp,4,total runtime ms,1279,16270,complete
-parallel on,paged_llama,PR #896 no-decomp,5,total runtime ms,1280,16270,complete
+parallel off,llama,current main,1,total runtime ms,1815,16761,complete
+parallel off,llama,current main,2,total runtime ms,1819,16761,complete
+parallel off,llama,current main,3,total runtime ms,1810,16761,complete
+parallel off,llama,current main,4,total runtime ms,1806,16761,complete
+parallel off,llama,current main,5,total runtime ms,1817,16761,complete
+parallel off,whisper,current main,1,total runtime ms,26076,26184,complete
+parallel off,whisper,current main,2,total runtime ms,25331,26184,complete
+parallel off,whisper,current main,3,total runtime ms,25194,26184,complete
+parallel off,whisper,current main,4,total runtime ms,25253,26184,complete
+parallel off,whisper,current main,5,total runtime ms,25667,26184,complete
+parallel off,gemma,current main,1,total runtime ms,144945,67904,complete
+parallel off,gemma,current main,2,total runtime ms,141877,67904,complete
+parallel off,gemma,current main,3,total runtime ms,142683,67904,complete
+parallel off,gemma,current main,4,total runtime ms,145804,67904,complete
+parallel off,gemma,current main,5,total runtime ms,146239,67904,complete
+parallel off,qwen3_moe,current main,1,total runtime ms,3664,31986,complete
+parallel off,qwen3_moe,current main,2,total runtime ms,3636,31986,complete
+parallel off,qwen3_moe,current main,3,total runtime ms,3768,31986,complete
+parallel off,qwen3_moe,current main,4,total runtime ms,3620,31986,complete
+parallel off,qwen3_moe,current main,5,total runtime ms,3634,31986,complete
+parallel off,qwen,current main,1,total runtime ms,2366,21873,complete
+parallel off,qwen,current main,2,total runtime ms,2364,21873,complete
+parallel off,qwen,current main,3,total runtime ms,2357,21873,complete
+parallel off,qwen,current main,4,total runtime ms,2368,21873,complete
+parallel off,qwen,current main,5,total runtime ms,2377,21873,complete
+parallel off,paged_llama,current main,1,total runtime ms,1789,16270,complete
+parallel off,paged_llama,current main,2,total runtime ms,1766,16270,complete
+parallel off,paged_llama,current main,3,total runtime ms,1760,16270,complete
+parallel off,paged_llama,current main,4,total runtime ms,1777,16270,complete
+parallel off,paged_llama,current main,5,total runtime ms,1770,16270,complete
+parallel off,llama,current main no-decomp,1,total runtime ms,1891,16761,complete
+parallel off,llama,current main no-decomp,2,total runtime ms,1870,16761,complete
+parallel off,llama,current main no-decomp,3,total runtime ms,1872,16761,complete
+parallel off,llama,current main no-decomp,4,total runtime ms,1868,16761,complete
+parallel off,llama,current main no-decomp,5,total runtime ms,1869,16761,complete
+parallel off,whisper,current main no-decomp,1,total runtime ms,8657,26184,complete
+parallel off,whisper,current main no-decomp,2,total runtime ms,8658,26184,complete
+parallel off,whisper,current main no-decomp,3,total runtime ms,8774,26184,complete
+parallel off,whisper,current main no-decomp,4,total runtime ms,8676,26184,complete
+parallel off,whisper,current main no-decomp,5,total runtime ms,8703,26184,complete
+parallel off,gemma,current main no-decomp,1,total runtime ms,43659,67904,complete
+parallel off,gemma,current main no-decomp,2,total runtime ms,43638,67904,complete
+parallel off,gemma,current main no-decomp,3,total runtime ms,43636,67904,complete
+parallel off,gemma,current main no-decomp,4,total runtime ms,43600,67904,complete
+parallel off,gemma,current main no-decomp,5,total runtime ms,44271,67904,complete
+parallel off,qwen3_moe,current main no-decomp,1,total runtime ms,2405,31986,complete
+parallel off,qwen3_moe,current main no-decomp,2,total runtime ms,2429,31986,complete
+parallel off,qwen3_moe,current main no-decomp,3,total runtime ms,2394,31986,complete
+parallel off,qwen3_moe,current main no-decomp,4,total runtime ms,2438,31986,complete
+parallel off,qwen3_moe,current main no-decomp,5,total runtime ms,2412,31986,complete
+parallel off,qwen,current main no-decomp,1,total runtime ms,2291,21873,complete
+parallel off,qwen,current main no-decomp,2,total runtime ms,2260,21873,complete
+parallel off,qwen,current main no-decomp,3,total runtime ms,2257,21873,complete
+parallel off,qwen,current main no-decomp,4,total runtime ms,2259,21873,complete
+parallel off,qwen,current main no-decomp,5,total runtime ms,2254,21873,complete
+parallel off,paged_llama,current main no-decomp,1,total runtime ms,1115,16270,complete
+parallel off,paged_llama,current main no-decomp,2,total runtime ms,1121,16270,complete
+parallel off,paged_llama,current main no-decomp,3,total runtime ms,1118,16270,complete
+parallel off,paged_llama,current main no-decomp,4,total runtime ms,1113,16270,complete
+parallel off,paged_llama,current main no-decomp,5,total runtime ms,1117,16270,complete
+parallel on,llama,current main,1,total runtime ms,2060,16761,complete
+parallel on,llama,current main,2,total runtime ms,2060,16761,complete
+parallel on,llama,current main,3,total runtime ms,2103,16761,complete
+parallel on,llama,current main,4,total runtime ms,2091,16761,complete
+parallel on,llama,current main,5,total runtime ms,2103,16761,complete
+parallel on,whisper,current main,1,total runtime ms,8852,26184,complete
+parallel on,whisper,current main,2,total runtime ms,9017,26184,complete
+parallel on,whisper,current main,3,total runtime ms,8879,26184,complete
+parallel on,whisper,current main,4,total runtime ms,8778,26184,complete
+parallel on,whisper,current main,5,total runtime ms,8936,26184,complete
+parallel on,gemma,current main,1,total runtime ms,58979,67904,complete
+parallel on,gemma,current main,2,total runtime ms,54039,67904,complete
+parallel on,gemma,current main,3,total runtime ms,56742,67904,complete
+parallel on,gemma,current main,4,total runtime ms,54577,67904,complete
+parallel on,gemma,current main,5,total runtime ms,54190,67904,complete
+parallel on,qwen3_moe,current main,1,total runtime ms,1687,31986,complete
+parallel on,qwen3_moe,current main,2,total runtime ms,1645,31986,complete
+parallel on,qwen3_moe,current main,3,total runtime ms,1688,31986,complete
+parallel on,qwen3_moe,current main,4,total runtime ms,1717,31986,complete
+parallel on,qwen3_moe,current main,5,total runtime ms,1668,31986,complete
+parallel on,qwen,current main,1,total runtime ms,1723,21873,complete
+parallel on,qwen,current main,2,total runtime ms,1680,21873,complete
+parallel on,qwen,current main,3,total runtime ms,1687,21873,complete
+parallel on,qwen,current main,4,total runtime ms,1701,21873,complete
+parallel on,qwen,current main,5,total runtime ms,1686,21873,complete
+parallel on,paged_llama,current main,1,total runtime ms,2057,16270,complete
+parallel on,paged_llama,current main,2,total runtime ms,2041,16270,complete
+parallel on,paged_llama,current main,3,total runtime ms,2051,16270,complete
+parallel on,paged_llama,current main,4,total runtime ms,2045,16270,complete
+parallel on,paged_llama,current main,5,total runtime ms,2047,16270,complete
+parallel on,llama,current main no-decomp,1,total runtime ms,2586,16761,complete
+parallel on,llama,current main no-decomp,2,total runtime ms,2582,16761,complete
+parallel on,llama,current main no-decomp,3,total runtime ms,2611,16761,complete
+parallel on,llama,current main no-decomp,4,total runtime ms,2579,16761,complete
+parallel on,llama,current main no-decomp,5,total runtime ms,2594,16761,complete
+parallel on,whisper,current main no-decomp,1,total runtime ms,4208,26184,complete
+parallel on,whisper,current main no-decomp,2,total runtime ms,4311,26184,complete
+parallel on,whisper,current main no-decomp,3,total runtime ms,4058,26184,complete
+parallel on,whisper,current main no-decomp,4,total runtime ms,4043,26184,complete
+parallel on,whisper,current main no-decomp,5,total runtime ms,3978,26184,complete
+parallel on,gemma,current main no-decomp,1,total runtime ms,15031,67904,complete
+parallel on,gemma,current main no-decomp,2,total runtime ms,15013,67904,complete
+parallel on,gemma,current main no-decomp,3,total runtime ms,14867,67904,complete
+parallel on,gemma,current main no-decomp,4,total runtime ms,15009,67904,complete
+parallel on,gemma,current main no-decomp,5,total runtime ms,14966,67904,complete
+parallel on,qwen3_moe,current main no-decomp,1,total runtime ms,1306,31986,complete
+parallel on,qwen3_moe,current main no-decomp,2,total runtime ms,1288,31986,complete
+parallel on,qwen3_moe,current main no-decomp,3,total runtime ms,1271,31986,complete
+parallel on,qwen3_moe,current main no-decomp,4,total runtime ms,1290,31986,complete
+parallel on,qwen3_moe,current main no-decomp,5,total runtime ms,1275,31986,complete
+parallel on,qwen,current main no-decomp,1,total runtime ms,1941,21873,complete
+parallel on,qwen,current main no-decomp,2,total runtime ms,1913,21873,complete
+parallel on,qwen,current main no-decomp,3,total runtime ms,1909,21873,complete
+parallel on,qwen,current main no-decomp,4,total runtime ms,1922,21873,complete
+parallel on,qwen,current main no-decomp,5,total runtime ms,1908,21873,complete
+parallel on,paged_llama,current main no-decomp,1,total runtime ms,1295,16270,complete
+parallel on,paged_llama,current main no-decomp,2,total runtime ms,1304,16270,complete
+parallel on,paged_llama,current main no-decomp,3,total runtime ms,1295,16270,complete
+parallel on,paged_llama,current main no-decomp,4,total runtime ms,1294,16270,complete
+parallel on,paged_llama,current main no-decomp,5,total runtime ms,1298,16270,complete

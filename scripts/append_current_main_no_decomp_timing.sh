@@ -10,10 +10,10 @@ PNG="$OUT_DIR/timings_scatter.png"
 PERCENT_CSV="$OUT_DIR/timing_percent_change.csv"
 PERCENT_SPEC="$ROOT/scripts/timing_percent_change.vl.json"
 PERCENT_PNG="$OUT_DIR/timing_percent_change.png"
-BIN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/egglog-repro-pr896-bins.XXXXXX")"
+BIN_DIR="$(mktemp -d "${TMPDIR:-/tmp}/egglog-repro-current-main-bins.XXXXXX")"
 RUNS="${RUNS:-5}"
-VARIANT="PR #896 no-decomp"
-BIN="$BIN_DIR/bench_pr896_no_decomp"
+VARIANT="current main no-decomp"
+BIN="$BIN_DIR/bench_current_main_no_decomp"
 
 trap 'rm -rf "$BIN_DIR"' EXIT
 
@@ -61,10 +61,10 @@ if [[ ! -f "$PERCENT_SPEC" ]]; then
   exit 1
 fi
 
-cargo build --release --features pr896_no_decomp --no-default-features
+cargo build --release --features latest_main_no_decomp --no-default-features
 cp target/release/bench "$BIN"
 
-tmp_csv="$(mktemp "${TMPDIR:-/tmp}/egglog-repro-pr896-csv.XXXXXX")"
+tmp_csv="$(mktemp "${TMPDIR:-/tmp}/egglog-repro-current-main-csv.XXXXXX")"
 awk -F, -v variant="$VARIANT" 'NR == 1 || $3 != variant' "$CSV" > "$tmp_csv"
 mv "$tmp_csv" "$CSV"
 

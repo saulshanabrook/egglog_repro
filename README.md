@@ -1,4 +1,4 @@
-# egglog 0a8cc35 → 2e5657b: large multi-atom rule regression
+# egglog #872: large multi-atom rule regression
 
 ## Summary
 
@@ -9,9 +9,10 @@ model `.egg` programs showed large total-runtime regressions. The current
 bounded local sweep compares:
 
 - `old`: `0a8cc35a6c68d0460c20449d5fa19ca3caba2923`
-- `PR #896`: [`#896`](https://github.com/egraphs-good/egglog/pull/896) at
-  `f58a47bf3a7dd252e44f7b1863f32a38fb6aa0c5`, with tree decomposition enabled
-- `PR #896 no-decomp`: the same PR #896 commit with `EGraph::no_decomp = true`
+- `current main`: `9879e4d720ddbb791e1ccd962048908a193b8292`, with tree
+  decomposition enabled
+- `current main no-decomp`: the same current-main commit with
+  `EGraph::no_decomp = true`
 
 With `RUNS=5`, all three variants complete every included model file under the
 current caps in both serial and default Rayon modes.
@@ -22,14 +23,14 @@ Seven self-contained `.egg` programs are checked in. The current default sweep
 intentionally excludes `gemma4_moe.egg`, because old/original did not complete
 under the previous cap and a manual probe ran past two minutes.
 
-| file | size | cap | old serial mean | PR #896 serial | PR #896 no-decomp serial |
+| file | size | cap | old serial mean | current main serial | current main no-decomp serial |
 |---|---:|---:|---:|---:|---:|
-| `llama.egg` | 445 KB | 60 s | 1.29 s | 1.76 s | 1.86 s |
-| `whisper.egg` | 478 KB | 61 s | 30.26 s | 25.61 s | 8.62 s |
-| `gemma.egg` | 916 KB | 147 s | 73.52 s | 142.43 s | 47.22 s |
-| `qwen3_moe.egg` | 524 KB | 60 s | 2.29 s | 3.59 s | 2.36 s |
-| `qwen.egg` | 474 KB | 60 s | 1.55 s | 2.32 s | 2.24 s |
-| `paged_llama.egg` | 437 KB | 60 s | 1.20 s | 1.73 s | 1.12 s |
+| `llama.egg` | 445 KB | 60 s | 1.29 s | 1.81 s | 1.87 s |
+| `whisper.egg` | 478 KB | 61 s | 30.26 s | 25.50 s | 8.69 s |
+| `gemma.egg` | 916 KB | 147 s | 73.52 s | 144.31 s | 43.76 s |
+| `qwen3_moe.egg` | 524 KB | 60 s | 2.29 s | 3.66 s | 2.42 s |
+| `qwen.egg` | 474 KB | 60 s | 1.55 s | 2.37 s | 2.26 s |
+| `paged_llama.egg` | 437 KB | 60 s | 1.20 s | 1.77 s | 1.12 s |
 | `gemma4_moe.egg` | 1.4 MB | excluded | n/a | n/a | n/a |
 
 These are total `parse_and_run_program` times from
@@ -49,12 +50,12 @@ lower bound for the true uncapped runtime ratio.
 scripts/render_timing_scatter.sh
 ```
 
-The script builds the bench harness against `old`, `pr896`, and
-`pr896_no_decomp`, then runs every model file both with
+The script builds the bench harness against `old`, `latest_main`, and
+`latest_main_no_decomp`, then runs every model file both with
 Rayon parallelism disabled (`RAYON_NUM_THREADS=1`, labeled `parallel off`) and
-with the default Rayon thread pool (`parallel on`). The `pr896_no_decomp`
-feature sets `EGraph::no_decomp = true`, equivalent to PR #896's global
-`--no-decomp` option. By default it uses five runs per cell and the
+with the default Rayon thread pool (`parallel on`). The
+`latest_main_no_decomp` feature sets `EGraph::no_decomp = true`, equivalent to
+the global `--no-decomp` option. By default it uses five runs per cell and the
 per-benchmark timeout caps listed above. Override the run count with `RUNS=...`
 if you want a longer sweep. It reads the static Vega-Lite specs in `scripts/`
 and writes:
@@ -65,11 +66,11 @@ and writes:
 - `results/timing_percent_change.csv`
 - `results/timing_percent_change.png`
 
-To append only the PR #896 no-decomposition variant to an existing
+To append only the current-main no-decomposition variant to an existing
 `results/timings_scatter.csv` and then regenerate the summaries and PNGs, run:
 
 ```bash
-scripts/append_pr896_no_decomp_timing.sh
+scripts/append_current_main_no_decomp_timing.sh
 ```
 
 The percent-change CSV uses the old serial (`parallel off`) mean for each
